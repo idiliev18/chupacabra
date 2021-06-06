@@ -1,1 +1,1 @@
-# chupa-frontend
+# chupacabra-frontend
