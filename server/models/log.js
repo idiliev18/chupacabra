@@ -8,19 +8,22 @@ class LoggerManager{
 
         this.logger.add(new this.winston.transports.Console({
             format: this.winston.format.json(),
+            level: 'silly'
         }));
               
         this.logger.add(new this.LokiTransport({
             host: process.env.LOKI_IP,
             json: true,
-            labels: { job: 'Chupacabra-Test' }
+            labels: { job: 'Chupacabra-Test' },
+            level: 'silly'
         }));
               
         this.logger.add(new this.DiscordLogger({
             webhooks: {
                 id: process.env.DISCORD_ID,
                 token: process.env.DISCORD_TOKEN
-            }
+            },
+            level: 'silly'
         }));
     }
 
