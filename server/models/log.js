@@ -3,7 +3,7 @@ class LoggerManager{
         require('dotenv').config({path: '../../.env'})
         this.winston = require('winston');
         this.LokiTransport = require('winston-loki');
-        this.DiscordLogger = require('winston-discord');
+        this.DiscordLogger = require('winston3-discord');
         this.logger = this.winston.createLogger();
 
         this.logger.add(new this.winston.transports.Console({
