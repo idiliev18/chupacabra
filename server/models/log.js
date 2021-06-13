@@ -1,6 +1,5 @@
 class LoggerManager{
     constructor() {
-        require('dotenv').config({path: '../../.env'})
         this.winston = require('winston');
         this.LokiTransport = require('winston-loki');
         this.DiscordLogger = require('winston3-discord');
@@ -62,3 +61,5 @@ class LoggerManager{
     #DiscordLogger
     #logger
 }
+
+module.exports = LoggerManager;
