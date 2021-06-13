@@ -2,6 +2,9 @@
 
 /* -- customization -- */
 
+$blue: rgb(4, 138, 250);
+$primary: $blue;
+
 /* -- customization -- */
 
-@import "../node_modules/bulma/bulma.sass";
+@import "../node_modules/bulma/sass/utilities/_all.sass";
