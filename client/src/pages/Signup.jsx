@@ -8,10 +8,32 @@ import styles from "./Signup.module.scss";
 
 function Signup() {
     const userContext = useContext(UserContext);
-    const [invalidText, setInvalidText] = useState({});
+    const [passwordsMatch, setPasswordsMatch] = useState(null);
+    const [showPasswordText, setShowPasswordText] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        if (passwordsMatch) {
+            console.log({
+                firstName: event.target.firstName,
+                lastName: event.target.lastName,
+                email: event.target.email,
+                password: event.target.password,
+            });
+        } else {
+            setShowPasswordText(true);
+        }
+    };
+
+    const handlePasswordChange = (event) => {
+        if (event.target.form.password.value !== "") {
+            setPasswordsMatch(
+                event.target.form.password.value ===
+                    event.target.form.confirmPassword.value
+            );
+        } else {
+            setPasswordsMatch(null);
+        }
     };
 
     return (
@@ -72,10 +94,11 @@ function Signup() {
                 <label className="label">Парола</label>
                 <div className="control">
                     <input
-                        type="text"
+                        type="password"
                         name="password"
                         className="input"
                         placeholder="********"
+                        onChange={handlePasswordChange}
                         required
                     />
                 </div>
@@ -85,13 +108,23 @@ function Signup() {
                 <label className="label">Повтори Парола</label>
                 <div className="control">
                     <input
-                        type="text"
-                        name="password"
-                        className="input"
+                        type="password"
+                        name="confirmPassword"
+                        className={`input ${
+                            passwordsMatch === null
+                                ? ""
+                                : passwordsMatch
+                                ? "is-success"
+                                : "is-danger"
+                        }`}
                         placeholder="********"
+                        onChange={handlePasswordChange}
                         required
                     />
                 </div>
+                {showPasswordText ? (
+                    <div className="help is-danger">паролите не съвпадат</div>
+                ) : null}
             </div>
 
             <div className="field">

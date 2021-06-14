@@ -6,7 +6,7 @@ function SetupForm(props) {
     const handleSubmit = props.onSubmit;
 
     return (
-        <div className={styles.center}>
+        <div className="center">
             <Box className={styles.box}>
                 <div
                     className={"is-flex " + styles["responsive-flex"]}
