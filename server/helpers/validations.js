@@ -36,15 +36,13 @@ const validations = {
 };
 
 function isDataValid(data, toCheck) {
-    return !!validations[data](toCheck);
-    /*
+
     for (const key in toCheck) {
         if (!validations[key](data, toCheck[key])) {
             return false;
         }
     }
     return true;
-    */
 };
 
 module.exports.isDataValid = isDataValid;
