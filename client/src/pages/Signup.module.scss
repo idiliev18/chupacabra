@@ -1,0 +1,9 @@
+@import "../variables.scss";
+
+.control {
+    width: 100%;
+
+    &:not(:first-child) {
+        padding-left: $control-padding-horizontal;
+    }
+}

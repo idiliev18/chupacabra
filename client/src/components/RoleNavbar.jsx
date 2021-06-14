@@ -12,14 +12,18 @@ function RoleNavbar(props) {
             <Navbar.Menu>
                 <Navbar.Container>
                     <Navbar.Item renderAs={Link} to="/">
-                        Home
+                        Начало
                     </Navbar.Item>
                     <Navbar.Item renderAs={Link} to="/news">
-                        News
+                        Новини
                     </Navbar.Item>
-                    <Navbar.Item renderAs={Link} to="/dash">
-                        Dash
-                    </Navbar.Item>
+                    {userContext.authenticated ? (
+                        <>
+                            <Navbar.Item renderAs={Link} to="/dash">
+                                Контролен Панел
+                            </Navbar.Item>
+                        </>
+                    ) : null}
                 </Navbar.Container>
                 <Navbar.Container align="right">
                     <div className="buttons">
@@ -27,7 +31,7 @@ function RoleNavbar(props) {
                             <Button
                                 onClick={userContext.invalidateAuthentication}
                             >
-                                Log Out
+                                Излизане
                             </Button>
                         ) : (
                             <>
@@ -36,10 +40,10 @@ function RoleNavbar(props) {
                                     to="/signup"
                                     color="primary"
                                 >
-                                    Sign Up
+                                    Регистрация
                                 </Button>
                                 <Button renderAs={Link} to="/login">
-                                    Log In
+                                    Влизане
                                 </Button>
                             </>
                         )}

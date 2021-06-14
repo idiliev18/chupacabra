@@ -16,7 +16,7 @@ function SetupForm(props) {
                         id={styles["side-msg"]}
                         className={styles["flex-item"]}
                     >
-                        <h1>Welcome to Chupacabra</h1>
+                        <h1>Добре дошли в Chupacabra</h1>
                     </div>
                     <form
                         className={styles["flex-item"]}

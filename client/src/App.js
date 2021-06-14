@@ -1,10 +1,12 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useState } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 
 import { Content } from "react-bulma-components";
 import { RoleNavbar } from "./components/RoleNavbar";
+
 import { Index } from "./pages/Index";
 import { Login } from "./pages/Login";
+import { Signup } from "./pages/Signup";
 
 import { readStorage, writeStorage } from "./localStorage";
 
@@ -79,6 +81,7 @@ function App() {
                 <Content>
                     <Route exact path="/" component={Index} />
                     <Route exact path="/login" component={Login} />
+                    <Route exact path="/signup" component={Signup} />
                 </Content>
             </UserContext.Provider>
         </BrowserRouter>

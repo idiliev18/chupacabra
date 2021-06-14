@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Redirect } from "react-router";
+import { Redirect, Link } from "react-router-dom";
 import { Button } from "react-bulma-components";
 import { SetupForm } from "../components/SetupForm";
 
@@ -31,12 +31,12 @@ function Login(props) {
     return (
         <SetupForm onSubmit={handleSubmit}>
             {userContext.authenticated ? <Redirect to="/" /> : ""}
-            <h1>Log In</h1>
+            <h1>Влизане</h1>
             <br />
 
             <div className="field">
                 <label htmlFor="email" className="label">
-                    Email
+                    Имейл
                 </label>
                 <div className="control">
                     <input
@@ -46,20 +46,21 @@ function Login(props) {
                                 : ""
                         }`}
                         type="email"
-                        placeholder="example@example.com"
+                        placeholder="gosho_qnko@abv.bg"
                         name="email"
+                        required
                     />
                 </div>
                 {!invalidData.email && invalidData.email !== null ? (
                     <p className="help is-danger">
-                        this email did not match our records
+                        този имейл не е част от нашите записи
                     </p>
                 ) : null}
             </div>
 
             <div className="field">
                 <label htmlFor="password" className="label">
-                    Password
+                    Парола
                 </label>
                 <div className="control">
                     <input
@@ -72,19 +73,26 @@ function Login(props) {
                         type="password"
                         placeholder="********"
                         name="password"
+                        required
                     />
                 </div>
                 {!invalidData.password && invalidData.password !== null ? (
                     <p className="help is-danger">
-                        this password did not match our records
+                        тази парола не е част от нашите записи
                     </p>
                 ) : null}
             </div>
 
             <div className="field">
+                <p>
+                    Нямате регистрирация? <Link to="/signup">Регистрация</Link>
+                </p>
+            </div>
+
+            <div className="field">
                 <div className="control">
                     <label htmlFor="rememberMe" className="checkbox">
-                        <input type="checkbox" name="rememberMe" /> Remember Me
+                        <input type="checkbox" name="rememberMe" /> Запомни ме
                     </label>
                 </div>
             </div>
@@ -95,7 +103,7 @@ function Login(props) {
                         color="primary"
                         renderAs="input"
                         type="submit"
-                        value="Log In"
+                        value="Влизане"
                     />
                 </div>
             </div>
