@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import { Content } from "react-bulma-components";
 import { RoleNavbar } from "./components/RoleNavbar";
@@ -7,6 +7,8 @@ import { RoleNavbar } from "./components/RoleNavbar";
 import { Index } from "./pages/Index";
 import { Login } from "./pages/Login";
 import { Signup } from "./pages/Signup";
+
+import { NotFound } from "./pages/NotFound";
 
 import { readStorage, writeStorage } from "./localStorage";
 
@@ -79,9 +81,12 @@ function App() {
             >
                 <RoleNavbar />
                 <Content>
-                    <Route exact path="/" component={Index} />
-                    <Route exact path="/login" component={Login} />
-                    <Route exact path="/signup" component={Signup} />
+                    <Switch>
+                        <Route exact path="/" component={Index} />
+                        <Route exact path="/login" component={Login} />
+                        <Route exact path="/signup" component={Signup} />
+                        <Route component={NotFound} />
+                    </Switch>
                 </Content>
             </UserContext.Provider>
         </BrowserRouter>
