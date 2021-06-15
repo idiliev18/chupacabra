@@ -6,33 +6,65 @@ import { SetupForm } from "../components/SetupForm";
 
 import styles from "./Signup.module.scss";
 
+const PHONE_REGEX = /\+3598[789]\d{7}/;
+
 function Signup() {
     const userContext = useContext(UserContext);
     const [passwordsMatch, setPasswordsMatch] = useState(null);
     const [showPasswordText, setShowPasswordText] = useState(false);
+    const [invalidValues, setInvalidValues] = useState({
+        passwordMatchText: null,
+        phoneNumberText: null,
+    });
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (passwordsMatch) {
+        {
             console.log({
-                firstName: event.target.firstName,
-                lastName: event.target.lastName,
-                email: event.target.email,
-                password: event.target.password,
+                firstName: event.target.firstName.value,
+                lastName: event.target.lastName.value,
+                email: event.target.email.value,
+                telephoneNumber: event.target.telephoneNumber.value,
+                password: event.target.password.value,
             });
-        } else {
-            setShowPasswordText(true);
         }
     };
 
     const handlePasswordChange = (event) => {
         if (event.target.form.password.value !== "") {
-            setPasswordsMatch(
-                event.target.form.password.value ===
-                    event.target.form.confirmPassword.value
-            );
+            setInvalidValues((prevState) => {
+                return {
+                    ...prevState,
+                    passwordMatchText:
+                        event.target.form.password.value ===
+                        event.target.form.confirmPassword.value,
+                };
+            });
         } else {
-            setPasswordsMatch(null);
+            setInvalidValues((prevState) => {
+                return {
+                    ...prevState,
+                    passwordMatchText: null,
+                };
+            });
+        }
+    };
+
+    const handleTelephoneNumberChange = (event) => {
+        if (event.target.value !== "") {
+            setInvalidValues((prevState) => {
+                return {
+                    ...prevState,
+                    phoneNumberText: !!event.target.value.match(PHONE_REGEX),
+                };
+            });
+        } else {
+            setInvalidValues((prevState) => {
+                return {
+                    ...prevState,
+                    phoneNumberText: null,
+                };
+            });
         }
     };
 
@@ -91,6 +123,30 @@ function Signup() {
             </div>
 
             <div className="field">
+                <div className="label">Телефонен номер (по избор)</div>
+                <div className="control">
+                    <input
+                        type="tel"
+                        name="telephoneNumber"
+                        className={`input ${
+                            invalidValues.phoneNumberText === null
+                                ? ""
+                                : invalidValues.phoneNumberText
+                                ? "is-success"
+                                : "is-danger"
+                        }`}
+                        onChange={handleTelephoneNumberChange}
+                    />
+                </div>
+                {invalidValues.phoneNumberText ===
+                null ? null : invalidValues.phoneNumberText ? null : (
+                    <div className="help is-danger">
+                        телефонният номер е невалиден
+                    </div>
+                )}
+            </div>
+
+            <div className="field">
                 <label className="label">Парола</label>
                 <div className="control">
                     <input
@@ -111,9 +167,9 @@ function Signup() {
                         type="password"
                         name="confirmPassword"
                         className={`input ${
-                            passwordsMatch === null
-                                ? ""
-                                : passwordsMatch
+                            invalidValues.passwordMatchText === null
+                                ? null
+                                : invalidValues.passwordMatchText
                                 ? "is-success"
                                 : "is-danger"
                         }`}
@@ -122,9 +178,10 @@ function Signup() {
                         required
                     />
                 </div>
-                {showPasswordText ? (
+                {invalidValues.passwordMatchText ===
+                null ? null : invalidValues.passwordMatchText ? null : (
                     <div className="help is-danger">паролите не съвпадат</div>
-                ) : null}
+                )}
             </div>
 
             <div className="field">
