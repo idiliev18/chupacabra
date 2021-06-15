@@ -1,5 +1,4 @@
 'use strict'
-
 const validations = {
     'minLength': function (data, minLength) {
         return data.length > minLength;
@@ -29,7 +28,11 @@ const validations = {
 
     'isPhoneValid': function (data) {
         let pattern = /\+3598[789]\d{7}/;
-        return data.match(pattern);
+        return  data.match(pattern);
+    },
+
+    'isNumber': function (data) {
+        return !isNaN(data);
     },
 
     //TODO add username validation, issue #3
@@ -44,5 +47,30 @@ function isDataValid(data, toCheck) {
     }
     return true;
 };
+function formValidation(dataToValidate,criterias){
+    let errorArr={};
+    for (const key in dataToValidate) {
+        if(!isDataValid(dataToValidate[key],criterias[key])){
+            errorArr[key] = criterias[Object.keys(criterias[key])[0]];
+        }
+    }
+    if(errorArr.length == 0){
+        return true;
+    }
+    return errorArr;
+};
+const registerValidations={
+    'firstName' : {'isNameValid' : 1},
+    'lastName' : {'isNameValid' : 1},
+    'age' : {'minNumber' : 0, 'maxNumber' : 127, 'isNumber' : 1},
+    'city' : {'isNameValid' : 1},
+    'phone' : {'isPhoneValid' : 1},
+    'email' : {'isEmailValid' : 1},
+    'isNameValid' : 'Invalid name',
+    'isPhoneValid' : 'Invalid phone',
+    'minNumber' : 'Age is not in range or it\'s not a number'
+};
 
 module.exports.isDataValid = isDataValid;
+module.exports.formValidation = formValidation;
+module.exports.registerValidations = registerValidations;
