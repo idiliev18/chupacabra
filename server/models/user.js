@@ -14,6 +14,7 @@ class User {
         this.email = email;
         this.isVerified = isVerified;
     }
+
     // private
 
     #id;
@@ -157,3 +158,4 @@ Object.defineProperty(User, 'isVerified', {
     }
 });
 
+module.exports = User;
