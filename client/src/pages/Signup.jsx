@@ -10,8 +10,6 @@ const PHONE_REGEX = /\+3598[789]\d{7}/;
 
 function Signup() {
     const userContext = useContext(UserContext);
-    const [passwordsMatch, setPasswordsMatch] = useState(null);
-    const [showPasswordText, setShowPasswordText] = useState(false);
     const [invalidValues, setInvalidValues] = useState({
         passwordMatchText: null,
         phoneNumberText: null,
@@ -19,7 +17,7 @@ function Signup() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        {
+        if (invalidValues.passwordMatchText && invalidValues.phoneNumberText) {
             console.log({
                 firstName: event.target.firstName.value,
                 lastName: event.target.lastName.value,
@@ -141,7 +139,7 @@ function Signup() {
                 {invalidValues.phoneNumberText ===
                 null ? null : invalidValues.phoneNumberText ? null : (
                     <div className="help is-danger">
-                        телефонният номер е невалиден
+                        телефонният номер е невалиден (пробвайте с +359)
                     </div>
                 )}
             </div>
@@ -202,4 +200,4 @@ function Signup() {
     );
 }
 
-export { Signup };
+export default Signup;

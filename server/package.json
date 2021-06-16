@@ -17,6 +17,7 @@
     },
     "homepage": "https://github.com/idiliev18/chupacabra#readme",
     "dependencies": {
+        "axios": "^0.21.1",
         "dotenv": "^10.0.0",
         "express": "^4.17.1",
         "mssql": "^7.1.0",

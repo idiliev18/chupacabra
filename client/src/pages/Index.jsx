@@ -45,4 +45,4 @@ function Index(props) {
     );
 }
 
-export { Index };
+export default Index;

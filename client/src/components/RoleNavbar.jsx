@@ -65,4 +65,4 @@ function RoleNavbar(props) {
     );
 }
 
-export { RoleNavbar };
+export default RoleNavbar;
