@@ -35,14 +35,31 @@ app.post('/register', (req, res) => {
 
     //Receive x-www-form-urlencoded from front-end
     let regData = req.body;
-    console.log(regData);
-    loggerManager.logInfo(`User with email: ${regData.email} is trying to register.`);
+
+    loggerManager.logInfo (
+        `User with email: ${regData.email} is trying to register.`
+    );
+
+    let returnValue = validation.formValidation(regData, validation.registerValidations);
 
     //Validation
-    if (validation.formValidation(regData,validation.registerValidations)) {
-        DB.registerUser(regData.firstName,regData.lastName,regData.age,regData.city,regData.phone,regData.username,"TokenGoBRRRRRR","HashedPasswordGoBRRRRRRRRRRRRR")
+    if (returnValue === true) {
+        returnValue = DB.registerUser(
+            regData.firstName,
+            regData.lastName,
+            regData.age,
+            regData.city,
+            regData.phone,
+            regData.email,
+            regData.username,
+            "TokenGoBRRRRRR",
+            "HashedPasswordGoBRRRRRRRRRRRRR"
+        )
     } else {
-        loggerManager.logWarn(`Email: ${regData.email} is not valid`);
+        loggerManager.logWarn (
+            `Failed validation/s at user with email ${regData.email}:
+            ${returnValue.join('\n')}`
+        );
     }
 
     //Send respond

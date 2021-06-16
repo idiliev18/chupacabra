@@ -13,22 +13,22 @@ const validations = {
         return data.match(pattern);
     },
 
-    'minNumber':function (data,minNumber){
+    'minNumber': function (data, minNumber) {
         return data > minNumber;
     },
 
-    'maxNumber':function (data,maxNumber){
+    'maxNumber': function (data, maxNumber) {
         return data < maxNumber;
     },
 
-    'isNameValid': function(data){
+    'isNameValid': function (data) {
         let pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
         return data.match(pattern);
     },
 
     'isPhoneValid': function (data) {
         let pattern = /\+3598[789]\d{7}/;
-        return  data.match(pattern);
+        return data.match(pattern);
     },
 
     'isNumber': function (data) {
@@ -47,28 +47,34 @@ function isDataValid(data, toCheck) {
     }
     return true;
 };
-function formValidation(dataToValidate,criterias){
-    let errorArr={};
+
+function formValidation(dataToValidate, criterias) {
+    let errorArr = new Array();
+
     for (const key in dataToValidate) {
-        if(!isDataValid(dataToValidate[key],criterias[key])){
-            errorArr[key] = criterias[Object.keys(criterias[key])[0]];
+        if (!isDataValid(dataToValidate[key], criterias[key])) {
+            errorArr.push(criterias[Object.keys(criterias[key])[0]]);
         }
     }
-    if(errorArr.length == 0){
+
+    if (errorArr.length == 0) {
         return true;
     }
+
     return errorArr;
 };
-const registerValidations={
-    'firstName' : {'isNameValid' : 1},
-    'lastName' : {'isNameValid' : 1},
-    'age' : {'minNumber' : 0, 'maxNumber' : 127, 'isNumber' : 1},
-    'city' : {'isNameValid' : 1},
-    'phone' : {'isPhoneValid' : 1},
-    'email' : {'isEmailValid' : 1},
-    'isNameValid' : 'Invalid name',
-    'isPhoneValid' : 'Invalid phone',
-    'minNumber' : 'Age is not in range or it\'s not a number'
+
+const registerValidations = {
+    'firstName': { 'isNameValid': 1 },
+    'lastName': { 'isNameValid': 1 },
+    'age': { 'minNumber': 0, 'maxNumber': 127, 'isNumber': 1 },
+    'city': { 'isNameValid': 1 },
+    'phone': { 'isPhoneValid': 1 },
+    'email': { 'isEmailValid': 1 },
+    'isNameValid': 'Invalid name',
+    'isPhoneValid': 'Invalid phone',
+    'minNumber': 'Age is not in range or it\'s not a number',
+    'isEmailValid': 'Email is not valid'
 };
 
 module.exports.isDataValid = isDataValid;

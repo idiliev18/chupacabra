@@ -1,6 +1,7 @@
 const dbConfig = require('../config/dbConfig');
 const sql = require('mssql')
-const request = new sql.Request()
+const logs = require('../models/log')
+const loggerManager = new logs();
 
 class db {
     constructor() {
@@ -13,27 +14,47 @@ class db {
     static async connectToDB() {
         try {
             await sql.connect(this._config);
-            const result = await sql.query`SELECT 1+1`;
-            console.log(result);
             this._connection = true;
         } catch (err) {
             console.log(err);
         }
     }
-    async registerUser(firstName,lastName,age,city,phone,email,username,token,hashPassword){
-        // await request.input('firstName', sql.NVarChar, firstName);
-        // await request.input('lastName', sql.NVarChar, lastName);
-        // await request.input('age', sql.Int, age);
-        // await request.input('city', sql.NVarChar, city);
-        // await request.input('phone', sql.VarChar, phone);
-        // await request.input('email', sql.NVarChar, email);
-        // await request.input('username', sql.VarChar, username);
-        // await request.input('token', sql.VarChar, token);
-        // await request.input('hashPassword', sql.VarChar, hashPassword);
-        await sql.query("EXEC RegisterUser @FirstName = 'FIKI' ,@LastName = 'Storaro', @Age  = 42, @City  = 'Shumen', @Phone  = '+359177603828', @Username = 't1o546612nufgc46h3op', @Email = 'dtou32d144f66nk9go@cb.bg', @Token = 'dfdfdfdfdfdf', @PasswordHash = 'sdfhjkBKgadhfguyadfhjuyadfs'", (err, result) => {
-            console.log(err);
-            console.log(result);
-        })
+
+    async registerUser(firstName, lastName, age, city, phone, email, username, token, hashPassword) {
+        const request = new sql.Request();
+        await request.input('userFirstName', sql.NVarChar, firstName);
+        await request.input('userLastName', sql.NVarChar, lastName);
+        await request.input('userAge', sql.Int, age);
+        await request.input('userCity', sql.NVarChar, city);
+        await request.input('userPhone', sql.VarChar, phone);
+        await request.input('userEmail', sql.NVarChar, email);
+        await request.input('userUsername', sql.VarChar, username);
+        await request.input('userToken', sql.VarChar, token);
+        await request.input('userHashPassword', sql.VarChar, hashPassword);
+        ``
+        await request.query(
+            `EXEC RegisterUser
+            @FirstName = @userFirstName,
+            @LastName = @userLastName,
+            @Age  = @userAge,
+            @City  = @userCity,
+            @Phone  = @userPhone,
+            @Username = @userUsername,
+            @Email = @userEmail,
+            @Token = @userToken,
+            @PasswordHash = @userHashPassword`,
+            (err, result) => {
+                err != null ? () => { loggerManager.logError(err) } : 0;
+
+                let logString = ["", "Taken email", "Taken Username", "Taken Phone"];
+
+                if (logString != null && result.recordset[0].ReturnCode != 0) {
+                    loggerManager.logWarn(
+                        `There is a problem with registration of User wiht email: ${email} \n ${logString[result.recordset[0].ReturnCode]}`
+                    )
+                }
+            }
+        )
     }
     //private
     static _config = dbConfig.config;
