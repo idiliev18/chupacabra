@@ -4,6 +4,7 @@ const validation = require('../helpers/validations');
 const logs = require('../models/log.js')
 const db = require('../models/db');
 const userClass = require('../models/user');
+const JSONModule = require('../helpers/JSON');
 const app = express();
 const loggerManager = new logs();
 
@@ -32,7 +33,7 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-
+    let resJSON;
     //Receive x-www-form-urlencoded from front-end
     let regData = req.body;
 
@@ -44,7 +45,7 @@ app.post('/register', (req, res) => {
 
     //Validation
     if (returnValue === true) {
-        returnValue = DB.registerUser(
+        DB.registerUser(
             regData.firstName,
             regData.lastName,
             regData.age,
@@ -56,6 +57,8 @@ app.post('/register', (req, res) => {
             "HashedPasswordGoBRRRRRRRRRRRRR"
         )
     } else {
+        resJSON = JSONModule.createJSONResponse(false, returnValue);
+
         loggerManager.logWarn (
             `Failed validation/s at user with email ${regData.email}:
             ${returnValue.join('\n')}`
@@ -63,7 +66,7 @@ app.post('/register', (req, res) => {
     }
 
     //Send respond
-    res.send(regData);
+    res.send(resJSON);
 });
 
 module.exports = app;
