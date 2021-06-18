@@ -48,20 +48,32 @@ function isDataValid(data, toCheck) {
     return true;
 };
 
-function formValidation(dataToValidate, criterias) {
-    let errorArr = new Array();
-
-    for (const key in dataToValidate) {
-        if (!isDataValid(dataToValidate[key], criterias[key])) {
-            errorArr.push(criterias[Object.keys(criterias[key])[0]]);
+function areValuesEqualTo(obj, value) {
+    for (var i in obj) {
+        if (!(obj[i] == value)) {
+            return false;
         }
     }
 
-    if (errorArr.length == 0) {
+    return true;
+}
+
+function formValidation(dataToValidate, criterias) {
+    let errorObj = new Object();
+
+    for (const key in dataToValidate) {
+        if (!isDataValid(dataToValidate[key], criterias[key])) {
+            errorObj[key] = criterias[Object.keys(criterias[key])[0]];
+        } else {
+            errorObj[key] = "Ok";
+        }
+    }
+
+    if (areValuesEqualTo(errorObj, 'Ok')) {
         return true;
     }
 
-    return errorArr;
+    return errorObj;
 };
 
 const registerValidations = {

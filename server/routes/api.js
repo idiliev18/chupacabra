@@ -37,7 +37,7 @@ app.post('/register', (req, res) => {
     //Receive x-www-form-urlencoded from front-end
     let regData = req.body;
 
-    loggerManager.logInfo (
+    loggerManager.logInfo(
         `User with email: ${regData.email} is trying to register.`
     );
 
@@ -58,9 +58,14 @@ app.post('/register', (req, res) => {
     } else {
         resJSON = JSONModule.createJSONResponse(false, returnValue);
 
-        loggerManager.logWarn (
-            `Failed validation/s at user with email ${regData.email}:
-            ${returnValue.join('\n')}`
+        loggerManager.logWarn(
+            `Failed validation/s at user with email ${regData.email}:\n
+            ${JSON.stringify(returnValue)
+                .split(',')
+                .join("\n\t    ")
+                .replace(/:/g, " - ")
+                .replace(/["{}]/g, "")
+            }`
         );
     }
 

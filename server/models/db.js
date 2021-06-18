@@ -42,15 +42,19 @@ class db {
             @Email = @userEmail,
             @PasswordHash = @userHashPassword`,
             (err, result) => {
+                console.log(err);
+                console.lor(result);
+                /*
                 err != null ? () => { loggerManager.logError(err) } : 0;
 
                 let logString = ["", "Taken email", "Taken Username", "Taken Phone"];
 
                 if (logString != null && result.recordset[0].ReturnCode != 0) {
                     loggerManager.logWarn(
-                        `There is a problem with registration of User wiht email: ${email} \n ${logString[result.recordset[0].ReturnCode]}`
+                        `There is a problem with registration of User with email: ${email} \n ${logString[result.recordset[0].ReturnCode]}`
                     )
                 }
+                */
             }
         )
     }
