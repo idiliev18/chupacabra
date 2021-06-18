@@ -7,63 +7,73 @@ import { SetupForm } from "../components/SetupForm";
 import styles from "./Signup.module.scss";
 
 const PHONE_REGEX = /\+3598[789]\d{7}/;
+const USERNAME_REGEX =
+    /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/;
 
 function Signup() {
     const userContext = useContext(UserContext);
     const [invalidValues, setInvalidValues] = useState({
-        passwordMatchText: null,
-        phoneNumberText: null,
+        password: null,
+        telephoneNumber: null,
+        username: null,
     });
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (invalidValues.passwordMatchText && invalidValues.phoneNumberText) {
-            console.log({
+
+        let allValid = false;
+        invalidValues.forEach((val, idx) => {
+            if (idx === "telephoneNumber" && val === null) allValid = true;
+            else allValid = val;
+        });
+
+        if (allValid) {
+            let data = {
                 firstName: event.target.firstName.value,
                 lastName: event.target.lastName.value,
                 email: event.target.email.value,
                 telephoneNumber: event.target.telephoneNumber.value,
                 password: event.target.password.value,
-            });
+            };
+            userContext.registerUser(data);
         }
     };
 
-    const handlePasswordChange = (event) => {
-        if (event.target.form.password.value !== "") {
-            setInvalidValues((prevState) => {
-                return {
-                    ...prevState,
-                    passwordMatchText:
-                        event.target.form.password.value ===
-                        event.target.form.confirmPassword.value,
-                };
-            });
-        } else {
-            setInvalidValues((prevState) => {
-                return {
-                    ...prevState,
-                    passwordMatchText: null,
-                };
-            });
-        }
-    };
-
-    const handleTelephoneNumberChange = (event) => {
+    const handleInputChange = (event) => {
+        console.log(event.target.name);
+        let updatedState = {};
         if (event.target.value !== "") {
-            setInvalidValues((prevState) => {
-                return {
-                    ...prevState,
-                    phoneNumberText: !!event.target.value.match(PHONE_REGEX),
-                };
-            });
+            switch (event.target.name) {
+                case "telephoneNumber": {
+                    updatedState["telephoneNumber"] =
+                        !!event.target.value.match(PHONE_REGEX);
+                    break;
+                }
+                case "password":
+                case "confirmPassword": {
+                    updatedState["password"] =
+                        event.target.form.password.value ===
+                        event.target.form.confirmPassword.value;
+                    break;
+                }
+                case "username": {
+                    updatedState["username"] =
+                        !!event.target.value.match(USERNAME_REGEX);
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
         } else {
-            setInvalidValues((prevState) => {
-                return {
-                    ...prevState,
-                    phoneNumberText: null,
-                };
-            });
+            if (event.target.name === "confirmPassword")
+                updatedState["password"] = null;
+            else updatedState[event.target.name] = null;
         }
+
+        setInvalidValues((prevState) => {
+            return { ...prevState, ...updatedState };
+        });
     };
 
     return (
@@ -78,7 +88,7 @@ function Signup() {
                         type="text"
                         name="firstName"
                         className="input"
-                        placeholder="Георги"
+                        placeholder="Янко"
                         required
                     />
                 </div>
@@ -101,10 +111,17 @@ function Signup() {
                         type="text"
                         name="username"
                         className="input"
-                        placeholder="qnko01_"
+                        placeholder="qnko0123"
+                        onChange={handleInputChange}
                         required
                     />
                 </div>
+                {invalidValues.username ===
+                null ? null : invalidValues.username ? null : (
+                    <div className="help is-danger">
+                        невалидно потребителско име
+                    </div>
+                )}
             </div>
 
             <div className="field">
@@ -114,7 +131,7 @@ function Signup() {
                         type="text"
                         name="email"
                         className="input"
-                        placeholder="gosho_qnko@abv.bg"
+                        placeholder="qnko_goshov@abv.bg"
                         required
                     />
                 </div>
@@ -127,17 +144,17 @@ function Signup() {
                         type="tel"
                         name="telephoneNumber"
                         className={`input ${
-                            invalidValues.phoneNumberText === null
+                            invalidValues.telephoneNumber === null
                                 ? ""
-                                : invalidValues.phoneNumberText
+                                : invalidValues.telephoneNumber
                                 ? "is-success"
                                 : "is-danger"
                         }`}
-                        onChange={handleTelephoneNumberChange}
+                        onChange={handleInputChange}
                     />
                 </div>
-                {invalidValues.phoneNumberText ===
-                null ? null : invalidValues.phoneNumberText ? null : (
+                {invalidValues.telephoneNumber ===
+                null ? null : invalidValues.telephoneNumber ? null : (
                     <div className="help is-danger">
                         телефонният номер е невалиден (пробвайте с +359)
                     </div>
@@ -152,7 +169,7 @@ function Signup() {
                         name="password"
                         className="input"
                         placeholder="********"
-                        onChange={handlePasswordChange}
+                        onChange={handleInputChange}
                         required
                     />
                 </div>
@@ -165,19 +182,19 @@ function Signup() {
                         type="password"
                         name="confirmPassword"
                         className={`input ${
-                            invalidValues.passwordMatchText === null
-                                ? null
-                                : invalidValues.passwordMatchText
+                            invalidValues.password === null
+                                ? ""
+                                : invalidValues.password
                                 ? "is-success"
                                 : "is-danger"
                         }`}
                         placeholder="********"
-                        onChange={handlePasswordChange}
+                        onChange={handleInputChange}
                         required
                     />
                 </div>
-                {invalidValues.passwordMatchText ===
-                null ? null : invalidValues.passwordMatchText ? null : (
+                {invalidValues.password ===
+                null ? null : invalidValues.password ? null : (
                     <div className="help is-danger">паролите не съвпадат</div>
                 )}
             </div>
