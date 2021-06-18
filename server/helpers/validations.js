@@ -73,8 +73,8 @@ const registerValidations = {
     'email': { 'isEmailValid': 1 },
     'isNameValid': 'Invalid name',
     'isPhoneValid': 'Invalid phone',
-    'minNumber': 'Age is not in range or it\'s not a number',
-    'isEmailValid': 'Email is not valid'
+    'minNumber': 'Invalid age',
+    'isEmailValid': 'Invalid email'
 };
 
 module.exports.isDataValid = isDataValid;
