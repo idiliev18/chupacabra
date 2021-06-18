@@ -20,7 +20,7 @@ class db {
         }
     }
 
-    async registerUser(firstName, lastName, age, city, phone, email, username, token, hashPassword) {
+    async registerUser(firstName, lastName, age, city, phone, email, username, hashPassword) {
         const request = new sql.Request();
         await request.input('userFirstName', sql.NVarChar, firstName);
         await request.input('userLastName', sql.NVarChar, lastName);
@@ -29,7 +29,6 @@ class db {
         await request.input('userPhone', sql.VarChar, phone);
         await request.input('userEmail', sql.NVarChar, email);
         await request.input('userUsername', sql.VarChar, username);
-        await request.input('userToken', sql.VarChar, token);
         await request.input('userHashPassword', sql.VarChar, hashPassword);
         ``
         await request.query(
@@ -41,7 +40,6 @@ class db {
             @Phone  = @userPhone,
             @Username = @userUsername,
             @Email = @userEmail,
-            @Token = @userToken,
             @PasswordHash = @userHashPassword`,
             (err, result) => {
                 err != null ? () => { loggerManager.logError(err) } : 0;
