@@ -43,7 +43,7 @@ class db {
             @PasswordHash = @userHashPassword`,
             (err, result) => {
                 console.log(err);
-                console.lor(result);
+                console.log(result);
                 /*
                 err != null ? () => { loggerManager.logError(err) } : 0;
 
