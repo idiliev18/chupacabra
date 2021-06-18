@@ -53,7 +53,6 @@ app.post('/register', (req, res) => {
             regData.phone,
             regData.email,
             regData.username,
-            "TokenGoBRRRRRR",
             "HashedPasswordGoBRRRRRRRRRRRRR"
         )
     } else {
