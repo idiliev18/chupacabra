@@ -1,5 +1,6 @@
 import React, { Suspense, lazy, createContext, useState } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 import { readStorage, writeStorage } from "./localStorage";
 
@@ -32,7 +33,7 @@ function App() {
     });
 
     const authenticate = (userData) => {
-        console.log(userData);
+        console.log("Submitted for authenticating!", userData);
         if (userData.email !== VALID_EMAIL.email) return { email: false };
         else if (userData.password !== VALID_EMAIL.password)
             return { password: false };
@@ -56,8 +57,8 @@ function App() {
         }
     };
 
-    const createAccount = (userData) => {
-        console.log(userData);
+    const registerUser = (userData) => {
+        console.log("Submitted for registering!", userData);
     };
 
     const invalidateAuthentication = () => {
@@ -72,30 +73,36 @@ function App() {
     };
 
     return (
-        <Suspense fallback={<Loading />}>
-            <BrowserRouter>
-                <UserContext.Provider
-                    value={{
-                        authenticated: state.authenticated,
-                        user: state.userData,
-                        authenticate,
-                        createAccount,
-                        invalidateAuthentication,
-                    }}
-                >
-                    <RoleNavbar />
-                    <Content>
-                        <Switch>
-                            <Route exact path="/" component={Index} />
-                            <Route exact path="/news" component={News} />
-                            <Route exact path="/login" component={Login} />
-                            <Route exact path="/signup" component={Signup} />
-                            <Route component={NotFound} />
-                        </Switch>
-                    </Content>
-                </UserContext.Provider>
-            </BrowserRouter>
-        </Suspense>
+        <ErrorBoundary>
+            <Suspense fallback={<Loading />}>
+                <BrowserRouter>
+                    <UserContext.Provider
+                        value={{
+                            authenticated: state.authenticated,
+                            user: state.userData,
+                            authenticate,
+                            registerUser,
+                            invalidateAuthentication,
+                        }}
+                    >
+                        <RoleNavbar />
+                        <Content>
+                            <Switch>
+                                <Route exact path="/" component={Index} />
+                                <Route exact path="/news" component={News} />
+                                <Route exact path="/login" component={Login} />
+                                <Route
+                                    exact
+                                    path="/signup"
+                                    component={Signup}
+                                />
+                                <Route component={NotFound} />
+                            </Switch>
+                        </Content>
+                    </UserContext.Provider>
+                </BrowserRouter>
+            </Suspense>
+        </ErrorBoundary>
     );
 }
 
