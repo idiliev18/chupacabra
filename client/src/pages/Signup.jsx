@@ -1,4 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, {
+    useCallback,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import { UserContext } from "../App";
 import { Link } from "react-router-dom";
 import { Button } from "react-bulma-components";
@@ -9,38 +15,66 @@ import styles from "./Signup.module.scss";
 const PHONE_REGEX = /\+3598[789]\d{7}/;
 const USERNAME_REGEX =
     /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/;
+const EMAIL_REGEX =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-function Signup() {
+function Signup(props) {
     const userContext = useContext(UserContext);
+    const [loading, setLoading] = useState(false);
     const [invalidValues, setInvalidValues] = useState({
         password: null,
         telephoneNumber: null,
         username: null,
+        email: null,
     });
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    // this reference is used for indication
+    // when the component has been unmounted
+    const mountedRef = useRef(true);
 
-        let allValid = false;
-        invalidValues.forEach((val, idx) => {
-            if (idx === "telephoneNumber" && val === null) allValid = true;
-            else allValid = val;
-        });
+    // used to indicate that the
+    // component has been unmounted
+    // equivalent to componentWillUnmount
+    useEffect(() => {
+        return () => {
+            mountedRef.current = false;
+        };
+    }, []);
 
-        if (allValid) {
-            let data = {
-                firstName: event.target.firstName.value,
-                lastName: event.target.lastName.value,
-                email: event.target.email.value,
-                telephoneNumber: event.target.telephoneNumber.value,
-                password: event.target.password.value,
-            };
-            userContext.registerUser(data);
-        }
-    };
+    const handleSubmit = useCallback(
+        (event) => {
+            event.preventDefault();
 
-    const handleInputChange = (event) => {
-        console.log(event.target.name);
+            let allValid = false;
+
+            for (let key in invalidValues) {
+                if (key === "telephoneNumber" && invalidValues[key] === null)
+                    allValid = true;
+                else allValid = invalidValues[key];
+
+                if (!allValid) break;
+            }
+
+            if (allValid) {
+                let data = {
+                    firstName: event.target.firstName.value,
+                    lastName: event.target.lastName.value,
+                    email: event.target.email.value,
+                    city: event.target.city.value,
+                    telephoneNumber: event.target.telephoneNumber.value,
+                    password: event.target.password.value,
+                };
+
+                setLoading(true);
+                userContext.registerUser(data).then((res) => {
+                    if (mountedRef.current) setLoading(false);
+                });
+            }
+        },
+        [invalidValues, userContext]
+    );
+
+    const handleInputChange = useCallback((event) => {
         let updatedState = {};
         if (event.target.value !== "") {
             switch (event.target.name) {
@@ -61,6 +95,11 @@ function Signup() {
                         !!event.target.value.match(USERNAME_REGEX);
                     break;
                 }
+                case "email": {
+                    updatedState["email"] =
+                        !!event.target.value.match(EMAIL_REGEX);
+                    break;
+                }
                 default: {
                     break;
                 }
@@ -74,7 +113,7 @@ function Signup() {
         setInvalidValues((prevState) => {
             return { ...prevState, ...updatedState };
         });
-    };
+    }, []);
 
     return (
         <SetupForm onSubmit={handleSubmit}>
@@ -110,7 +149,13 @@ function Signup() {
                     <input
                         type="text"
                         name="username"
-                        className="input"
+                        className={`input ${
+                            invalidValues.username === null
+                                ? ""
+                                : invalidValues.username
+                                ? "is-success"
+                                : "is-danger"
+                        }`}
                         placeholder="qnko0123"
                         onChange={handleInputChange}
                         required
@@ -128,11 +173,34 @@ function Signup() {
                 <label className="label">Имейл</label>
                 <div className="control">
                     <input
-                        type="text"
+                        type="email"
                         name="email"
-                        className="input"
+                        className={`input ${
+                            invalidValues.email === null
+                                ? ""
+                                : invalidValues.email
+                                ? "is-success"
+                                : "is-danger"
+                        }`}
+                        onChange={handleInputChange}
                         placeholder="qnko_goshov@abv.bg"
                         required
+                    />
+                </div>
+                {invalidValues.email ===
+                null ? null : invalidValues.email ? null : (
+                    <div className="help is-danger">имейлът е невалиден</div>
+                )}
+            </div>
+
+            <div className="field">
+                <label className="label">Град (по избор)</label>
+                <div className="control">
+                    <input
+                        type="text"
+                        name="city"
+                        className="input"
+                        placeholder="Бургас"
                     />
                 </div>
             </div>
@@ -210,7 +278,8 @@ function Signup() {
                     color="primary"
                     renderAs="input"
                     type="submit"
-                    value="Регистрация"
+                    value={loading ? "Моля изчакайте..." : "Регистрация"}
+                    {...{ disabled: loading }}
                 ></Button>
             </div>
         </SetupForm>

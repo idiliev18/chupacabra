@@ -1,4 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, {
+    useCallback,
+    useContext,
+    useState,
+    useRef,
+    useEffect,
+} from "react";
 import { Redirect, Link } from "react-router-dom";
 import { Button } from "react-bulma-components";
 import { SetupForm } from "../components/SetupForm";
@@ -7,26 +13,50 @@ import { UserContext } from "../App";
 
 function Login(props) {
     const userContext = useContext(UserContext);
+    const [loading, setLoading] = useState(false);
     const [invalidData, setInvalidData] = useState({
         email: null,
         password: null,
     });
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    // this reference is used for indication
+    // when the component has been unmounted
+    const mountedRef = useRef(true);
 
-        setInvalidData({ email: null, password: null });
+    // used to indicate that the
+    // component has been unmounted
+    // equivalent to componentWillUnmount
+    useEffect(() => {
+        return () => {
+            mountedRef.current = false;
+        };
+    }, []);
 
-        let success = userContext.authenticate({
-            email: event.target.email.value,
-            password: event.target.password.value,
-            rememberMe: event.target.rememberMe.checked,
-        });
+    const handleSubmit = useCallback(
+        (event) => {
+            event.preventDefault();
 
-        setInvalidData((prevState) => {
-            return { ...prevState, ...success };
-        });
-    };
+            setInvalidData({ email: null, password: null });
+            setLoading(true);
+
+            userContext
+                .authenticate({
+                    email: event.target.email.value,
+                    password: event.target.password.value,
+                    rememberMe: event.target.rememberMe.checked,
+                })
+                .then((success) => {
+                    if (mountedRef.current) {
+                        setInvalidData((prevState) => {
+                            return { ...prevState, ...success };
+                        });
+
+                        setLoading(false);
+                    }
+                });
+        },
+        [userContext]
+    );
 
     return (
         <SetupForm onSubmit={handleSubmit}>
@@ -98,14 +128,13 @@ function Login(props) {
             </div>
 
             <div className="field">
-                <div className="control">
-                    <Button
-                        color="primary"
-                        renderAs="input"
-                        type="submit"
-                        value="Влизане"
-                    />
-                </div>
+                <Button
+                    color="primary"
+                    renderAs="input"
+                    type="submit"
+                    value={loading ? "Моля изчакайте..." : "Влизане"}
+                    {...{ disabled: loading }}
+                ></Button>
             </div>
         </SetupForm>
     );

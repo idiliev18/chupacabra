@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, createContext, useState } from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 import { readStorage, writeStorage } from "./localStorage";
@@ -32,33 +32,40 @@ function App() {
         userData: null,
     });
 
-    const authenticate = (userData) => {
-        console.log("Submitted for authenticating!", userData);
-        if (userData.email !== VALID_EMAIL.email) return { email: false };
-        else if (userData.password !== VALID_EMAIL.password)
-            return { password: false };
-        else {
-            var updatedState = {
-                userData: {
-                    username: "example",
-                    email: "example@example.com",
-                    token: VALID_TOKEN,
-                },
-                authenticated: true,
-            };
+    const authenticate = async (userData) => {
+        return new Promise((res, rej) => {
+            console.log("Submitted for authenticating!", userData);
+            if (userData.email !== VALID_EMAIL.email)
+                setTimeout(() => res({ email: false }), 1000);
+            else if (userData.password !== VALID_EMAIL.password)
+                setTimeout(() => res({ password: false }), 1000);
+            else {
+                // writeStorage("auth", updatedState.userData.token);
 
-            setState((prevState) => {
-                return { ...prevState, ...updatedState };
-            });
+                setTimeout(() => {
+                    res({ email: true, password: true });
+                    let updatedState = {
+                        userData: {
+                            username: "example",
+                            email: "example@example.com",
+                            token: VALID_TOKEN,
+                        },
+                        authenticated: true,
+                    };
 
-            // writeStorage("auth", updatedState.userData.token);
-
-            return { email: true, password: true };
-        }
+                    setState((prevState) => {
+                        return { ...prevState, ...updatedState };
+                    });
+                }, 1000);
+            }
+        });
     };
 
-    const registerUser = (userData) => {
-        console.log("Submitted for registering!", userData);
+    const registerUser = async (userData) => {
+        return new Promise((res, rej) => {
+            console.log("Submitted for registering!", userData);
+            setTimeout(res, 1000);
+        });
     };
 
     const invalidateAuthentication = () => {
