@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import RSSParser from "rss-parser";
 import he from "he";
 
-import { Tile, Notification, Container } from "react-bulma-components";
-import { Link } from "react-router-dom";
+import { RSS_ENDPOINT } from "../api";
+
+import { Tile, Notification } from "react-bulma-components";
 import Loading from "../components/Loading";
 
-const NEWS_ENDPOINT = "//localhost:4000/rss/maritimeFeed";
 const rssParser = new RSSParser();
 
 function News(props) {
@@ -22,7 +22,7 @@ function News(props) {
     };
 
     useEffect(() => {
-        rssParser.parseURL(NEWS_ENDPOINT).then((feed) => {
+        rssParser.parseURL(`${RSS_ENDPOINT}/maritimeFeed`).then((feed) => {
             setFeed(feed);
             setLoading(false);
         });

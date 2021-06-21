@@ -23,7 +23,7 @@ function Signup(props) {
     const [loading, setLoading] = useState(false);
     const [invalidValues, setInvalidValues] = useState({
         password: null,
-        telephoneNumber: null,
+        phone: null,
         username: null,
         email: null,
     });
@@ -48,7 +48,7 @@ function Signup(props) {
             let allValid = false;
 
             for (let key in invalidValues) {
-                if (key === "telephoneNumber" && invalidValues[key] === null)
+                if (key === "phone" && invalidValues[key] === null)
                     allValid = true;
                 else allValid = invalidValues[key];
 
@@ -59,9 +59,11 @@ function Signup(props) {
                 let data = {
                     firstName: event.target.firstName.value,
                     lastName: event.target.lastName.value,
+                    age: event.target.age.value,
+                    username: event.target.username.value,
                     email: event.target.email.value,
                     city: event.target.city.value,
-                    telephoneNumber: event.target.telephoneNumber.value,
+                    phone: event.target.phone.value,
                     password: event.target.password.value,
                 };
 
@@ -78,8 +80,8 @@ function Signup(props) {
         let updatedState = {};
         if (event.target.value !== "") {
             switch (event.target.name) {
-                case "telephoneNumber": {
-                    updatedState["telephoneNumber"] =
+                case "phone": {
+                    updatedState["phone"] =
                         !!event.target.value.match(PHONE_REGEX);
                     break;
                 }
@@ -138,6 +140,16 @@ function Signup(props) {
                         name="lastName"
                         className="input"
                         placeholder="Георгиев"
+                        required
+                    />
+                </div>
+                <div className={"control " + styles.control}>
+                    <label className="label">Възраст</label>
+                    <input
+                        type="number"
+                        name="age"
+                        className="input"
+                        placeholder="22"
                         required
                     />
                 </div>
@@ -210,19 +222,19 @@ function Signup(props) {
                 <div className="control">
                     <input
                         type="tel"
-                        name="telephoneNumber"
+                        name="phone"
                         className={`input ${
-                            invalidValues.telephoneNumber === null
+                            invalidValues.phone === null
                                 ? ""
-                                : invalidValues.telephoneNumber
+                                : invalidValues.phone
                                 ? "is-success"
                                 : "is-danger"
                         }`}
                         onChange={handleInputChange}
                     />
                 </div>
-                {invalidValues.telephoneNumber ===
-                null ? null : invalidValues.telephoneNumber ? null : (
+                {invalidValues.phone ===
+                null ? null : invalidValues.phone ? null : (
                     <div className="help is-danger">
                         телефонният номер е невалиден (пробвайте с +359)
                     </div>

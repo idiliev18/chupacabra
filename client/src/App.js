@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 import { readStorage, writeStorage } from "./localStorage";
+import { fetchAPI } from "./api";
 
 import Loading from "./components/Loading";
 
@@ -32,6 +33,7 @@ function App() {
         userData: null,
     });
 
+    // TODO: Implement backend communication
     const authenticate = async (userData) => {
         return new Promise((res, rej) => {
             console.log("Submitted for authenticating!", userData);
@@ -62,10 +64,11 @@ function App() {
     };
 
     const registerUser = async (userData) => {
-        return new Promise((res, rej) => {
-            console.log("Submitted for registering!", userData);
-            setTimeout(res, 1000);
-        });
+        console.log("Submitted for registering!", userData);
+        let responseData = await fetchAPI("/register", userData, "POST");
+        console.log(responseData);
+
+        return;
     };
 
     const invalidateAuthentication = () => {
