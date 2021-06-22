@@ -29,13 +29,18 @@
         "winston3-discord": "^1.1.1"
     },
     "eslintConfig": {
-        "extends": ["react-app", "shared-config"],
+        "extends": [
+            "react-app",
+            "shared-config"
+        ],
         "rules": {
             "additional-rule": "warn"
         },
         "overrides": [
             {
-                "files": ["**/*.ts?(x)"],
+                "files": [
+                    "**/*.ts?(x)"
+                ],
                 "rules": {
                     "additional-typescript-only-rule": "warn"
                 }
