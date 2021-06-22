@@ -1,5 +1,5 @@
 const express = require('express');
-const crypto = require('crypto');
+var CryptoJS = require("crypto-js");
 const validation = require('../helpers/validations');
 const logs = require('../models/log.js')
 const db = require('../models/db');
@@ -53,7 +53,8 @@ app.post('/register', (req, res) => {
             regData.phone,
             regData.email,
             regData.username,
-            "HashedPasswordGoBRRRRRRRRRRRRR"
+            CryptoJS.SHA256(regData.password+process.env.salt).
+                                     toString(CryptoJS.enc.Base32)
         )
     } else {
         resJSON = JSONModule.createJSONResponse(false, returnValue);

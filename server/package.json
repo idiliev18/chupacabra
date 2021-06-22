@@ -18,6 +18,7 @@
     "homepage": "https://github.com/idiliev18/chupacabra#readme",
     "dependencies": {
         "axios": "^0.21.1",
+        "crypto-js": "^4.0.0",
         "dotenv": "^10.0.0",
         "express": "^4.17.1",
         "mssql": "^7.1.0",
@@ -29,13 +30,18 @@
         "winston3-discord": "^1.1.1"
     },
     "eslintConfig": {
-        "extends": ["react-app", "shared-config"],
+        "extends": [
+            "react-app",
+            "shared-config"
+        ],
         "rules": {
             "additional-rule": "warn"
         },
         "overrides": [
             {
-                "files": ["**/*.ts?(x)"],
+                "files": [
+                    "**/*.ts?(x)"
+                ],
                 "rules": {
                     "additional-typescript-only-rule": "warn"
                 }
