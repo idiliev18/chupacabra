@@ -22,42 +22,44 @@ class db {
 
     async registerUser(firstName, lastName, age, city, phone, email, username, hashPassword) {
         const request = new sql.Request();
-        await request.input('userFirstName', sql.NVarChar, firstName);
-        await request.input('userLastName', sql.NVarChar, lastName);
-        await request.input('userAge', sql.Int, age);
-        await request.input('userCity', sql.NVarChar, city);
-        await request.input('userPhone', sql.VarChar, phone);
-        await request.input('userEmail', sql.NVarChar, email);
-        await request.input('userUsername', sql.VarChar, username);
-        await request.input('userHashPassword', sql.VarChar, hashPassword);
-        ``
-        await request.query(
-            `EXEC RegisterUser
-            @FirstName = @userFirstName,
-            @LastName = @userLastName,
-            @Age  = @userAge,
-            @City  = @userCity,
-            @Phone  = @userPhone,
-            @Username = @userUsername,
-            @Email = @userEmail,
-            @PasswordHash = @userHashPassword`,
-            (err, result) => {
-                console.log(err);
-                console.log(result);
-                /*
-                err != null ? () => { loggerManager.logError(err) } : 0;
+         request.input('userFirstName', sql.NVarChar, firstName)
+         .input('userLastName', sql.NVarChar, lastName)
+         .input('userAge', sql.Int, age)
+         .input('userCity', sql.NVarChar, city)
+         .input('userPhone', sql.VarChar, phone)
+         .input('userEmail', sql.NVarChar, email)
+         .input('userUsername', sql.VarChar, username)
+         .input('userHashPassword', sql.VarChar, hashPassword);
 
-                let logString = ["", "Taken email", "Taken Username", "Taken Phone"];
+         let result
+         try{
+            result = await request.query(
+                `EXEC RegisterUser
+                @FirstName = @userFirstName,
+                @LastName = @userLastName,
+                @Age  = @userAge,
+                @City  = @userCity,
+                @Phone  = @userPhone,
+                @Username = @userUsername,
+                @Email = @userEmail,
+                @PasswordHash = @userHashPassword`)
+    
+         }catch(err){
+                return err;
+         }
 
-                if (logString != null && result.recordset[0].ReturnCode != 0) {
-                    loggerManager.logWarn(
-                        `There is a problem with registration of User with email: ${email} \n ${logString[result.recordset[0].ReturnCode]}`
-                    )
-                }
-                */
-            }
-        )
+         return result;
+       
     }
+
+    async loginUser(email, passwordHash){
+        const request = new sql.Request();
+
+        await request.input('userEmail', sql.VarChar, email);
+        await request.input('userPasswordHash', sql.VarChar, passwordHash);
+    }
+
+
     //private
     static _config = dbConfig.config;
     static _connection = false;

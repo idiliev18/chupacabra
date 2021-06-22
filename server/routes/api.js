@@ -32,7 +32,7 @@ app.post('/login', (req, res) => {
     res.send(user);
 });
 
-app.post('/register', (req, res) => {
+app.post('/register', async(req, res) => {
     let resJSON;
     //Receive x-www-form-urlencoded from front-end
     let regData = req.body;
@@ -45,7 +45,7 @@ app.post('/register', (req, res) => {
 
     //Validation
     if (returnValue === true) {
-        DB.registerUser(
+        returnValue = await DB.registerUser(
             regData.firstName,
             regData.lastName,
             regData.age,
@@ -56,6 +56,7 @@ app.post('/register', (req, res) => {
             CryptoJS.SHA256(regData.password+process.env.salt).
                                      toString(CryptoJS.enc.Base32)
         )
+        console.log(returnValue);
     } else {
         resJSON = JSONModule.createJSONResponse(false, returnValue);
 
