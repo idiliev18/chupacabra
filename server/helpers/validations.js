@@ -92,3 +92,4 @@ const registerValidations = {
 module.exports.isDataValid = isDataValid;
 module.exports.formValidation = formValidation;
 module.exports.registerValidations = registerValidations;
+module.exports.validations = validations;
