@@ -59,21 +59,16 @@ function areValuesEqualTo(obj, value) {
 }
 
 function formValidation(dataToValidate, criterias) {
-    let errorObj = new Object();
-
+    let errorArr={};
     for (const key in dataToValidate) {
-        if (!isDataValid(dataToValidate[key], criterias[key])) {
-            errorObj[key] = criterias[Object.keys(criterias[key])[0]];
-        } else {
-            errorObj[key] = "Ok";
+        if(!isDataValid(dataToValidate[key],criterias[key])){
+            errorArr[key] = criterias[Object.keys(criterias[key])[0]];
         }
     }
-
-    if (areValuesEqualTo(errorObj, 'Ok')) {
+    if(Object.keys(errorArr).length === 0){
         return true;
     }
-
-    return errorObj;
+    return errorArr;
 };
 
 const registerValidations = {

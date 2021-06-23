@@ -40,9 +40,7 @@ app.post('/register', async(req, res) => {
     loggerManager.logInfo(
         `User with email: ${regData.email} is trying to register.`
     );
-
     let returnValue = validation.formValidation(regData, validation.registerValidations);
-
     //Validation
     if (returnValue === true) {
         returnValue = await DB.registerUser(
@@ -56,10 +54,9 @@ app.post('/register', async(req, res) => {
             CryptoJS.SHA256(regData.password+process.env.salt).
                                      toString(CryptoJS.enc.Base32)
         )
-        console.log(returnValue);
+        resJSON = JSONModule.createJSONResponse(returnValue.hasOwnProperty("Token"),returnValue[0])
     } else {
         resJSON = JSONModule.createJSONResponse(false, returnValue);
-
         loggerManager.logWarn(
             `Failed validation/s at user with email ${regData.email}:\n
             ${JSON.stringify(returnValue)
@@ -70,7 +67,6 @@ app.post('/register', async(req, res) => {
             }`
         );
     }
-
     //Send respond
     res.send(resJSON);
 });

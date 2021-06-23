@@ -43,13 +43,12 @@ class db {
                 @Username = @userUsername,
                 @Email = @userEmail,
                 @PasswordHash = @userHashPassword`)
-    
+
          }catch(err){
                 return err;
          }
+         return result.recordset;
 
-         return result;
-       
     }
 
     async loginUser(email, passwordHash){
