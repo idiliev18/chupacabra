@@ -22,17 +22,18 @@ class db {
 
     async registerUser(firstName, lastName, age, city, phone, email, username, hashPassword) {
         const request = new sql.Request();
-         request.input('userFirstName', sql.NVarChar, firstName)
-         .input('userLastName', sql.NVarChar, lastName)
-         .input('userAge', sql.Int, age)
-         .input('userCity', sql.NVarChar, city)
-         .input('userPhone', sql.VarChar, phone)
-         .input('userEmail', sql.NVarChar, email)
-         .input('userUsername', sql.VarChar, username)
-         .input('userHashPassword', sql.VarChar, hashPassword);
+        request.input('userFirstName', sql.NVarChar, firstName)
+            .input('userLastName', sql.NVarChar, lastName)
+            .input('userAge', sql.Int, age)
+            .input('userCity', sql.NVarChar, city)
+            .input('userPhone', sql.VarChar, phone)
+            .input('userEmail', sql.NVarChar, email)
+            .input('userUsername', sql.VarChar, username)
+            .input('userHashPassword', sql.VarChar, hashPassword);
 
-         let result
-         try{
+        let result;
+
+        try {
             result = await request.query(
                 `EXEC RegisterUser
                 @FirstName = @userFirstName,
@@ -44,14 +45,14 @@ class db {
                 @Email = @userEmail,
                 @PasswordHash = @userHashPassword`)
 
-         }catch(err){
-                return err;
-         }
-         return result.recordset;
+        } catch (err) {
+            return err;
+        }
 
+        return result.recordset;
     }
 
-    async loginUser(email, passwordHash){
+    async loginUser(email, passwordHash) {
         const request = new sql.Request();
 
         await request.input('userEmail', sql.VarChar, email);

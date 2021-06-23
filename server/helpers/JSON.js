@@ -1,10 +1,10 @@
 function createJSONResponse(isSuccess, fields) {
-    let returnJSONObject = new Object;
     if (isSuccess) {
-        returnJSONObject.type = "register-success";
-        returnJSONObject.data = new Object();
-        returnJSONObject.data.token = fields.token;
-        returnJSONObject.data.expiresAt = fields.expiresAt;
+        let data = fields;
+        return {
+            "type": "register-success",
+            data
+        }
     } else {
         return {
             "type": "register-failure",
@@ -16,8 +16,6 @@ function createJSONResponse(isSuccess, fields) {
     }
 
 
-
-    return JSON.stringify(returnJSONObject);
 }
 
 module.exports.createJSONResponse = createJSONResponse;

@@ -59,15 +59,18 @@ function areValuesEqualTo(obj, value) {
 }
 
 function formValidation(dataToValidate, criterias) {
-    let errorArr={};
+    let errorArr = {};
+
     for (const key in dataToValidate) {
-        if(!isDataValid(dataToValidate[key],criterias[key])){
+        if (!isDataValid(dataToValidate[key], criterias[key])) {
             errorArr[key] = criterias[Object.keys(criterias[key])[0]];
         }
     }
-    if(Object.keys(errorArr).length === 0){
+
+    if (Object.keys(errorArr).length === 0) {
         return true;
     }
+    
     return errorArr;
 };
 
