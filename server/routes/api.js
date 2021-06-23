@@ -7,6 +7,7 @@ const userClass = require('../models/user');
 const JSONModule = require('../helpers/JSON');
 const app = express();
 const loggerManager = new logs();
+const {errors} = require('../helpers/errors')
 
 app.use(express.urlencoded({
     extended: true
@@ -55,8 +56,8 @@ app.post('/register', async (req, res) => {
                 toString(CryptoJS.enc.Base32)
         )
 
-        console.log(returnValue[0]);
-        resJSON = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Token"), returnValue[0])
+        console.log(errors[returnValue[0].ReturnCode]);
+        resJSON = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Token"), errors[returnValue[0].ReturnCode])
     } else {
         resJSON = JSONModule.createJSONResponse(false, returnValue);
         loggerManager.logWarn(
