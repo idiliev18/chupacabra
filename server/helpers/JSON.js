@@ -1,13 +1,13 @@
-function createJSONResponse(isSuccess, fields) {
+function createJSONResponse(isSuccess, fields,type) {
     if (isSuccess) {
         let data = fields;
         return {
-            "type": "register-success",
+            "type": type+"-success",
             data
         }
     } else {
         return {
-            "type": "register-failure",
+            "type": type+"-failure",
             fields
         }
     }

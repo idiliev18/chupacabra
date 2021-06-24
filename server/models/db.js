@@ -52,11 +52,24 @@ class db {
         return result.recordset;
     }
 
-    async loginUser(email, passwordHash) {
+    async loginUser(loginCredential, hashPassword) {
         const request = new sql.Request();
+        request.input('userLoginCredential', sql.NVarChar, loginCredential)
+            .input('userHashPassword', sql.VarChar, hashPassword);
 
-        await request.input('userEmail', sql.VarChar, email);
-        await request.input('userPasswordHash', sql.VarChar, passwordHash);
+        let result;
+
+        try {
+            result = await request.query(
+                `EXEC LoginUser
+                @LoginCredential = @userLoginCredential,
+                @PasswordHash = @userHashPassword`)
+
+        } catch (err) {
+            return err;
+        }
+
+        return result.recordset;
     }
 
 
