@@ -1,15 +1,18 @@
 let errors = [
     {},
     {
-      "email": "Taken Email"  
+      "email": "Taken Email"
     },
 
     {
-      "username": "Taken Username"  
+      "username": "Taken Username"
     },
 
     {
-        "phone": "Taken Phone"  
+        "phone": "Taken Phone"
+    },
+    {
+        "email" : "Wrong credentials"
     }
 ]
 

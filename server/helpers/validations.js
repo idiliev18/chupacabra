@@ -70,7 +70,7 @@ function formValidation(dataToValidate, criterias) {
     if (Object.keys(errorArr).length === 0) {
         return true;
     }
-    
+
     return errorArr;
 };
 
@@ -87,7 +87,15 @@ const registerValidations = {
     'isEmailValid': 'Invalid email'
 };
 
+const loginValidations = {
+    'email': { 'isEmailValid': 1 },
+    'isEmailValid': 'Invalid email'
+};
+
+
+
 module.exports.isDataValid = isDataValid;
 module.exports.formValidation = formValidation;
 module.exports.registerValidations = registerValidations;
+module.exports.loginValidations = loginValidations;
 module.exports.validations = validations;
