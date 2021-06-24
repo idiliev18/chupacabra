@@ -74,4 +74,48 @@ app.post('/register', async (req, res) => {
     res.send(resJSON);
 });
 
+app.get('/users/:username', async(req, res) =>{
+
+    //console.log(req.params.username);
+    console.log(req.headers.authorization);
+
+    let returnValue, JSONResponse;
+
+    if(req.headers.authorization != undefined){
+        returnValue = await DB.getPrivateProfileInformation(req.params.username, req.headers.authorization)
+
+        //console.log("UMIRAM PREDI JSON");
+
+        if(returnValue.length == 0)
+        {
+            
+            JSONResponse = JSONModule.
+                           createProfileJSON
+                           (await DB.getPublicProfileInformation(req.params.username)); 
+           
+              //console.log("UMIRAM SLED JSON");
+        }
+        else
+        {
+            
+            JSONResponse = JSONModule.
+                           createProfileJSON(returnValue);
+             
+        }
+    }else{
+        returnValue = await DB.getPublicProfileInformation(req.params.username)
+
+        if(returnValue.length == 0){
+            res.status(404);
+        }
+
+        JSONResponse = JSONModule.
+                        createProfileJSON(returnValue);
+        
+    }
+
+    res.send(JSONResponse);
+})
+
+
 module.exports = app;

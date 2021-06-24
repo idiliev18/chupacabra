@@ -58,6 +58,51 @@ class db {
         await request.input('userEmail', sql.VarChar, email);
         await request.input('userPasswordHash', sql.VarChar, passwordHash);
     }
+    
+
+    async getPublicProfileInformation(username){
+        const request = new sql.Request();
+        request.input('userUsername', sql.VarChar, username)
+        request.input('userToken', sql.VarChar, 'NULL')
+
+        let result;
+        
+        console.log(username);
+
+        try {
+            result = await request.query(
+                `EXEC GetProfileInformation
+                @Username = @userUsername,
+                @Token = @userToken`)
+
+
+        } catch (err) {
+            return err;
+        }
+
+        return result.recordset;
+    }
+
+    async getPrivateProfileInformation(username, token){
+        const request = new sql.Request();
+        request.input('userUsername', sql.VarChar, username)
+        request.input('userToken', sql.VarChar, token)
+
+        let result;
+
+        try {
+            result = await request.query(
+                `EXEC GetProfileInformation
+                @Username = @userUsername,
+                @Token = @userToken`)
+
+
+        } catch (err) {
+            return err;
+        }
+
+        return result.recordset;
+    }
 
 
     //private
