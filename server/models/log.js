@@ -1,23 +1,23 @@
 class LoggerManager{
     constructor() {
-        this.winston = require('winston');
-        this.LokiTransport = require('winston-loki');
-        this.DiscordLogger = require('winston3-discord');
-        this.logger = this.winston.createLogger();
+        this.#winston = require('winston');
+        this.#LokiTransport = require('winston-loki');
+        this.#DiscordLogger = require('winston3-discord');
+        this.#logger = this.#winston.createLogger();
 
-        this.logger.add(new this.winston.transports.Console({
-            format: this.winston.format.json(),
+        this.#logger.add(new this.#winston.transports.Console({
+            format: this.#winston.format.json(),
             level: 'silly'
         }));
               
-        this.logger.add(new this.LokiTransport({
+        this.#logger.add(new this.#LokiTransport({
             host: process.env.LOKI_IP,
             json: true,
             labels: { job: 'Chupacabra-Test' },
             level: 'silly'
         }));
               
-        this.logger.add(new this.DiscordLogger({
+        this.#logger.add(new this.#DiscordLogger({
             webhooks: {
                 id: process.env.DISCORD_ID,
                 token: process.env.DISCORD_TOKEN
@@ -28,31 +28,31 @@ class LoggerManager{
 
     //public methods
     logError(logMsg) {
-        this.logger.error(logMsg)
+        this.#logger.error(logMsg)
     }
     
     logWarn(logMsg) {
-        this.logger.warn(logMsg)
+        this.#logger.warn(logMsg)
     }
     
     logInfo(logMsg) {
-        this.logger.info(logMsg);
+        this.#logger.info(logMsg);
     }
     
     logHttp(logMsg) {
-        this.logger.http(logMsg);
+        this.#logger.http(logMsg);
     }
     
     logVerbose(logMsg) {
-        this.logger.verbose(logMsg);
+        this.#logger.verbose(logMsg);
     }
     
     logDebug(logMsg) {
-        this.logger.debug(logMsg);
+        this.#logger.debug(logMsg);
     }
     
     logSilly(logMsg) {
-        this.logger.silly(logMsg);
+        this.#logger.silly(logMsg);
     }
 
     //private
