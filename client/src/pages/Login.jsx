@@ -60,7 +60,6 @@ function Login(props) {
 
     return (
         <SetupForm onSubmit={handleSubmit}>
-            {userContext.authenticated ? <Redirect to="/" /> : ""}
             <h1>Влизане</h1>
             <br />
 

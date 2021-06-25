@@ -30,7 +30,7 @@ function RoleNavbar(props) {
                     </Navbar.Item>
                     {userContext.authenticated ? (
                         <>
-                            <Navbar.Item renderAs={Link} to="/dash">
+                            <Navbar.Item renderAs={Link} to="/dashboard">
                                 Контролен Панел
                             </Navbar.Item>
                         </>
