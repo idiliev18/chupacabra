@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, createContext, useState } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 import { readStorage, writeStorage } from "./localStorage";
@@ -16,7 +16,9 @@ const Index = lazy(() => import("./pages/Index"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 const News = lazy(() => import("./pages/News"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const NeedsAuthentication = lazy(() => import("./pages/NeedsAuthentication"));
 
 const UserContext = createContext();
 
@@ -95,18 +97,42 @@ function App() {
                             invalidateAuthentication,
                         }}
                     >
-                        <RoleNavbar />
                         <Content>
                             <Switch>
-                                <Route exact path="/" component={Index} />
-                                <Route exact path="/news" component={News} />
-                                <Route exact path="/login" component={Login} />
-                                <Route
-                                    exact
-                                    path="/signup"
-                                    component={Signup}
-                                />
-                                <Route component={NotFound} />
+                                <Route exact path="/dashboard">
+                                    {state.authenticated ? (
+                                        <Dashboard />
+                                    ) : (
+                                        <NeedsAuthentication />
+                                    )}
+                                </Route>
+
+                                <Route path="/">
+                                    <RoleNavbar />
+                                    <Route exact path="/" component={Index} />
+                                    <Route
+                                        exact
+                                        path="/news"
+                                        component={News}
+                                    />
+                                    {state.authenticated ? (
+                                        <Redirect to="/" />
+                                    ) : (
+                                        <>
+                                            <Route
+                                                exact
+                                                path="/login"
+                                                component={Login}
+                                            />
+                                            <Route
+                                                exact
+                                                path="/signup"
+                                                component={Signup}
+                                            />
+                                        </>
+                                    )}
+                                    <Route component={NotFound} />
+                                </Route>
                             </Switch>
                         </Content>
                     </UserContext.Provider>

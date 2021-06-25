@@ -1,0 +1,67 @@
+@import "../variables.scss";
+
+#sidebar {
+    height: 100vh;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin: 0;
+    }
+
+    #nav-items {
+        list-style-type: none;
+        margin: 0;
+
+        li {
+            background-color: $primary;
+            padding: $block-spacing / 1.2;
+            margin: 0;
+            transition: 0.3s background-color;
+            width: 100%;
+        }
+
+        li {
+            button {
+                width: 100%;
+            }
+        }
+
+        li:hover {
+            background-color: darken($primary, 2.5%);
+            cursor: pointer;
+        }
+
+        li span {
+            margin-right: $block-spacing / 1.2;
+        }
+    }
+
+    #nav-header {
+        padding: $block-spacing;
+        background-color: darken($primary, 10%);
+        border-top-left-radius: $radius-large;
+        border-top-right-radius: $radius-large;
+    }
+
+    #nav-user {
+        padding: $block-spacing;
+
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        background-color: darken($primary, 15%);
+
+        border-bottom-left-radius: $radius-large;
+        border-bottom-right-radius: $radius-large;
+    }
+}
+
+#content {
+    height: 100vh;
+}

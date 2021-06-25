@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {string} key
+ * @returns {string}
+ */
 function readFromLocalStorage(key) {
     if (!localStorage.getItem(key)) return null;
     else {
@@ -9,6 +14,11 @@ function readFromLocalStorage(key) {
     }
 }
 
+/**
+ *
+ * @param {string} key
+ * @param {string} data
+ */
 function writeToLocalStorage(key, data) {
     localStorage.setItem(key, JSON.stringify(data));
 }
