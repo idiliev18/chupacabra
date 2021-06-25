@@ -93,6 +93,8 @@ app.get('/users/:username', async (req, res) => {
     if (req.headers.authorization != undefined) {
         returnValue = await DB.getPrivateProfileInformation(req.params.username, req.headers.authorization)
 
+        console.log(returnValue);
+
         if (returnValue.length == 0) {
             JSONResponse = JSONModule.
                 createProfileJSON
@@ -105,6 +107,7 @@ app.get('/users/:username', async (req, res) => {
     } else {
         returnValue = await DB.getPublicProfileInformation(req.params.username)
 
+        console.log();
         if (returnValue.length == 0) {
             res.status(404);
         }

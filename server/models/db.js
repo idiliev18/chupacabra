@@ -91,7 +91,7 @@ class db {
             return err;
         }
 
-        return result.recordset;
+        return result.recordsets;
     }
 
     async getPrivateProfileInformation(username, token) {
@@ -112,7 +112,7 @@ class db {
             return err;
         }
 
-        return result.recordset;
+        return result.recordsets;
     }
 
     //private

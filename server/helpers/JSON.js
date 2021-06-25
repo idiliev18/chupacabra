@@ -14,17 +14,24 @@ function createJSONResponse(isSuccess, fields, type) {
 }
 
 function createProfileJSON(data) {
-    if (data.length == 0) {
+
+    console.log(data);
+    if (data[0].length == 0) {
         return ({
-            "type": "failure",
+            "type": "user-failure",
             "reason": "Error 404"
         })
     }
     else {
-        return ({
-            "type": "success",
-            "data": data[0]
-        })
+        let tmp = {
+            "type": "user-success",
+            "data": data[0][0]
+        }
+
+
+        tmp.data.roles = data[1].map((role)=>{return role.RoleName});
+
+        return tmp;
     }
 }
 
