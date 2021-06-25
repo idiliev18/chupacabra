@@ -9,6 +9,7 @@
    <img src = "https://img.shields.io/github/repo-size/idiliev18/chupacabra?style=for-the-badge">
    <img src = "https://img.shields.io/github/last-commit/idiliev18/chupacabra?style=for-the-badge">
    <img src = "https://img.shields.io/github/languages/top/idiliev18/chupacabra?style=for-the-badge">
+  <img src = "https://github.com/idiliev18/chupacabra/actions/workflows/codeql-analysis.yml/badge.svg">
   </p>
 
    <hr>
@@ -24,7 +25,7 @@
   <strong><big>
    The innovative solution for every port in the world. 💧
   </strong><big>
-  </p><br><hr>
+  </p><hr>
   <h1>💻 About  </h1>
   <p>
     Our website systematizes, organizes and facilitates the work of the workers in the ports and gives the citizens access to useful information. 
