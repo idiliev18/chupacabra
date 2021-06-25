@@ -20,11 +20,6 @@ app.post('/login', async (req, res) => {
     let returnValue = true;
     let resJSON;
 
-    let password = 123233;
-    let securedPassword = (password+"fikretchu");
-
-
-
     loggerManager.logInfo(
         `User with email: ${loginData.email} is trying to login.`
     );
