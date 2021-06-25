@@ -19,7 +19,10 @@ app.post('/login', async (req, res) => {
     let loginData = req.body;
     let returnValue = true;
     let resJSON;
-    loggerManager.logInfo(`User with email: ${loginData.email} is trying to login.`);
+
+    loggerManager.logInfo(
+        `User with email: ${loginData.email} is trying to login.`
+    );
 
     if (loginData.email.includes('@')) {
         returnValue = validation.formValidation(loginData, validation.loginValidations);
@@ -30,13 +33,27 @@ app.post('/login', async (req, res) => {
         returnValue = await DB.loginUser(loginData.email,
             CryptoJS.SHA256(loginData.password + process.env.salt).
                 toString(CryptoJS.enc.Base32)
-        )
+        );
+
+        if (returnValue[0].hasOwnProperty("Token")) {
+            loggerManager.logInfo(
+                `User with email/username: ${loginData.email} is successfully logged.`
+            );
+        } else {
+            loggerManager.logWarn(
+                `There is no an account with this Username: ${loginData.email}`
+            );
+        }
+
         resJSON = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Token"), returnValue[0].hasOwnProperty("Token") ? returnValue : errors[returnValue[0].ReturnCode], 'login')
     } else {
         resJSON = JSONModule.createJSONResponse(false, returnValue, login);
-        loggerManager.logWarn(`Email: ${user.email} is not valid`);
+
+        loggerManager.logWarn(
+            `Email: ${user.email} is not valid.`
+        );
     }
-    
+
     //Send respond
     res.send(resJSON);
 });
@@ -65,9 +82,26 @@ app.post('/register', async (req, res) => {
             CryptoJS.SHA256(regData.password + process.env.salt).
                 toString(CryptoJS.enc.Base32)
         )
+
+
+        if (returnValue[0].hasOwnProperty("Token")) {
+            loggerManager.logInfo(
+                `User with email: ${regData.email} is successfully register into the database.`
+            );
+        } else {
+            loggerManager.logWarn(
+                `Failed saving to database at user with email: ${regData.email}:\n
+                ${JSON.stringify(errors[returnValue[0].ReturnCode])
+                    .split(',')
+                    .join("\n\t    ")
+                    .replace(/:/g, " - ")
+                    .replace(/["{}]/g, "")
+                }`
+            );
+        }
+
         resJSON = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Token"), errors[returnValue[0].ReturnCode], 'register')
     } else {
-        resJSON = JSONModule.createJSONResponse(false, returnValue, 'register');
         loggerManager.logWarn(
             `Failed validation/s at user with email ${regData.email}:\n
             ${JSON.stringify(returnValue)
@@ -77,6 +111,8 @@ app.post('/register', async (req, res) => {
                 .replace(/["{}]/g, "")
             }`
         );
+
+        resJSON = JSONModule.createJSONResponse(false, returnValue, 'register');
     }
 
     //Send respond
