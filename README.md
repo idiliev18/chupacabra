@@ -88,8 +88,7 @@
    <p> To install our project on your machine you just need to clone it. This can be done by : </p>
    <pre>
     git clone https://github.com/idiliev18/chupacabra.git
-    cd chupacabra
-   </pre>
+    cd chupacabra</pre>
    <h1> ⛏️ Built using : </h1>
    <p>With what it is build</p>
    <!--
