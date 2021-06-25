@@ -1,8 +1,8 @@
 'use strict'
 const validations = require('../helpers/validations.js');
+
 class User {
     // public
-
     constructor(id, firstName, lastName, age, city, phone, username, email, isVerified) {
         this.id = id;
         this.firstName = firstName;
@@ -16,7 +16,6 @@ class User {
     }
 
     // private
-
     #id;
     #firstName;
     #lastName;

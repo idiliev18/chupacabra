@@ -39,12 +39,12 @@ const validations = {
 };
 
 function isDataValid(data, toCheck) {
-
     for (const key in toCheck) {
         if (!validations[key](data, toCheck[key])) {
             return false;
         }
     }
+    
     return true;
 };
 

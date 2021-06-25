@@ -1,7 +1,5 @@
 const dbConfig = require('../config/dbConfig');
 const sql = require('mssql')
-const logs = require('../models/log')
-const loggerManager = new logs();
 
 class db {
     constructor() {
@@ -43,8 +41,8 @@ class db {
                 @Phone  = @userPhone,
                 @Username = @userUsername,
                 @Email = @userEmail,
-                @PasswordHash = @userHashPassword`)
-
+                @PasswordHash = @userHashPassword`
+            );
         } catch (err) {
             return err;
         }
@@ -63,31 +61,31 @@ class db {
             result = await request.query(
                 `EXEC LoginUser
                 @LoginCredential = @userLoginCredential,
-                @PasswordHash = @userHashPassword`)
-
+                @PasswordHash = @userHashPassword`
+            );
         } catch (err) {
             return err;
         }
 
         return result.recordset;
     }
-    
 
-    async getPublicProfileInformation(username){
+
+    async getPublicProfileInformation(username) {
         const request = new sql.Request();
         request.input('userUsername', sql.VarChar, username)
         request.input('userToken', sql.VarChar, 'NULL')
 
         let result;
-        
+
         console.log(username);
 
         try {
             result = await request.query(
                 `EXEC GetProfileInformation
                 @Username = @userUsername,
-                @Token = @userToken`)
-
+                @Token = @userToken`
+            );
 
         } catch (err) {
             return err;
@@ -96,7 +94,7 @@ class db {
         return result.recordset;
     }
 
-    async getPrivateProfileInformation(username, token){
+    async getPrivateProfileInformation(username, token) {
         const request = new sql.Request();
         request.input('userUsername', sql.VarChar, username)
         request.input('userToken', sql.VarChar, token)
@@ -116,7 +114,6 @@ class db {
 
         return result.recordset;
     }
-
 
     //private
     static _config = dbConfig.config;

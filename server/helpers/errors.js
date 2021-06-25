@@ -1,19 +1,19 @@
 let errors = [
-    {},
-    {
-      "email": "Taken Email"
-    },
+  {},
+  {
+    "email": "Taken Email"
+  },
 
-    {
-      "username": "Taken Username"
-    },
+  {
+    "username": "Taken Username"
+  },
 
-    {
-        "phone": "Taken Phone"
-    },
-    {
-        "email" : "Wrong credentials"
-    }
+  {
+    "phone": "Taken Phone"
+  },
+  {
+    "email": "Wrong credentials"
+  }
 ]
 
 module.exports.errors = errors;

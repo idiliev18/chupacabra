@@ -1,4 +1,4 @@
-class LoggerManager{
+class LoggerManager {
     constructor() {
         this.#winston = require('winston');
         this.#LokiTransport = require('winston-loki');
@@ -9,14 +9,14 @@ class LoggerManager{
             format: this.#winston.format.json(),
             level: 'silly'
         }));
-              
+
         this.#logger.add(new this.#LokiTransport({
             host: process.env.LOKI_IP,
             json: true,
             labels: { job: 'Chupacabra-Test' },
             level: 'silly'
         }));
-              
+
         this.#logger.add(new this.#DiscordLogger({
             webhooks: {
                 id: process.env.DISCORD_ID,
@@ -30,36 +30,36 @@ class LoggerManager{
     logError(logMsg) {
         this.#logger.error(logMsg)
     }
-    
+
     logWarn(logMsg) {
         this.#logger.warn(logMsg)
     }
-    
+
     logInfo(logMsg) {
         this.#logger.info(logMsg);
     }
-    
+
     logHttp(logMsg) {
         this.#logger.http(logMsg);
     }
-    
+
     logVerbose(logMsg) {
         this.#logger.verbose(logMsg);
     }
-    
+
     logDebug(logMsg) {
         this.#logger.debug(logMsg);
     }
-    
+
     logSilly(logMsg) {
         this.#logger.silly(logMsg);
     }
 
     //private
-    #winston
-    #LokiTransport
-    #DiscordLogger
-    #logger
+    #winston;
+    #LokiTransport;
+    #DiscordLogger;
+    #logger;
 }
 
 module.exports = LoggerManager;

@@ -1,4 +1,4 @@
-require('dotenv').config({path: '../.env'})
+require('dotenv').config({ path: '../.env' })
 const express = require('express');
 const app = express();
 const api = require("./routes/api.js");

@@ -3,11 +3,10 @@ var CryptoJS = require("crypto-js");
 const validation = require('../helpers/validations');
 const logs = require('../models/log.js')
 const db = require('../models/db');
-const userClass = require('../models/user');
 const JSONModule = require('../helpers/JSON');
 const app = express();
 const loggerManager = new logs();
-const {errors} = require('../helpers/errors')
+const { errors } = require('../helpers/errors')
 
 app.use(express.urlencoded({
     extended: true
@@ -15,29 +14,29 @@ app.use(express.urlencoded({
 
 let DB = new db();
 
-app.post('/login',async (req, res) => {
-
+app.post('/login', async (req, res) => {
     //Receive x-www-form-urlencoded from front-end
     let loginData = req.body;
-    let returnValue=true;
+    let returnValue = true;
     let resJSON;
     loggerManager.logInfo(`User with email: ${loginData.email} is trying to login.`);
 
-    if(loginData.email.includes('@')){
-        let returnValue = validation.formValidation(loginData, validation.loginValidations);
+    if (loginData.email.includes('@')) {
+        returnValue = validation.formValidation(loginData, validation.loginValidations);
     }
 
     //Validation
     if (returnValue) {
         returnValue = await DB.loginUser(loginData.email,
             CryptoJS.SHA256(loginData.password + process.env.salt).
-            toString(CryptoJS.enc.Base32)
-            )
-        resJSON = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Token"), returnValue[0].hasOwnProperty("Token")?returnValue:errors[returnValue[0].ReturnCode],'login')
+                toString(CryptoJS.enc.Base32)
+        )
+        resJSON = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Token"), returnValue[0].hasOwnProperty("Token") ? returnValue : errors[returnValue[0].ReturnCode], 'login')
     } else {
-        resJSON = JSONModule.createJSONResponse(false, returnValue,login);
+        resJSON = JSONModule.createJSONResponse(false, returnValue, login);
         loggerManager.logWarn(`Email: ${user.email} is not valid`);
     }
+    
     //Send respond
     res.send(resJSON);
 });
@@ -50,7 +49,9 @@ app.post('/register', async (req, res) => {
     loggerManager.logInfo(
         `User with email: ${regData.email} is trying to register.`
     );
+
     let returnValue = validation.formValidation(regData, validation.registerValidations);
+
     //Validation
     if (returnValue === true) {
         returnValue = await DB.registerUser(
@@ -64,9 +65,9 @@ app.post('/register', async (req, res) => {
             CryptoJS.SHA256(regData.password + process.env.salt).
                 toString(CryptoJS.enc.Base32)
         )
-        resJSON = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Token"), errors[returnValue[0].ReturnCode],'register')
+        resJSON = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Token"), errors[returnValue[0].ReturnCode], 'register')
     } else {
-        resJSON = JSONModule.createJSONResponse(false, returnValue,'register');
+        resJSON = JSONModule.createJSONResponse(false, returnValue, 'register');
         loggerManager.logWarn(
             `Failed validation/s at user with email ${regData.email}:\n
             ${JSON.stringify(returnValue)
@@ -77,48 +78,40 @@ app.post('/register', async (req, res) => {
             }`
         );
     }
+
     //Send respond
     res.send(resJSON);
 });
 
-app.get('/users/:username', async(req, res) =>{
+app.get('/users/:username', async (req, res) => {
 
     //console.log(req.params.username);
     console.log(req.headers.authorization);
 
     let returnValue, JSONResponse;
 
-    if(req.headers.authorization != undefined){
+    if (req.headers.authorization != undefined) {
         returnValue = await DB.getPrivateProfileInformation(req.params.username, req.headers.authorization)
 
-        //console.log("UMIRAM PREDI JSON");
-
-        if(returnValue.length == 0)
-        {
-            
+        if (returnValue.length == 0) {
             JSONResponse = JSONModule.
-                           createProfileJSON
-                           (await DB.getPublicProfileInformation(req.params.username)); 
-           
-              //console.log("UMIRAM SLED JSON");
+                createProfileJSON
+                (await DB.getPublicProfileInformation(req.params.username));
         }
-        else
-        {
-            
+        else {
             JSONResponse = JSONModule.
-                           createProfileJSON(returnValue);
-             
+                createProfileJSON(returnValue);
         }
-    }else{
+    } else {
         returnValue = await DB.getPublicProfileInformation(req.params.username)
 
-        if(returnValue.length == 0){
+        if (returnValue.length == 0) {
             res.status(404);
         }
 
         JSONResponse = JSONModule.
-                        createProfileJSON(returnValue);
-        
+            createProfileJSON(returnValue);
+
     }
 
     res.send(JSONResponse);
