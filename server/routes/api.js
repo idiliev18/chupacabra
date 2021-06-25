@@ -45,7 +45,7 @@ app.post('/login', async (req, res) => {
             );
         }
 
-        resJSON = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Token"), returnValue[0].hasOwnProperty("Token") ? returnValue : errors[returnValue[0].ReturnCode], 'login')
+        resJSON = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Token"), returnValue[0].hasOwnProperty("Token") ? returnValue[0] : errors[returnValue[0].ReturnCode], 'login')
     } else {
         resJSON = JSONModule.createJSONResponse(false, returnValue, login);
 
@@ -100,7 +100,7 @@ app.post('/register', async (req, res) => {
             );
         }
 
-        resJSON = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Token"), errors[returnValue[0].ReturnCode], 'register')
+        resJSON = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Token"), returnValue[0].hasOwnProperty("Token") ? returnValue[0] : errors[returnValue[0].ReturnCode], 'register')
     } else {
         loggerManager.logWarn(
             `Failed validation/s at user with email ${regData.email}:\n
