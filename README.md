@@ -51,11 +51,11 @@
     <ul>
     <li>We store our date in localStorage.</li>
     <li>To store the date we stringify it and then store it in localStorage. When we need it, we just parse it with JSON.</li>
-    <li>This method in not the most secure one, but it is good enought, as our main task is to present dynamic date and statistics.</li>
+    <li>This method in not the most secure one, but it is good enough, as our main task is to present dynamic date and statistics.</li>
     </ul>
     <br>
     <li>
-    <img src="https://bulma.io/images/bulma-logo.png" width="72px" height="18px" alt="bulmaLogo" > Fron end - Bulma :  </li>
+    <img src="https://bulma.io/images/bulma-logo.png" width="72px" height="18px" alt="bulmaLogo" > Front end - Bulma :  </li>
     <ul><li>Bulma is CSS framework that is build on flexbox and grid system and create fully responsive webpage.</li>
    </ul>
    <br>
@@ -84,8 +84,8 @@
    </pre>
    <p> After that, just start the website by click on index.html in File Explorer. </p>
    -->
-   <h1> 📥 Installing </h1>
-   <p> To install our project on your machine you just need to clone it. This can be done by : </p>
+   <h1> 📥 Deploying </h1>
+   <p> To deploy our project on your machine you just need to clone it. This can be done by : </p>
    <pre>
     git clone https://github.com/idiliev18/chupacabra.git
     cd chupacabra</pre>
@@ -103,5 +103,5 @@
     <p>Ivan Dimov - <a href = "https://github.com/iidimov18"> IIDimov18</a> - Back-end Developer </p>
     <p>Atanas Pozharliev - <a href = "https://github.com/abpozharliev19"> ABPozharliev19</a> - Back-end Developer </p>
     <p>Kostadin Taligadzhiev - <a href = "https://github.com/kntaligadzhiev19"> KNTaligadzhiev19 </a> - Designer </p>
-    <p>Alexander Manov - <a href = "https://github.com/aemanov20"> AEManov20</a> - Front-end Develeopr </p>
-    <p>Maxim Marinov - <a href = "https://github.com/mmmarinov20"> MMMarinov20</a> - Front-end Develeopr </p>
+    <p>Alexander Manov - <a href = "https://github.com/aemanov20"> AEManov20</a> - Front-end Developer </p>
+    <p>Maxim Marinov - <a href = "https://github.com/mmmarinov20"> MMMarinov20</a> - Front-end Developer </p>
