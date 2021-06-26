@@ -9,6 +9,7 @@ import { UserContext } from "../App";
 import { Link } from "react-router-dom";
 import { Button } from "react-bulma-components";
 import { SetupForm } from "../components/SetupForm";
+import { ErrorableInput } from "../components/ErrorableInput";
 
 import styles from "./Signup.module.scss";
 
@@ -21,12 +22,7 @@ const EMAIL_REGEX =
 function Signup(props) {
     const userContext = useContext(UserContext);
     const [loading, setLoading] = useState(false);
-    const [invalidValues, setInvalidValues] = useState({
-        password: null,
-        phone: null,
-        username: null,
-        email: null,
-    });
+    const [invalidValues, setInvalidValues] = useState({});
 
     // this reference is used for indication
     // when the component has been unmounted
@@ -45,17 +41,29 @@ function Signup(props) {
         (event) => {
             event.preventDefault();
 
-            let allValid = false;
+            setInvalidValues({});
+            let updatedState = {};
 
-            for (let key in invalidValues) {
-                if (key === "phone" && invalidValues[key] === null)
-                    allValid = true;
-                else allValid = invalidValues[key];
+            if (!event.target.phone.value.match(PHONE_REGEX))
+                updatedState["phone"] = "невалиден телефонен номер";
 
-                if (!allValid) break;
-            }
+            if (
+                event.target.password.value !==
+                event.target.confirmPassword.value
+            )
+                updatedState["password"] = "паролите не съвпадат";
 
-            if (allValid) {
+            if (!event.target.username.value.match(USERNAME_REGEX))
+                updatedState["username"] = "невалидно потребителско име";
+
+            if (!event.target.email.value.match(EMAIL_REGEX))
+                updatedState["email"] = "невалиден имейл";
+
+            setInvalidValues((prevState) => {
+                return { ...prevState, ...updatedState };
+            });
+
+            if (Object.keys(updatedState).length === 0) {
                 let data = {
                     firstName: event.target.firstName.value,
                     lastName: event.target.lastName.value,
@@ -68,54 +76,26 @@ function Signup(props) {
                 };
 
                 setLoading(true);
-                userContext.registerUser(data).then((res) => {
-                    if (mountedRef.current) setLoading(false);
+                userContext.registerUser(data).then((fields) => {
+                    // checks if component is still mounted
+                    if (mountedRef.current) {
+                        updatedState = fields;
+
+                        setInvalidValues((prevState) => {
+                            return { ...prevState, ...updatedState };
+                        });
+
+                        setLoading(false);
+                    }
                 });
+            } else {
+                return;
             }
         },
-        [invalidValues, userContext]
+        [userContext]
     );
 
-    const handleInputChange = useCallback((event) => {
-        let updatedState = {};
-        if (event.target.value !== "") {
-            switch (event.target.name) {
-                case "phone": {
-                    updatedState["phone"] =
-                        !!event.target.value.match(PHONE_REGEX);
-                    break;
-                }
-                case "password":
-                case "confirmPassword": {
-                    updatedState["password"] =
-                        event.target.form.password.value ===
-                        event.target.form.confirmPassword.value;
-                    break;
-                }
-                case "username": {
-                    updatedState["username"] =
-                        !!event.target.value.match(USERNAME_REGEX);
-                    break;
-                }
-                case "email": {
-                    updatedState["email"] =
-                        !!event.target.value.match(EMAIL_REGEX);
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
-        } else {
-            if (event.target.name === "confirmPassword")
-                updatedState["password"] = null;
-            else updatedState[event.target.name] = null;
-        }
-
-        setInvalidValues((prevState) => {
-            return { ...prevState, ...updatedState };
-        });
-    }, []);
+    const handleInputChange = useCallback((event) => {}, []);
 
     return (
         <SetupForm onSubmit={handleSubmit}>
@@ -124,159 +104,106 @@ function Signup(props) {
 
             <div className="field is-flex">
                 <div className={"control " + styles.control}>
-                    <label className="label">Първо име</label>
-                    <input
-                        type="text"
+                    <ErrorableInput
+                        label="Първо име"
                         name="firstName"
-                        className="input"
                         placeholder="Янко"
+                        errText={invalidValues.firstName}
                         required
                     />
                 </div>
                 <div className={"control " + styles.control}>
-                    <label className="label">Фамилия</label>
-                    <input
-                        type="text"
+                    <ErrorableInput
+                        label="Фамилия"
                         name="lastName"
-                        className="input"
                         placeholder="Георгиев"
+                        errText={invalidValues.lastName}
                         required
                     />
                 </div>
                 <div className={"control " + styles.control}>
-                    <label className="label">Възраст</label>
-                    <input
+                    <ErrorableInput
                         type="number"
+                        label="Възраст"
                         name="age"
-                        className="input"
                         placeholder="22"
+                        errText={invalidValues.age}
                         required
                     />
                 </div>
             </div>
 
             <div className="field">
-                <label className="label">Потребителско име</label>
                 <div className="control">
-                    <input
-                        type="text"
+                    <ErrorableInput
+                        label="Потребителско име"
                         name="username"
-                        className={`input ${
-                            invalidValues.username === null
-                                ? ""
-                                : invalidValues.username
-                                ? "is-success"
-                                : "is-danger"
-                        }`}
                         placeholder="qnko0123"
-                        onChange={handleInputChange}
+                        errText={invalidValues.username}
                         required
                     />
                 </div>
-                {invalidValues.username ===
-                null ? null : invalidValues.username ? null : (
-                    <div className="help is-danger">
-                        невалидно потребителско име
-                    </div>
-                )}
             </div>
 
             <div className="field">
-                <label className="label">Имейл</label>
                 <div className="control">
-                    <input
+                    <ErrorableInput
+                        label="Имейл"
                         type="email"
                         name="email"
-                        className={`input ${
-                            invalidValues.email === null
-                                ? ""
-                                : invalidValues.email
-                                ? "is-success"
-                                : "is-danger"
-                        }`}
-                        onChange={handleInputChange}
                         placeholder="qnko_goshov@abv.bg"
+                        errText={invalidValues.email}
                         required
                     />
                 </div>
-                {invalidValues.email ===
-                null ? null : invalidValues.email ? null : (
-                    <div className="help is-danger">имейлът е невалиден</div>
-                )}
             </div>
 
             <div className="field">
-                <label className="label">Град (по избор)</label>
                 <div className="control">
-                    <input
-                        type="text"
+                    <ErrorableInput
+                        label="Град (по избор)"
                         name="city"
-                        className="input"
                         placeholder="Бургас"
+                        errText={invalidValues.city}
                     />
                 </div>
             </div>
 
             <div className="field">
-                <div className="label">Телефонен номер (по избор)</div>
                 <div className="control">
-                    <input
+                    <ErrorableInput
+                        label="Телефонен номер (по избор)"
                         type="tel"
                         name="phone"
-                        className={`input ${
-                            invalidValues.phone === null
-                                ? ""
-                                : invalidValues.phone
-                                ? "is-success"
-                                : "is-danger"
-                        }`}
-                        onChange={handleInputChange}
+                        errText={invalidValues.phone}
                     />
                 </div>
-                {invalidValues.phone ===
-                null ? null : invalidValues.phone ? null : (
-                    <div className="help is-danger">
-                        телефонният номер е невалиден (пробвайте с +359)
-                    </div>
-                )}
             </div>
 
             <div className="field">
-                <label className="label">Парола</label>
                 <div className="control">
-                    <input
+                    <ErrorableInput
+                        label="Парола"
                         type="password"
                         name="password"
-                        className="input"
                         placeholder="********"
-                        onChange={handleInputChange}
+                        errText={invalidValues.password}
                         required
                     />
                 </div>
             </div>
 
             <div className="field">
-                <label className="label">Повтори Парола</label>
                 <div className="control">
-                    <input
+                    <ErrorableInput
+                        label="Повтори Парола"
                         type="password"
                         name="confirmPassword"
-                        className={`input ${
-                            invalidValues.password === null
-                                ? ""
-                                : invalidValues.password
-                                ? "is-success"
-                                : "is-danger"
-                        }`}
                         placeholder="********"
-                        onChange={handleInputChange}
+                        errText={invalidValues.confirmPassword}
                         required
                     />
                 </div>
-                {invalidValues.password ===
-                null ? null : invalidValues.password ? null : (
-                    <div className="help is-danger">паролите не съвпадат</div>
-                )}
             </div>
 
             <div className="field">

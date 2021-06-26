@@ -1,8 +1,14 @@
-import React, { Suspense, lazy, createContext, useState } from "react";
+import React, {
+    Suspense,
+    lazy,
+    createContext,
+    useState,
+    useEffect,
+} from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
 
-import { readStorage, writeStorage } from "./localStorage";
+import { deleteStorage, readStorage, writeStorage } from "./localStorage";
 import { fetchAPI } from "./api";
 
 import Loading from "./components/Loading";
@@ -35,48 +41,91 @@ function App() {
         userData: null,
     });
 
-    // TODO: Implement backend communication
-    const authenticate = async (userData) => {
-        return new Promise((res, rej) => {
-            console.log("Submitted for authenticating!", userData);
-            if (userData.email !== VALID_EMAIL.email)
-                setTimeout(() => res({ email: false }), 1000);
-            else if (userData.password !== VALID_EMAIL.password)
-                setTimeout(() => res({ password: false }), 1000);
-            else {
-                // writeStorage("auth", updatedState.userData.token);
+    useEffect(() => {
+        let token = readStorage("auth");
 
-                setTimeout(() => {
-                    res({ email: true, password: true });
-                    let updatedState = {
-                        userData: {
-                            username: "example",
-                            email: "example@example.com",
-                            token: VALID_TOKEN,
-                        },
-                        authenticated: true,
-                    };
+        if (!token) deleteStorage("auth");
+        else {
+            let isValid = true;
 
-                    setState((prevState) => {
-                        return { ...prevState, ...updatedState };
-                    });
-                }, 1000);
+            // TODO: implement token validation
+
+            if (isValid) {
+                let updatedState = {
+                    userData: {
+                        username: "example",
+                        email: VALID_EMAIL.email,
+                        token,
+                    },
+                    authenticated: true,
+                };
+
+                setState((prevState) => {
+                    return { ...prevState, ...updatedState };
+                });
+            } else {
+                deleteStorage("auth");
             }
-        });
+        }
+    }, []);
+
+    const authenticate = async (userData) => {
+        console.log("Submitted for authenticating!", userData);
+        let responseData = await fetchAPI("/login", userData, "POST");
+
+        if (responseData.type === "login-success") {
+            let updatedState = {
+                userData: {
+                    username: "example",
+                    email: VALID_EMAIL.email,
+                    token: responseData.data.Token,
+                },
+                authenticated: true,
+            };
+
+            setState((prevState) => {
+                return { ...prevState, ...updatedState };
+            });
+
+            writeStorage("auth", updatedState.userData.token);
+
+            return { email: true, password: true };
+        } else if (responseData.type === "login-failure") {
+            return { email: "неправилна имейл или парола" };
+        }
     };
 
     const registerUser = async (userData) => {
         console.log("Submitted for registering!", userData);
         let responseData = await fetchAPI("/register", userData, "POST");
-        console.log(responseData);
 
-        return;
+        if (responseData.type === "register-success") {
+            let updatedState = {
+                userData: {
+                    username: "example",
+                    email: VALID_EMAIL.email,
+                    token: responseData.data.Token,
+                },
+                authenticated: true,
+            };
+
+            setState((prevState) => {
+                return { ...prevState, ...updatedState };
+            });
+
+            writeStorage("auth", updatedState.userData.token);
+
+            return {};
+        } else if (responseData.type === "register-failure") {
+            return responseData.fields;
+        }
     };
 
     const invalidateAuthentication = () => {
-        console.log(localStorage);
         if (!state.authenticated) return true;
         else {
+            deleteStorage("auth");
+
             setState({
                 userData: null,
                 authenticated: false,
@@ -131,8 +180,8 @@ function App() {
                                             />
                                         </>
                                     )}
-                                    <Route component={NotFound} />
                                 </Route>
+                                <Route component={NotFound} />
                             </Switch>
                         </Content>
                     </UserContext.Provider>

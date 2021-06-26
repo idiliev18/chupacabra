@@ -26,14 +26,16 @@ function toURLEncoded(data) {
  * @returns {Promise<any>}
  */
 export async function fetchAPI(endpoint, data = {}, method = "GET") {
-    return await fetch(API_ENDPOINT + endpoint, {
-        method,
-        mode: "cors",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: method === "GET" ? null : toURLEncoded(data),
-    });
+    return (
+        await fetch(API_ENDPOINT + endpoint, {
+            method,
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: method === "GET" ? null : toURLEncoded(data),
+        })
+    ).json();
 }
 
 /**
@@ -46,12 +48,14 @@ export async function fetchAPI(endpoint, data = {}, method = "GET") {
  * @returns {Promise<any>}
  */
 export async function fetchRSS(endpoint, data = {}, method = "GET") {
-    return await fetch(RSS_ENDPOINT + endpoint, {
-        method,
-        mode: "cors",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: method === "GET" ? null : toURLEncoded(data),
-    });
+    return (
+        await fetch(RSS_ENDPOINT + endpoint, {
+            method,
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: method === "GET" ? null : toURLEncoded(data),
+        })
+    ).json();
 }
