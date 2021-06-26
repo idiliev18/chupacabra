@@ -57,6 +57,9 @@ class db {
 
         let result;
 
+        console.log(loginCredential);
+        console.log(hashPassword);
+
         try {
             result = await request.query(
                 `EXEC LoginUser
