@@ -60,7 +60,7 @@ app.post('/login', async (req, res) => {
 
 app.post('/register', async (req, res) => {
     let resJSON;
-    //Receive x-www-form-urlencoded from front-end
+    // Receive x-www-form-urlencoded from client
     let regData = req.body;
 
     loggerManager.logInfo(
@@ -69,7 +69,7 @@ app.post('/register', async (req, res) => {
 
     let returnValue = validation.formValidation(regData, validation.registerValidations);
 
-    //Validation
+    // Validate client data
     if (returnValue === true) {
         returnValue = await DB.registerUser(
             regData.firstName,
@@ -120,18 +120,15 @@ app.post('/register', async (req, res) => {
 });
 
 app.get('/users/:username', async (req, res) => {
-
-    //console.log(req.params.username);
-    console.log(req.headers.authorization);
-
     let returnValue, JSONResponse;
 
+    // Checks if token is passed
     if (req.headers.authorization != undefined) {
         returnValue = await DB.getPrivateProfileInformation(req.params.username, req.headers.authorization)
 
-        console.log(returnValue);
-
+        // Check is there valid token
         if (returnValue.length == 0) {
+            // Get public account information
             JSONResponse = JSONModule.
                 createProfileJSON
                 (await DB.getPublicProfileInformation(req.params.username));
@@ -141,9 +138,10 @@ app.get('/users/:username', async (req, res) => {
                 createProfileJSON(returnValue);
         }
     } else {
+        // Get public accoutn information
         returnValue = await DB.getPublicProfileInformation(req.params.username)
 
-        console.log();
+        // Check is there found user
         if (returnValue.length == 0) {
             res.status(404);
         }
