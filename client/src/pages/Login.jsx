@@ -5,19 +5,17 @@ import React, {
     useRef,
     useEffect,
 } from "react";
-import { Redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "react-bulma-components";
 import { SetupForm } from "../components/SetupForm";
+import { ErrorableInput } from "../components/ErrorableInput";
 
 import { UserContext } from "../App";
 
 function Login(props) {
     const userContext = useContext(UserContext);
     const [loading, setLoading] = useState(false);
-    const [invalidData, setInvalidData] = useState({
-        email: null,
-        password: null,
-    });
+    const [invalidData, setInvalidData] = useState({});
 
     // this reference is used for indication
     // when the component has been unmounted
@@ -36,7 +34,7 @@ function Login(props) {
         (event) => {
             event.preventDefault();
 
-            setInvalidData({ email: null, password: null });
+            setInvalidData({});
             setLoading(true);
 
             userContext
@@ -47,6 +45,7 @@ function Login(props) {
                 })
                 .then((success) => {
                     if (mountedRef.current) {
+                        console.log(success);
                         setInvalidData((prevState) => {
                             return { ...prevState, ...success };
                         });
@@ -64,52 +63,29 @@ function Login(props) {
             <br />
 
             <div className="field">
-                <label htmlFor="email" className="label">
-                    Имейл
-                </label>
                 <div className="control">
-                    <input
-                        className={`input${
-                            !invalidData.email && invalidData.email !== null
-                                ? " is-danger"
-                                : ""
-                        }`}
+                    <ErrorableInput
+                        label="Имейл"
                         type="email"
-                        placeholder="gosho_qnko@abv.bg"
                         name="email"
+                        placeholder="qnko_goshov@abv.bg"
+                        errText={invalidData.email}
                         required
                     />
                 </div>
-                {!invalidData.email && invalidData.email !== null ? (
-                    <p className="help is-danger">
-                        този имейл не е част от нашите записи
-                    </p>
-                ) : null}
             </div>
 
             <div className="field">
-                <label htmlFor="password" className="label">
-                    Парола
-                </label>
                 <div className="control">
-                    <input
-                        className={`input${
-                            !invalidData.password &&
-                            invalidData.password !== null
-                                ? " is-danger"
-                                : ""
-                        }`}
+                    <ErrorableInput
+                        label="Парола"
                         type="password"
                         placeholder="********"
                         name="password"
+                        errText={invalidData.password}
                         required
                     />
                 </div>
-                {!invalidData.password && invalidData.password !== null ? (
-                    <p className="help is-danger">
-                        тази парола не е част от нашите записи
-                    </p>
-                ) : null}
             </div>
 
             <div className="field">

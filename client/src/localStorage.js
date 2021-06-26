@@ -1,7 +1,7 @@
 /**
  *
  * @param {string} key
- * @returns {string}
+ * @returns {object}
  */
 function readFromLocalStorage(key) {
     if (!localStorage.getItem(key)) return null;
@@ -17,13 +17,17 @@ function readFromLocalStorage(key) {
 /**
  *
  * @param {string} key
- * @param {string} data
+ * @param {object} data
  */
 function writeToLocalStorage(key, data) {
     localStorage.setItem(key, JSON.stringify(data));
 }
 
+function deleteFromLocalStorage(key) {
+    localStorage.removeItem(key);
+}
 export {
     readFromLocalStorage as readStorage,
     writeToLocalStorage as writeStorage,
+    deleteFromLocalStorage as deleteStorage,
 };
