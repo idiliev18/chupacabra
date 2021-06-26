@@ -97,7 +97,8 @@ function Login(props) {
             <div className="field">
                 <div className="control">
                     <label htmlFor="rememberMe" className="checkbox">
-                        <input type="checkbox" name="rememberMe" /> Запомни ме
+                        <input type="checkbox" name="rememberMe" id="rememberMe"/> 
+                        <label for="rememberMe"> Запомни ме</label>
                     </label>
                 </div>
             </div>
