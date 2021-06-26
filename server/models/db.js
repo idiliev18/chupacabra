@@ -18,6 +18,40 @@ class db {
         }
     }
 
+    async registerBoat(token,licenseId, name, engine, registrationNumber, boatLicense, seatsCount, anchorLength,lifeJacketsCount) {
+        const request = new sql.Request();
+        request.input('userToken', sql.NVarChar, token)
+            .input('boatLicenseId', sql.NVarChar, licenseId)
+            .input('boatName', sql.NVarChar, name)
+            .input('boatEngine', sql.NVarChar, engine)
+            .input('boatRegistrationNumber', sql.NVarChar, registrationNumber)
+            .input('boatLicense', sql.NVarChar, boatLicense)
+            .input('boatSeatsCount', sql.Int, seatsCount)
+            .input('boatAnchorLength', sql.Int, anchorLength)
+            .input('boatLifeJacketsCount', sql.Int, lifeJacketsCount);
+
+        let result;
+
+        try {
+            result = await request.query(
+                `EXEC RegisterBoat
+                @Token = @userToken,
+                @LicenseId = @boatLicenseId,
+                @Name = @boatName,
+                @Engine = @boatEngine,
+                @RegistrationNumber = @boatRegistrationNumber,
+                @BoatLicense = @boatLicense,
+                @SeatsCount = @boatSeatsCount,
+                @AnchorLength = @boatAnchorLength,
+                @LifeJacketsCount = @boatLifeJacketsCount`
+            );
+        } catch (err) {
+            return err;
+        }
+
+        return result.recordset;
+    }
+
     async registerUser(firstName, lastName, age, city, phone, email, username, hashPassword) {
         const request = new sql.Request();
         request.input('userFirstName', sql.NVarChar, firstName)
@@ -56,6 +90,9 @@ class db {
             .input('userHashPassword', sql.VarChar, hashPassword);
 
         let result;
+
+        console.log(loginCredential);
+        console.log(hashPassword);
 
         try {
             result = await request.query(
