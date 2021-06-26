@@ -63,9 +63,9 @@ app.post('/register', async (req, res) => {
     // Receive x-www-form-urlencoded from client
     let regData = req.body;
 
-    loggerManager.logInfo(
-        `User with email: ${regData.email} is trying to register.`
-    );
+    // loggerManager.logInfo(
+    //     `User with email: ${regData.email} is trying to register.`
+    // );
 
     let returnValue = validation.formValidation(regData, validation.registerValidations);
 
