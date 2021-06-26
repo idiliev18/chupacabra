@@ -2,6 +2,7 @@ import React from "react";
 
 import { Hero, Container } from "react-bulma-components";
 import { Link } from "react-router-dom";
+import Footer from '../components/Footer';
 
 function Index(props) {
     return (
@@ -31,15 +32,10 @@ function Index(props) {
                     </div>
                 </Hero.Body>
             </Hero>
-            <Hero size="medium is-success">
-                <Hero.Body>
-                    <div className="title">Актуално</div>
-                    <div className="subtitle">
-                        News section
-                    </div>
-                </Hero.Body>
-            </Hero>
+            
+            <Footer />
         </>
+
     );
 }
 

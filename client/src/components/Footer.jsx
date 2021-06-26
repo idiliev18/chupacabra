@@ -1,43 +1,69 @@
 import React from "react";
-
-const FooterPage = () => {
+import {
+  Box,
+  Container,
+  Row,
+  Column,
+  FooterLink,
+  Heading,
+} from "./FooterStyles";
+  
+const Footer = () => {
   return (
-    <MDBFooter color="blue" className="font-small pt-4 mt-4">
-      <MDBContainer fluid className="text-center text-md-left">
-        <MDBRow>
-          <MDBCol md="6">
-            <h5 className="title">Footer Content</h5>
-            <p>
-              Here you can use rows and columns here to organize your footer
-              content.
-            </p>
-          </MDBCol>
-          <MDBCol md="6">
-            <h5 className="title">Links</h5>
-            <ul>
-              <li className="list-unstyled">
-                <a href="#!">Link 1</a>
-              </li>
-              <li className="list-unstyled">
-                <a href="#!">Link 2</a>
-              </li>
-              <li className="list-unstyled">
-                <a href="#!">Link 3</a>
-              </li>
-              <li className="list-unstyled">
-                <a href="#!">Link 4</a>
-              </li>
-            </ul>
-          </MDBCol>
-        </MDBRow>
-      </MDBContainer>
-      <div className="footer-copyright text-center py-3">
-        <MDBContainer fluid>
-          &copy; {new Date().getFullYear()} Copyright: <a href="https://www.mdbootstrap.com"> MDBootstrap.com </a>
-        </MDBContainer>
-      </div>
-    </MDBFooter>
+    <Box>
+      <h1 style={{ color: "white", 
+                   textAlign: "center", 
+                   marginTop: "-50px" }}>
+        CHUPACABRA
+      </h1>
+      <Container>
+        <Row>
+          <Column>
+            <Heading>За нас</Heading>
+            <p>Тук трябва да напишем информация за нас</p>
+          </Column>
+          <Column>
+            <Heading>Бързи връзки</Heading>
+            <p>Тук трябва да сложим линкове към другите страници</p>
+          </Column>
+          <Column>
+            <Heading>Контакти</Heading>
+            <p>Тук трябва да сложим различни контакти</p>
+          </Column>
+          <Column>
+            <Heading>Социални медии</Heading>
+            <FooterLink href="#">
+              <i className="fab fa-facebook-f">
+                <span style={{ marginLeft: "10px" }}>
+                  Facebook
+                </span>
+              </i>
+            </FooterLink>
+            <FooterLink href="#">
+              <i className="fab fa-instagram">
+                <span style={{ marginLeft: "10px" }}>
+                  Instagram
+                </span>
+              </i>
+            </FooterLink>
+            <FooterLink href="#">
+              <i className="fab fa-twitter">
+                <span style={{ marginLeft: "10px" }}>
+                  Twitter
+                </span>
+              </i>
+            </FooterLink>
+            <FooterLink href="#">
+              <i className="fab fa-youtube">
+                <span style={{ marginLeft: "10px" }}>
+                  Youtube
+                </span>
+              </i>
+            </FooterLink>
+          </Column>
+        </Row>
+      </Container>
+    </Box>
   );
-}
-
-export default FooterPage;
+};
+export default Footer;
