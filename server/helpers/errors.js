@@ -13,6 +13,12 @@ let errors = [
   },
   {
     "email": "Wrong credentials"
+  },
+  {
+    "registrationNumber" : "Registration number is already taken"
+  },
+  {
+    "boatLicense" : "'Boat license id is already taken'"
   }
 ]
 
