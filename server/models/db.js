@@ -70,10 +70,9 @@ class db {
         return result.recordset;
     }
 
-    async registerBoat(token,licenseId, name, engine, registrationNumber, boatLicense, seatsCount, anchorLength,lifeJacketsCount) {
+    async registerBoat(token, name, engine, registrationNumber, boatLicense, seatsCount, anchorLength,lifeJacketsCount) {
         const request = new sql.Request();
         request.input('userToken', sql.NVarChar, token)
-            .input('boatLicenseId', sql.NVarChar, licenseId)
             .input('boatName', sql.NVarChar, name)
             .input('boatEngine', sql.NVarChar, engine)
             .input('boatRegistrationNumber', sql.NVarChar, registrationNumber)
@@ -88,7 +87,6 @@ class db {
             result = await request.query(
                 `EXEC RegisterBoat
                 @Token = @userToken,
-                @LicenseId = @boatLicenseId,
                 @Name = @boatName,
                 @Engine = @boatEngine,
                 @RegistrationNumber = @boatRegistrationNumber,

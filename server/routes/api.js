@@ -243,7 +243,6 @@ app.post('/registerBoat', async (req, res) => {
 
     returnValue = await DB.registerBoat(
         regData.Token,
-        regData.licenseId,
         regData.boatName,
         regData.Engine,
         regData.registrationNumber,
@@ -268,11 +267,18 @@ app.post('/registerBoat', async (req, res) => {
 app.get('/boats', async (req, res) => {
     let token = req.headers.authorization;
     let returnValue;
+    let JSONResponse;
 
     if(token != undefined){
         returnValue = await DB.getBoatsInformation(token);
-
         console.log(returnValue);
+        if(returnValue.length == 0){
+            JSONResponse = JSONModule.createJSONResponse(0, {"reason": "Boats not found"}, "boat")
+        }else{
+            JSONResponse = JSONModule.createJSONResponse(1, returnValue, "boat")
+        }
     }
+
+    res.send(JSONResponse);
 })
 module.exports = app;
