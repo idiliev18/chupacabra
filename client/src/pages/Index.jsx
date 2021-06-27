@@ -4,24 +4,45 @@ import { Hero } from "react-bulma-components";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 
+import backgroundImage from "./img/bg.jpg";
+
 function Index(props) {
     return (
         <>
-            <Hero size="medium" color="link">
+            <img
+                src={backgroundImage}
+                style={{
+                    position: "absolute",
+                    top: "0",
+                    bottom: "0",
+                    zIndex: "-1",
+                    width: "100vw",
+                    height: "90vh",
+                }}
+            />
+            <Hero size="medium">
                 <Hero.Body>
-                    <div className="title">
+                    <div className="title" style={{ color: "white" }}>
                         Намерете новини за пристанища и морето
                     </div>
-                    <div className="subtitle">
+                    <div className="subtitle" style={{ color: "white" }}>
                         Разгледайте нашата страница за новини относно тези теми{" "}
                         <Link to="/news">тук</Link>
                     </div>
                 </Hero.Body>
             </Hero>
-            <Hero size="medium" color="link">
+            <Hero size="medium">
                 <Hero.Body>
-                    <div className="title info-module">За сайта</div>
-                    <div className="subtitle info-module">
+                    <div
+                        className="title info-module"
+                        style={{ color: "white" }}
+                    >
+                        За сайта
+                    </div>
+                    <div
+                        className="subtitle info-module"
+                        style={{ color: "white" }}
+                    >
                         Нашият уебсайт има за цел да улесни работата на
                         пристанищата, максимално автоматизирайки ги. Освен за
                         пристанища той е подходящ за рибари, независимо
