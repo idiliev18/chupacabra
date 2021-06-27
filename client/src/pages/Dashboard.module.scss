@@ -36,7 +36,7 @@
         }
 
         li span {
-            margin-right: $block-spacing / 1.2;
+            margin-right: $block-spacing / 1.6;
         }
     }
 
@@ -64,4 +64,14 @@
 
 #content {
     height: 100vh;
+}
+
+@media only screen and (max-width: $tablet) {
+    #sidebar {
+        height: 100%;
+
+        #nav-user {
+            position: initial;
+        }
+    }
 }
