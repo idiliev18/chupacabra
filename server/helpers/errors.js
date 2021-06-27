@@ -18,7 +18,10 @@ let errors = [
     "registrationNumber" : "Registration number is already taken"
   },
   {
-    "boatLicense" : "'Boat license id is already taken'"
+    "boatLicense" : "Boat license id is already taken"
+  },
+  {
+     "name" : "You must verify your account before registering a boat"
   }
 ]
 

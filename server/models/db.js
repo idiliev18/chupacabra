@@ -18,6 +18,29 @@ class db {
         }
     }
 
+    async verifyUser(token) {
+        const request = new sql.Request();
+        request.input('userToken', sql.NVarChar, token)
+
+        let result;
+
+        try {
+            result = await request.query(
+                `IF EXISTS(SELECT Id FROM Users WHERE Token = @userToken)
+                           BEGIN
+                           UPDATE Users SET IsVerified = 1 WHERE Token = @userToken
+                           SELECT 0 AS Success
+                           END
+                           SELECT 7 AS ReturnCode`
+            );
+        } catch (err) {
+            return err;
+        }
+
+        return result.recordset;
+    }
+
+
     async registerBoat(token,licenseId, name, engine, registrationNumber, boatLicense, seatsCount, anchorLength,lifeJacketsCount) {
         const request = new sql.Request();
         request.input('userToken', sql.NVarChar, token)

@@ -123,6 +123,18 @@ app.post('/register', async (req, res) => {
     res.send(resJSON);
 });
 
+app.get('/verify/:token',async (req, res) => {
+    let returnValue;
+    let token = req.params.token;
+
+
+    // Checks if token is passed
+    returnValue= await DB.verifyUser(token);
+    if(returnValue[0].hasOwnProperty('Success')){
+        res.redirect('/');
+    }
+})
+
 app.get('/users/:username', async (req, res) => {
     let returnValue, JSONResponse;
 
