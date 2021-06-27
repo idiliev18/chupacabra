@@ -16,6 +16,11 @@ const validations = {
         return data.match(pattern);
     },
 
+    'isUsernameValid': function (data) {
+        let pattern = /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/;
+        return data.match(pattern);
+    },
+
     'minNumber': function (data, minNumber) {
         return data > minNumber;
     },
@@ -83,10 +88,12 @@ function formValidation(dataToValidate, criterias) {
 const registerValidations = {
     'firstName': { 'isNameValid': 1 },
     'lastName': { 'isNameValid': 1 },
+    'username': { 'isUsernameValid': 1},
     'age': { 'minNumber': 0, 'maxNumber': 127, 'isNumber': 1 },
     'city': { 'isNameValid': 1 },
     'phone': { 'isPhoneValid': 1 },
     'email': { 'isEmailValid': 1 },
+    'isUsernameValid': 'Invalid username',
     'isNameValid': 'Invalid name',
     'isPhoneValid': 'Invalid phone',
     'minNumber': 'Invalid age',
