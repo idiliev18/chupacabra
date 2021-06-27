@@ -9,7 +9,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 import { deleteStorage, readStorage, writeStorage } from "./localStorage";
-import { fetchAPI } from "./api";
+import { fetchAPI, fetchUser, validateToken } from "./api";
 
 import Loading from "./components/Loading";
 
@@ -33,8 +33,6 @@ const VALID_EMAIL = {
     password: "12341234",
 };
 
-const VALID_TOKEN = "40eeff8a-88b6-42dd-995c-a25ee81fc874";
-
 function App() {
     const [state, setState] = useState({
         authenticated: false,
@@ -46,51 +44,53 @@ function App() {
 
         if (!token) deleteStorage("auth");
         else {
-            let isValid = true;
-
-            // TODO: implement token validation
-
-            if (isValid) {
-                let updatedState = {
-                    userData: {
-                        username: "example",
-                        email: VALID_EMAIL.email,
-                        token,
-                    },
-                    authenticated: true,
-                };
-
-                setState((prevState) => {
-                    return { ...prevState, ...updatedState };
-                });
-            } else {
-                deleteStorage("auth");
-            }
-        }
-    }, []);
-
-    const authenticate = async (userData) => {
-        return new Promise((res, rej) => {
-            console.log("Submitted for authenticating!", userData);
-            fetchAPI("/login", userData, "POST")
-                .then((responseData) => {
-                    if (responseData.type === "login-success") {
+            validateToken(token).then((isValid) => {
+                if (isValid) {
+                    fetchUser(token).then((userData) => {
                         let updatedState = {
-                            userData: {
-                                username: "example",
-                                email: VALID_EMAIL.email,
-                                token: responseData.data.Token,
-                            },
+                            userData: userData.data,
+                            token,
                             authenticated: true,
                         };
 
                         setState((prevState) => {
                             return { ...prevState, ...updatedState };
                         });
+                    });
+                } else {
+                    deleteStorage("auth");
+                }
+            });
+        }
+    }, []);
 
-                        writeStorage("auth", updatedState.userData.token);
+    /**
+     * tries to authenticate the
+     * session with the data provided
+     * @param {object} userData
+     * @returns {Promise<object>}
+     */
+    const authenticate = async (userData) => {
+        return new Promise((res, rej) => {
+            console.log("Submitted for authenticating!", userData);
+            fetchAPI("/login", userData, {}, "POST")
+                .then((responseData) => {
+                    if (responseData.type === "login-success") {
+                        fetchUser(responseData.data.Token).then((userData) => {
+                            let updatedState = {
+                                userData: userData.data,
+                                token: responseData.data.Token,
+                                authenticated: true,
+                            };
 
-                        return { email: true, password: true };
+                            setState((prevState) => {
+                                return { ...prevState, ...updatedState };
+                            });
+
+                            writeStorage("auth", updatedState.token);
+
+                            return {};
+                        });
                     } else if (responseData.type === "login-failure") {
                         return { email: "неправилна имейл или парола" };
                     }
@@ -103,28 +103,33 @@ function App() {
         });
     };
 
+    /**
+     * tries to register a user
+     * with the data given
+     * @param {object} userData
+     * @returns {Promise<object>}
+     */
     const registerUser = async (userData) => {
         return new Promise((res, rej) => {
             console.log("Submitted for registering!", userData);
-            fetchAPI("/register", userData, "POST")
+            fetchAPI("/register", userData, {}, "POST")
                 .then((responseData) => {
                     if (responseData.type === "register-success") {
-                        let updatedState = {
-                            userData: {
-                                username: "example",
-                                email: VALID_EMAIL.email,
+                        fetchUser(responseData.data.Token).then((userData) => {
+                            let updatedState = {
+                                userData: userData.data,
                                 token: responseData.data.Token,
-                            },
-                            authenticated: true,
-                        };
+                                authenticated: true,
+                            };
 
-                        setState((prevState) => {
-                            return { ...prevState, ...updatedState };
+                            setState((prevState) => {
+                                return { ...prevState, ...updatedState };
+                            });
+
+                            writeStorage("auth", updatedState.token);
+
+                            res({});
                         });
-
-                        writeStorage("auth", updatedState.userData.token);
-
-                        res({});
                     } else if (responseData.type === "register-failure") {
                         res(responseData.fields);
                     }
@@ -137,6 +142,10 @@ function App() {
         });
     };
 
+    /**
+     * clears localStorage's token
+     * @returns {void}
+     */
     const invalidateAuthentication = () => {
         if (!state.authenticated) return true;
         else {
@@ -149,12 +158,6 @@ function App() {
         }
     };
 
-    const fetchUser = () => {
-        if (!state.authenticatied) return {};
-        else {
-        }
-    };
-
     return (
         <ErrorBoundary>
             <Suspense fallback={<Loading />}>
@@ -162,6 +165,7 @@ function App() {
                     <UserContext.Provider
                         value={{
                             authenticated: state.authenticated,
+                            token: state.token,
                             user: state.userData,
                             authenticate,
                             registerUser,

@@ -1,4 +1,7 @@
 'use strict'
+/**
+ * Validations for every input
+ */
 const validations = {
     'minLength': function (data, minLength) {
         return data.length > minLength;
@@ -34,10 +37,14 @@ const validations = {
     'isNumber': function (data) {
         return !isNaN(data);
     },
-
-    //TODO add username validation, issue #3
 };
 
+/**
+ * To check certain data if it is valid
+ * @param {string} data data to check
+ * @param {object} toCheck For what to check
+ * @returns {boolean} Is the data valid?
+ */
 function isDataValid(data, toCheck) {
     for (const key in toCheck) {
         if (!validations[key](data, toCheck[key])) {
@@ -48,16 +55,12 @@ function isDataValid(data, toCheck) {
     return true;
 };
 
-function areValuesEqualTo(obj, value) {
-    for (var i in obj) {
-        if (!(obj[i] == value)) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
+/**
+ * Function to validate the form received from client
+ * @param {object} dataToValidate Data that needs to be validated
+ * @param {object} criterias Criterias for evaluating the date 
+ * @returns {(boolean|Array)} Booleant if the data is valid or array of errors 
+ */
 function formValidation(dataToValidate, criterias) {
     let errorArr = {};
 
@@ -74,6 +77,9 @@ function formValidation(dataToValidate, criterias) {
     return errorArr;
 };
 
+/**
+ * Validations for registering form
+ */
 const registerValidations = {
     'firstName': { 'isNameValid': 1 },
     'lastName': { 'isNameValid': 1 },
@@ -87,12 +93,13 @@ const registerValidations = {
     'isEmailValid': 'Invalid email'
 };
 
+/**
+ * Validations for login form
+ */
 const loginValidations = {
     'email': { 'isEmailValid': 1 },
     'isEmailValid': 'Invalid email'
 };
-
-
 
 module.exports.isDataValid = isDataValid;
 module.exports.formValidation = formValidation;
