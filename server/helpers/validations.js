@@ -30,7 +30,7 @@ const validations = {
     },
 
     'isNameValid': function (data) {
-        let pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
+        let pattern = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u
         return data.match(pattern);
     },
 
@@ -56,25 +56,23 @@ function isDataValid(data, toCheck) {
             return false;
         }
     }
-    
+
     return true;
 };
 
 /**
  * Function to validate the form received from client
  * @param {object} dataToValidate Data that needs to be validated
- * @param {object} criterias Criterias for evaluating the date 
- * @returns {(boolean|Array)} Booleant if the data is valid or array of errors 
+ * @param {object} criterias Criterias for evaluating the date
+ * @returns {(boolean|Array)} Booleant if the data is valid or array of errors
  */
 function formValidation(dataToValidate, criterias) {
     let errorArr = {};
-
     for (const key in dataToValidate) {
         if (!isDataValid(dataToValidate[key], criterias[key])) {
             errorArr[key] = criterias[Object.keys(criterias[key])[0]];
         }
     }
-
     if (Object.keys(errorArr).length === 0) {
         return true;
     }

@@ -27,7 +27,16 @@ app.post('/login', async (req, res) => {
     loggerManager.logInfo(
         `User with email: ${loginData.email} is trying to login.`
     );
-
+    let fields =['email','password'];
+    for (const key in fields){
+        if(loginData[fields[key]] == undefined){
+            console.log('chao');
+            return 0;
+        }
+        if ( Array.isArray(loginData[fields[key]])){
+            loginData[fields[key]] = loginData[fields[key]][0];
+        }
+    }
     if (loginData.email.includes('@')) {
         returnValue = validation.formValidation(loginData, validation.loginValidations);
     }
@@ -65,14 +74,37 @@ app.post('/login', async (req, res) => {
 app.post('/register', async (req, res) => {
     let resJSON;
     // Receive x-www-form-urlencoded from client
-    let regData = req.body;
+    let blankPhone,tmpCity,blankCity,tmpPhone;
 
+    let regData = req.body;
+    let fields =['firstName','lastName','age','email','username','password','phone','city'];
+    for (const key in fields){
+        if(regData[fields[key]] == undefined){
+            console.log('chao');
+            return 0;
+        }
+        if ( Array.isArray(regData[fields[key]])){
+            regData[fields[key]] = regData[fields[key]][0];
+        }
+    }
+    if (regData.phone==''){
+        blankPhone=true;
+        tmpPhone=regData.phone;
+        regData.phone='+359896603828';
+    }
+    if (regData.city==''){
+        blankCity=true;
+        tmpCity=regData.city;
+        regData.city='Yambol';
+    }
     // loggerManager.logInfo(
     //     `User with email: ${regData.email} is trying to register.`
     // );
-
+    console.log(regData.city,regData.phone);
     let returnValue = validation.formValidation(regData, validation.registerValidations);
 
+    regData.phone = blankPhone?tmpPhone:regData.phone;
+    regData.city = blankCity?tmpCity:regData.city;
     // Validate client data
     if (returnValue === true) {
         returnValue = await DB.registerUser(
