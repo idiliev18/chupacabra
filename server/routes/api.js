@@ -5,9 +5,10 @@ const CryptoJS = require('crypto-js')
 const logs = require('../models/log.js')
 const db = require('../models/db');
 const JSONModule = require('../helpers/JSON');
+const emailer = require('../helpers/email')
 const app = express();
 const loggerManager = new logs();
-const { errors } = require('../helpers/errors')
+const { errors } = require('../helpers/errors');
 
 const cors = require('cors');
 
@@ -130,6 +131,8 @@ app.post('/register', async (req, res) => {
             loggerManager.logInfo(
                 `User with email: ${regData.email} is successfully register into the database.`
             );
+
+            await emailer.sendVerificationEmail(regData.email, returnValue[0].Token)
         } else {
             loggerManager.logWarn(
                 `Failed saving to database at user with email: ${regData.email}:\n
