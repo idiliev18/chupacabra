@@ -6,7 +6,7 @@ function SetupForm(props) {
     const handleSubmit = props.onSubmit;
 
     return (
-        <Box className={styles.box}>
+        <Box style={props.style} className={styles.box}>
             <div
                 className={"is-flex " + styles["responsive-flex"]}
                 style={{ height: "100%" }}
