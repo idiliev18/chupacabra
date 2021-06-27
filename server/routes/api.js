@@ -210,6 +210,27 @@ app.get('/users/:username', async (req, res) => {
     res.send(JSONResponse);
 })
 
+
+
+app.post('/users/:username/settings',async (req, res) =>{
+    let returnValue, JSONResponse;
+    console.log(req.body);
+    // Checks if token is passed
+    if (req.headers.authorization != undefined) {
+        returnValue = await DB.updateUser(req.headers.authorization ,req.body.firstName, req.body.lastName,req.body.email)
+        console.log(returnValue);
+        JSONResponse = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Success"), returnValue[0].hasOwnProperty("Success") ? returnValue[0] : errors[returnValue[0].ReturnCode], 'settings')
+        // Check is there valid token
+
+    }else{
+        res.send('unauthorized attempt');
+    }
+
+    res.send(JSONResponse);
+});
+
+
+
 app.post('/registerBoat', async (req, res) => {
     // Receive x-www-form-urlencoded from client
     let resJSON;

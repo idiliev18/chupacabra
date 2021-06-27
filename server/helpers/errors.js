@@ -22,6 +22,9 @@ let errors = [
   },
   {
      "name" : "You must verify your account before registering a boat"
+  },
+  {
+    "email": "Email must be verified to change email, first name or last name"
   }
 ]
 
