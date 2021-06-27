@@ -53,7 +53,7 @@ const Footer = () => {
           </Column>
           <Column>
             <Heading>Контакти</Heading>
-            <p>За повече информаия моля свържете се с нас на посочения имейл: <br /> <FontAwesomeIcon icon={faEnvelope} /> foo@foo.bg</p>
+            <p>За повече информаия моля свържете се с нас на посочения имейл: <br /> <FontAwesomeIcon icon={faEnvelope} /> chupacabradevs@gmail.com</p>
           </Column>
           <Column>
             <Heading>Социални медии</Heading>
