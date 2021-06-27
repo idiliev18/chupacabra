@@ -1,9 +1,13 @@
 @import "./_variables.scss";
 @import "../node_modules/bulma/bulma.sass";
 
+body {
+    background-color: darken(#ffffff, 10%);
+}
+
 .center {
-  min-height: 85vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    min-height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

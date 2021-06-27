@@ -1,7 +1,7 @@
 import React, { createElement, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 
-import { Tile, Notification, Icon, Button } from "react-bulma-components";
+import { Tile, Notification, Icon } from "react-bulma-components";
 import { Redirect } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,113 +11,11 @@ import {
     faFish,
     faShip,
 } from "@fortawesome/free-solid-svg-icons";
-import { SetupForm } from "../components/SetupForm";
-import { ErrorableInput } from "../components/ErrorableInput";
+import { RegisterBoatPage, BoatsPage, ProfilePage } from "./DashboardPages.jsx";
 
 import styles from "./Dashboard.module.scss";
 
-function ProfilePage(props) {
-    return (
-        <Notification className="is-child" renderAs={Tile} color="primary">
-            <div className="subtitle">profile page content</div>
-        </Notification>
-    );
-}
-
-function BoatsPage(props) {
-    return (
-        <Notification className="is-child" renderAs={Tile} color="primary">
-            <div className="subtitle">boats page content</div>
-        </Notification>
-    );
-}
-
-function RegisterBoatPage(props) {
-    return (
-        <SetupForm style={{ width: "100%", height: "100%" }}>
-            <h1>Регистрация на лодка</h1>
-            <br />
-
-            <div className="field">
-                <div className="control">
-                    <ErrorableInput
-                        label="Име на лодката"
-                        name="boatName"
-                        required
-                    />
-                </div>
-            </div>
-
-            <div className="field">
-                <div className="control">
-                    <ErrorableInput label="Двигател" name="engine" required />
-                </div>
-            </div>
-
-            <div className="field">
-                <div className="control">
-                    <ErrorableInput
-                        label="Регистрационен номер"
-                        name="registrationNumber"
-                        required
-                    />
-                </div>
-            </div>
-
-            <div className="field">
-                <div className="control">
-                    <ErrorableInput
-                        label="Свидетелство за управление на лодка"
-                        name="boatLicense"
-                        required
-                    />
-                </div>
-            </div>
-
-            <div className="field">
-                <div className="control">
-                    <ErrorableInput
-                        label="Брой места"
-                        name="seatsCount"
-                        required
-                    />
-                </div>
-            </div>
-
-            <div className="field">
-                <div className="control">
-                    <ErrorableInput
-                        label="Дължина на котва"
-                        name="anchorLength"
-                        required
-                    />
-                </div>
-            </div>
-
-            <div className="field">
-                <div className="control">
-                    <ErrorableInput
-                        label="Брой спасителни жилетки"
-                        type="number"
-                        name="seatsCount"
-                        min="3"
-                        max="20"
-                        required
-                    />
-                </div>
-            </div>
-
-            <div className="field">
-                <Button
-                    color="primary"
-                    renderAs="input"
-                    type="submit"
-                    value="Изпращане"
-                ></Button>
-            </div>
-        </SetupForm>
-    );
-}
+import { UserContext } from "../App.js";
 
 export default function Dashboard(props) {
     const [pageIdx, setPageIdx] = useState(0);
@@ -211,9 +109,7 @@ export default function Dashboard(props) {
                 </Notification>
             </Tile>
             <Tile
-                className={`is-parent is-vertical ${
-                    isTablet ? "is-11" : "is-9"
-                }`}
+                className={`is-vertical ${isTablet ? "is-11" : "is-9"}`}
                 id={styles.content}
             >
                 {createElement(pages[pageIdx].page)}

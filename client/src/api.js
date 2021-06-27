@@ -110,3 +110,19 @@ export async function validateToken(token) {
         return false;
     }
 }
+
+/**
+ *
+ * @param {File} file
+ * @param {string} token
+ */
+export async function changeAvatar(file, token) {
+    const formData = new FormData();
+
+    formData.append("avatar", file);
+
+    return await fetch(`${API_ENDPOINT}/users/@me/changeProfilePicture`, {
+        method: "POST",
+        body: formData,
+    });
+}

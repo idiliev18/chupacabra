@@ -10,6 +10,7 @@ function ErrorableInput(props) {
                 className={`input ${!!props.errText ? "is-danger" : null}`}
                 placeholder={props.placeholder}
                 {...{ required: props.required }}
+                onChange={props.onChange}
             />
             {!!props.errText ? (
                 <div className="help is-danger">{props.errText}</div>
