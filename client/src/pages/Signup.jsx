@@ -5,6 +5,8 @@ import React, {
     useRef,
     useState,
 } from "react";
+import { useMediaQuery } from "react-responsive";
+
 import { UserContext } from "../App";
 import { Link } from "react-router-dom";
 import { Button } from "react-bulma-components";
@@ -44,7 +46,10 @@ function Signup(props) {
             setInvalidValues({});
             let updatedState = {};
 
-            if (!event.target.phone.value.match(PHONE_REGEX))
+            if (
+                event.target.phone.value !== "" &&
+                !event.target.phone.value.match(PHONE_REGEX)
+            )
                 updatedState["phone"] = "невалиден телефонен номер";
 
             if (
@@ -75,6 +80,9 @@ function Signup(props) {
                     password: event.target.password.value,
                 };
 
+                if (!data.city) delete data.city;
+                if (!data.phone) delete data.phone;
+
                 setLoading(true);
                 userContext.registerUser(data).then((fields) => {
                     // checks if component is still mounted
@@ -95,137 +103,155 @@ function Signup(props) {
         [userContext]
     );
 
+    const isTablet = useMediaQuery({
+        query: "(max-width: 1024px)",
+    });
+
     return (
-        <SetupForm onSubmit={handleSubmit}>
-            <h1>Регистрация</h1>
-            <br />
+        <div
+            className="center"
+            {...{
+                style: isTablet
+                    ? null
+                    : {
+                          marginTop: "5%",
+                          marginBottom: "5%",
+                      },
+            }}
+        >
+            <SetupForm onSubmit={handleSubmit}>
+                <h1>Регистрация</h1>
+                <br />
 
-            <div className="field is-flex">
-                <div className={"control " + styles.control}>
-                    <ErrorableInput
-                        label="Първо име"
-                        name="firstName"
-                        placeholder="Янко"
-                        errText={invalidValues.firstName}
-                        required
-                    />
+                <div className="field is-flex">
+                    <div className={"control " + styles.control}>
+                        <ErrorableInput
+                            label="Първо име"
+                            name="firstName"
+                            placeholder="Янко"
+                            errText={invalidValues.firstName}
+                            required
+                        />
+                    </div>
+                    <div className={"control " + styles.control}>
+                        <ErrorableInput
+                            label="Фамилия"
+                            name="lastName"
+                            placeholder="Георгиев"
+                            errText={invalidValues.lastName}
+                            required
+                        />
+                    </div>
+                    <div className={"control " + styles.control}>
+                        <ErrorableInput
+                            type="number"
+                            label="Възраст"
+                            name="age"
+                            placeholder="22"
+                            errText={invalidValues.age}
+                            required
+                        />
+                    </div>
                 </div>
-                <div className={"control " + styles.control}>
-                    <ErrorableInput
-                        label="Фамилия"
-                        name="lastName"
-                        placeholder="Георгиев"
-                        errText={invalidValues.lastName}
-                        required
-                    />
+
+                <div className="field">
+                    <div className="control">
+                        <ErrorableInput
+                            label="Потребителско име"
+                            name="username"
+                            placeholder="qnko0123"
+                            errText={invalidValues.username}
+                            required
+                        />
+                    </div>
                 </div>
-                <div className={"control " + styles.control}>
-                    <ErrorableInput
-                        type="number"
-                        label="Възраст"
-                        name="age"
-                        placeholder="22"
-                        errText={invalidValues.age}
-                        required
-                    />
+
+                <div className="field">
+                    <div className="control">
+                        <ErrorableInput
+                            label="Имейл"
+                            type="email"
+                            name="email"
+                            placeholder="qnko_goshov@abv.bg"
+                            errText={invalidValues.email}
+                            required
+                        />
+                    </div>
                 </div>
-            </div>
 
-            <div className="field">
-                <div className="control">
-                    <ErrorableInput
-                        label="Потребителско име"
-                        name="username"
-                        placeholder="qnko0123"
-                        errText={invalidValues.username}
-                        required
-                    />
+                <div className="field">
+                    <div className="control">
+                        <ErrorableInput
+                            label="Град (по избор)"
+                            name="city"
+                            placeholder="Бургас"
+                            errText={invalidValues.city}
+                        />
+                    </div>
                 </div>
-            </div>
 
-            <div className="field">
-                <div className="control">
-                    <ErrorableInput
-                        label="Имейл"
-                        type="email"
-                        name="email"
-                        placeholder="qnko_goshov@abv.bg"
-                        errText={invalidValues.email}
-                        required
-                    />
+                <div className="field">
+                    <div className="control">
+                        <ErrorableInput
+                            label="Телефонен номер (по избор)"
+                            type="tel"
+                            name="phone"
+                            errText={invalidValues.phone}
+                        />
+                    </div>
                 </div>
-            </div>
 
-            <div className="field">
-                <div className="control">
-                    <ErrorableInput
-                        label="Град (по избор)"
-                        name="city"
-                        placeholder="Бургас"
-                        errText={invalidValues.city}
-                    />
+                <div className="field">
+                    <div className="control">
+                        <ErrorableInput
+                            label="Парола"
+                            type="password"
+                            name="password"
+                            placeholder="********"
+                            errText={invalidValues.password}
+                            required
+                        />
+                    </div>
                 </div>
-            </div>
 
-            <div className="field">
-                <div className="control">
-                    <ErrorableInput
-                        label="Телефонен номер (по избор)"
-                        type="tel"
-                        name="phone"
-                        errText={invalidValues.phone}
-                    />
+                <div className="field">
+                    <div className="control">
+                        <ErrorableInput
+                            label="Повтори Парола"
+                            type="password"
+                            name="confirmPassword"
+                            placeholder="********"
+                            errText={invalidValues.confirmPassword}
+                            required
+                        />
+                    </div>
                 </div>
-            </div>
 
-            <div className="field">
-                <div className="control">
-                    <ErrorableInput
-                        label="Парола"
-                        type="password"
-                        name="password"
-                        placeholder="********"
-                        errText={invalidValues.password}
-                        required
-                    />
+                <div className="field">
+                    {!!invalidValues.global ? (
+                        <div className="help is-danger">
+                            {invalidValues.global}
+                        </div>
+                    ) : null}
                 </div>
-            </div>
 
-            <div className="field">
-                <div className="control">
-                    <ErrorableInput
-                        label="Повтори Парола"
-                        type="password"
-                        name="confirmPassword"
-                        placeholder="********"
-                        errText={invalidValues.confirmPassword}
-                        required
-                    />
+                <div className="field">
+                    <p>
+                        Имате регистрация? <Link to="/login">Влизане</Link>
+                    </p>
                 </div>
-            </div>
 
-            <div className="field">
-                {!!invalidValues.global ? (
-                    <div className="help is-danger">{invalidValues.global}</div>
-                ) : null}
-            </div>
-
-            <div className="field">
-                <p>
-                    Имате регистрация? <Link to="/login">Влизане</Link>
-                </p>
-            </div>
-
-            <div className="field">
-                <Button
-                    color="primary"
-                    renderAs="input"
-                    type="submit"
-                    value={loading ? "Моля изчакайте..." : "Регистрация"}
-                    {...{ disabled: loading }}
-                ></Button>
-            </div>
-        </SetupForm>
+                <div className="field">
+                    <Button
+                        color="primary"
+                        renderAs="input"
+                        type="submit"
+                        value={loading ? "Моля изчакайте..." : "Регистрация"}
+                        {...{ disabled: loading }}
+                    ></Button>
+                </div>
+            </SetupForm>
+        </div>
     );
 }
 

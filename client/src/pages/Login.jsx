@@ -5,6 +5,8 @@ import React, {
     useRef,
     useEffect,
 } from "react";
+import { useMediaQuery } from "react-responsive";
+
 import { Link } from "react-router-dom";
 import { Button } from "react-bulma-components";
 import { SetupForm } from "../components/SetupForm";
@@ -57,72 +59,91 @@ function Login(props) {
         [userContext]
     );
 
+    const isTablet = useMediaQuery({
+        query: "(max-width: 1024px)",
+    });
+
     return (
-        <SetupForm onSubmit={handleSubmit}>
-            <h1>Влизане</h1>
-            <br />
+        <div
+            className="center"
+            {...{
+                style: isTablet
+                    ? null
+                    : {
+                          marginTop: "5%",
+                          marginBottom: "5%",
+                      },
+            }}
+        >
+            <SetupForm onSubmit={handleSubmit}>
+                <h1>Влизане</h1>
+                <br />
 
-            <div className="field">
-                <div className="control">
-                    <ErrorableInput
-                        label="Имейл"
-                        type="email"
-                        name="email"
-                        placeholder="qnko_goshov@abv.bg"
-                        errText={invalidValues.email}
-                        required
-                    />
-                </div>
-            </div>
-
-            <div className="field">
-                <div className="control">
-                    <ErrorableInput
-                        label="Парола"
-                        type="password"
-                        placeholder="********"
-                        name="password"
-                        errText={invalidValues.password}
-                        required
-                    />
-                </div>
-            </div>
-
-            <div className="field">
-                {!!invalidValues.global ? (
-                    <div className="help is-danger">{invalidValues.global}</div>
-                ) : null}
-            </div>
-
-            <div className="field">
-                <p>
-                    Нямате регистрирация? <Link to="/signup">Регистрация</Link>
-                </p>
-            </div>
-
-            <div className="field">
-                <div className="control">
-                    <label htmlFor="rememberMe" className="checkbox">
-                        <input
-                            type="checkbox"
-                            name="rememberMe"
-                            id="rememberMe"
+                <div className="field">
+                    <div className="control">
+                        <ErrorableInput
+                            label="Имейл"
+                            type="email"
+                            name="email"
+                            placeholder="qnko_goshov@abv.bg"
+                            errText={invalidValues.email}
+                            required
                         />
-                        <label htmlFor="rememberMe"> Запомни ме</label>
-                    </label>
+                    </div>
                 </div>
-            </div>
 
-            <div className="field">
-                <Button
-                    color="primary"
-                    renderAs="input"
-                    type="submit"
-                    value={loading ? "Моля изчакайте..." : "Влизане"}
-                    {...{ disabled: loading }}
-                ></Button>
-            </div>
-        </SetupForm>
+                <div className="field">
+                    <div className="control">
+                        <ErrorableInput
+                            label="Парола"
+                            type="password"
+                            placeholder="********"
+                            name="password"
+                            errText={invalidValues.password}
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div className="field">
+                    {!!invalidValues.global ? (
+                        <div className="help is-danger">
+                            {invalidValues.global}
+                        </div>
+                    ) : null}
+                </div>
+
+                <div className="field">
+                    <p>
+                        Нямате регистрирация?{" "}
+                        <Link to="/signup">Регистрация</Link>
+                    </p>
+                </div>
+
+                <div className="field">
+                    <div className="control">
+                        <label htmlFor="rememberMe" className="checkbox">
+                            <input
+                                type="checkbox"
+                                name="rememberMe"
+                                id="rememberMe"
+                            />
+                            <label htmlFor="rememberMe"> Запомни ме</label>
+                        </label>
+                    </div>
+                </div>
+
+                <div className="field">
+                    <Button
+                        color="primary"
+                        renderAs="input"
+                        type="submit"
+                        value={loading ? "Моля изчакайте..." : "Влизане"}
+                        {...{ disabled: loading }}
+                    ></Button>
+                </div>
+            </SetupForm>
+        </div>
     );
 }
 

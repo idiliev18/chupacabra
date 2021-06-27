@@ -1,5 +1,7 @@
 const dbConfig = require('../config/dbConfig');
-const sql = require('mssql')
+const sql = require('mssql');
+const logs = require('../models/log.js');
+const loggerManager = new logs();
 
 class db {
     constructor() {
@@ -14,9 +16,34 @@ class db {
             await sql.connect(this._config);
             this._connection = true;
         } catch (err) {
+            loggerManager.logError(JSON.stringify(err));
             console.log(err);
         }
     }
+
+    async verifyUser(token) {
+        const request = new sql.Request();
+        request.input('userToken', sql.NVarChar, token)
+
+        let result;
+
+        try {
+            result = await request.query(
+                `IF EXISTS(SELECT Id FROM Users WHERE Token = @userToken)
+                           BEGIN
+                           UPDATE Users SET IsVerified = 1 WHERE Token = @userToken
+                           SELECT 0 AS Success
+                           END
+                           SELECT 7 AS ReturnCode`
+            );
+        } catch (err) {
+            loggerManager.logError(JSON.stringify(err));
+            return err;
+        }
+
+        return result.recordset;
+    }
+
 
     async registerBoat(token,licenseId, name, engine, registrationNumber, boatLicense, seatsCount, anchorLength,lifeJacketsCount) {
         const request = new sql.Request();
@@ -46,6 +73,7 @@ class db {
                 @LifeJacketsCount = @boatLifeJacketsCount`
             );
         } catch (err) {
+            loggerManager.logError(JSON.stringify(err));
             return err;
         }
 
@@ -78,6 +106,7 @@ class db {
                 @PasswordHash = @userHashPassword`
             );
         } catch (err) {
+            loggerManager.logError(JSON.stringify(err));
             return err;
         }
 
@@ -91,9 +120,6 @@ class db {
 
         let result;
 
-        console.log(loginCredential);
-        console.log(hashPassword);
-
         try {
             result = await request.query(
                 `EXEC LoginUser
@@ -101,6 +127,7 @@ class db {
                 @PasswordHash = @userHashPassword`
             );
         } catch (err) {
+            loggerManager.logError(JSON.stringify(err));
             return err;
         }
 
@@ -115,8 +142,6 @@ class db {
 
         let result;
 
-        console.log(username);
-
         try {
             result = await request.query(
                 `EXEC GetProfileInformation
@@ -125,6 +150,7 @@ class db {
             );
 
         } catch (err) {
+            loggerManager.logError(JSON.stringify(err));
             return err;
         }
 
@@ -136,8 +162,6 @@ class db {
         request.input('userUsername', sql.VarChar, username)
         request.input('userToken', sql.VarChar, token)
 
-        console.log("GPPI " + token);
-        console.log("GPPI " + username);
         let result;
 
         try {
@@ -147,11 +171,10 @@ class db {
                 @Token = @userToken`)
 
         } catch (err) {
+            loggerManager.logError(JSON.stringify(err));
             return err;
         }
 
-
-        console.log(result.recordsets);
         return result.recordsets;
     }
 

@@ -1,4 +1,7 @@
 'use strict'
+/**
+ * Validations for every input
+ */
 const validations = {
     'minLength': function (data, minLength) {
         return data.length > minLength;
@@ -10,6 +13,11 @@ const validations = {
 
     'isEmailValid': function (data) {
         let pattern = /(([a-z]+)([._a-z0-9])([a-z0-9]+)).{1,64}(@)([a-z]+)([.a-z])([a-z])+/gmi;
+        return data.match(pattern);
+    },
+
+    'isUsernameValid': function (data) {
+        let pattern = /^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/;
         return data.match(pattern);
     },
 
@@ -34,10 +42,14 @@ const validations = {
     'isNumber': function (data) {
         return !isNaN(data);
     },
-
-    //TODO add username validation, issue #3
 };
 
+/**
+ * To check certain data if it is valid
+ * @param {string} data data to check
+ * @param {object} toCheck For what to check
+ * @returns {boolean} Is the data valid?
+ */
 function isDataValid(data, toCheck) {
     for (const key in toCheck) {
         if (!validations[key](data, toCheck[key])) {
@@ -48,16 +60,12 @@ function isDataValid(data, toCheck) {
     return true;
 };
 
-function areValuesEqualTo(obj, value) {
-    for (var i in obj) {
-        if (!(obj[i] == value)) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
+/**
+ * Function to validate the form received from client
+ * @param {object} dataToValidate Data that needs to be validated
+ * @param {object} criterias Criterias for evaluating the date 
+ * @returns {(boolean|Array)} Booleant if the data is valid or array of errors 
+ */
 function formValidation(dataToValidate, criterias) {
     let errorArr = {};
 
@@ -74,25 +82,31 @@ function formValidation(dataToValidate, criterias) {
     return errorArr;
 };
 
+/**
+ * Validations for registering form
+ */
 const registerValidations = {
     'firstName': { 'isNameValid': 1 },
     'lastName': { 'isNameValid': 1 },
+    'username': { 'isUsernameValid': 1},
     'age': { 'minNumber': 0, 'maxNumber': 127, 'isNumber': 1 },
     'city': { 'isNameValid': 1 },
     'phone': { 'isPhoneValid': 1 },
     'email': { 'isEmailValid': 1 },
+    'isUsernameValid': 'Invalid username',
     'isNameValid': 'Invalid name',
     'isPhoneValid': 'Invalid phone',
     'minNumber': 'Invalid age',
     'isEmailValid': 'Invalid email'
 };
 
+/**
+ * Validations for login form
+ */
 const loginValidations = {
     'email': { 'isEmailValid': 1 },
     'isEmailValid': 'Invalid email'
 };
-
-
 
 module.exports.isDataValid = isDataValid;
 module.exports.formValidation = formValidation;
