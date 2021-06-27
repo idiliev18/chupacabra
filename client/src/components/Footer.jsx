@@ -1,43 +1,89 @@
 import React from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 
-const FooterPage = () => {
+import {
+  Box,
+  Container,
+  Row,
+  Column,
+  FooterLink,
+  Heading,
+} from "./FooterStyles";
+  
+const Footer = () => {
   return (
-    <MDBFooter color="blue" className="font-small pt-4 mt-4">
-      <MDBContainer fluid className="text-center text-md-left">
-        <MDBRow>
-          <MDBCol md="6">
-            <h5 className="title">Footer Content</h5>
-            <p>
-              Here you can use rows and columns here to organize your footer
-              content.
-            </p>
-          </MDBCol>
-          <MDBCol md="6">
-            <h5 className="title">Links</h5>
-            <ul>
-              <li className="list-unstyled">
-                <a href="#!">Link 1</a>
-              </li>
-              <li className="list-unstyled">
-                <a href="#!">Link 2</a>
-              </li>
-              <li className="list-unstyled">
-                <a href="#!">Link 3</a>
-              </li>
-              <li className="list-unstyled">
-                <a href="#!">Link 4</a>
-              </li>
-            </ul>
-          </MDBCol>
-        </MDBRow>
-      </MDBContainer>
-      <div className="footer-copyright text-center py-3">
-        <MDBContainer fluid>
-          &copy; {new Date().getFullYear()} Copyright: <a href="https://www.mdbootstrap.com"> MDBootstrap.com </a>
-        </MDBContainer>
-      </div>
-    </MDBFooter>
-  );
-}
+    <Box>
+      <h1 style={{ color: "#AAAAAA", 
+                   textAlign: "center", 
+                   marginTop: "-50px" }}>
+        CHUPACABRA
+      </h1> <br />
+      <Container>
+        <Row>
+          <Column>
+            <Heading>За сайта</Heading>
+            <p>Целта на нашата уеб страница е да помогне, както в организацията на пристанищата, като ги автоматизира, так и на рибарите.</p>
+          </Column>
+          <Column>
+            <Heading>Бързи връзки</Heading>
+            <FooterLink href="#">
+                <span style={{ marginLeft: "10px" }}>
+                  Влизане
+                </span>
+            </FooterLink>
 
-export default FooterPage;
+            <FooterLink href="#">
+                <span style={{ marginLeft: "10px" }}>
+                  Регистрация
+                </span>
+            </FooterLink>
+
+            <FooterLink href="#">
+                <span style={{ marginLeft: "10px" }}>
+                  Новини
+                </span>
+            </FooterLink>
+
+            <FooterLink href="#">
+                <span style={{ marginLeft: "10px" }}>
+                  Начало
+                </span>
+            </FooterLink>
+          </Column>
+          <Column>
+            <Heading>Контакти</Heading>
+            <p>За повече информаия моля свържете се с нас на посочения имейл: <br /> <FontAwesomeIcon icon={faEnvelope} /> foo@foo.bg</p>
+          </Column>
+          <Column>
+            <Heading>Социални медии</Heading>
+            <FooterLink href="#">
+                <span style={{ marginLeft: "10px" }}>
+                  Facebook
+                </span>
+            </FooterLink>
+
+            <FooterLink href="#">
+                <span style={{ marginLeft: "10px" }}>
+                  Instagram
+                </span>
+            </FooterLink>
+
+            <FooterLink href="#">
+                <span style={{ marginLeft: "10px" }}>
+                  Twitter
+                </span>
+            </FooterLink>
+
+            <FooterLink href="#">
+                <span style={{ marginLeft: "10px" }}>
+                  Youtube
+                </span>
+            </FooterLink>
+          </Column>
+        </Row>
+      </Container>
+    </Box>
+  );
+};
+export default Footer;

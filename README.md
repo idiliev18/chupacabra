@@ -1,8 +1,8 @@
 <p align = "center">
-  <img src = "https://camo.githubusercontent.com/1e9856e8d1466c3aa3ec7a8c631f5e5d4b66441ced6f5ed789825a03422e9688/68747470733a2f2f6d656469612e646973636f72646170702e6e65742f6174746163686d656e74732f3835303538333330373834393536343139302f3835303734373735343134353737353631362f66696b692e706e67" alt = "logo" width = 380px height = 138px>
+  <img src = "https://camo.githubusercontent.com/1e9856e8d1466c3aa3ec7a8c631f5e5d4b66441ced6f5ed789825a03422e9688/68747470733a2f2f6d656469612e646973636f72646170702e6e65742f6174746163686d656e74732f3835303538333330373834393536343139302f3835303734373735343134353737353631362f66696b692e706e67" alt = "logo">
   </p>
   </p>
-  <h1 align = "center"> Chupacabra </h1>
+  <h1 align = "center"> CHUPACABRA </h1>
   <p align = "center">
    <img src = "https://img.shields.io/github/languages/count/idiliev18/chupacabra?style=for-the-badge">
    <img src = "https://img.shields.io/github/contributors/idiliev18/chupacabra?style=for-the-badge">
