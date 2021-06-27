@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Hero, Container } from "react-bulma-components";
+import { Hero } from "react-bulma-components";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 
