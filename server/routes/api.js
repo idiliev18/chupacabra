@@ -241,5 +241,16 @@ app.post('/registerBoat', async (req, res) => {
     res.send(resJSON);
 });
 
+app.git('/boats', async (req, res) => {
+    let token = req.headers.authorization;
+
+    let returnValue;
+    if(token != undefined){
+        returnValue = await DB
+    }
+    else{
+        res.send(403)
+    }
+})
 
 module.exports = app;

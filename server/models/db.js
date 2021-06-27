@@ -178,6 +178,10 @@ class db {
         return result.recordsets;
     }
 
+    async getBoatsInformation(token){
+        
+    }
+
     //private
     static _config = dbConfig.config;
     static _connection = false;
