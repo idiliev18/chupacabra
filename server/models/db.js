@@ -179,7 +179,22 @@ class db {
     }
 
     async getBoatsInformation(token){
-        
+        const request = new sql.Request();
+        request.input('userToken', sql.VarChar, token)
+
+        let result;
+
+          try {
+            result = await request.query(
+                `EXEC GetBoats
+                @Token = @userToken`)
+
+        } catch (err) {
+            loggerManager.logError(JSON.stringify(err));
+            return err;
+        }  
+
+        return result.recordsets;
     }
 
     //private
