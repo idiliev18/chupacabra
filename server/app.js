@@ -6,7 +6,7 @@ const rss = require("./routes/rss.js");
 const RateLimit = require("express-rate-limit");
 
 let limiter = new RateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minute
+    windowMs: 60 * 1000, // 1 minute
     max: process.env.MAX_REQUEST_COUNT,
 });
 
