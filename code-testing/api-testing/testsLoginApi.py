@@ -85,7 +85,7 @@ class TestLoginApi(unittest.TestCase):
     """
     Checks whether the api returns 'login-success'
     which means there is a user with those credentials.
-    Tests should pass if the.
+    Tests should pass if the credentials are in the database.
     """
 
     def test_login10(self):
