@@ -27,25 +27,25 @@ const Footer = () => {
           </Column>
           <Column>
             <Heading>Бързи връзки</Heading>
-            <FooterLink href="#">
+            <FooterLink href="../Login">
                 <span style={{ marginLeft: "10px" }}>
                   Влизане
                 </span>
             </FooterLink>
 
-            <FooterLink href="#">
+            <FooterLink href="../Signup">
                 <span style={{ marginLeft: "10px" }}>
                   Регистрация
                 </span>
             </FooterLink>
 
-            <FooterLink href="#">
+            <FooterLink href="../News">
                 <span style={{ marginLeft: "10px" }}>
                   Новини
                 </span>
             </FooterLink>
 
-            <FooterLink href="#">
+            <FooterLink href="../Index">
                 <span style={{ marginLeft: "10px" }}>
                   Начало
                 </span>
