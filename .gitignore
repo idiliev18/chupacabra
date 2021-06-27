@@ -180,4 +180,4 @@ fabric.properties
 
 # Python files
 /.pytest_cache
-/__pycache__
+/code-testing/api-testing/__pycache__
