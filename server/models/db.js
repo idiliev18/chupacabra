@@ -45,6 +45,31 @@ class db {
     }
 
 
+    async updateUser(token,firstName,lastName,email) {
+        const request = new sql.Request();
+        request.input('userToken', sql.VarChar, token)
+            .input('firstName', sql.NVarChar, firstName)
+            .input('lastName', sql.NVarChar, lastName)
+            .input('userEmail', sql.NVarChar, email)
+
+        let result;
+
+        try {
+            result = await request.query(
+                `EXEC ChangeUserData
+                @Email = @userEmail,
+                @FirstName = @firstName,
+                @LastName = @lastName,
+                @Token = @userToken`
+            );
+        } catch (err) {
+            loggerManager.logError(JSON.stringify(err));
+            return err;
+        }
+
+        return result.recordset;
+    }
+
     async registerBoat(token,licenseId, name, engine, registrationNumber, boatLicense, seatsCount, anchorLength,lifeJacketsCount) {
         const request = new sql.Request();
         request.input('userToken', sql.NVarChar, token)
