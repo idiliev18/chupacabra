@@ -4,7 +4,7 @@ import LoadingSVG from "../loading.svg";
 function Loading() {
     return (
         <div className="center" style={{ minHeight: "100vh" }}>
-            <img src={LoadingSVG} />
+            <img src={LoadingSVG} alt="Loading" />
         </div>
     );
 }
