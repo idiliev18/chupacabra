@@ -27,16 +27,19 @@ app.post('/login', async (req, res) => {
     loggerManager.logInfo(
         `User with email: ${loginData.email} is trying to login.`
     );
-    let fields =['email','password'];
-    for (const key in fields){
-        if(loginData[fields[key]] == undefined){
-            console.log('chao');
+
+    let fields = ['email', 'password'];
+
+    for (const key in fields) {
+        if (loginData[fields[key]] == undefined) {
             return 0;
         }
-        if ( Array.isArray(loginData[fields[key]])){
+
+        if (Array.isArray(loginData[fields[key]])) {
             loginData[fields[key]] = loginData[fields[key]][0];
         }
     }
+
     if (loginData.email.includes('@')) {
         returnValue = validation.formValidation(loginData, validation.loginValidations);
     }
@@ -72,39 +75,42 @@ app.post('/login', async (req, res) => {
 });
 
 app.post('/register', async (req, res) => {
-    let resJSON;
     // Receive x-www-form-urlencoded from client
-    let blankPhone,tmpCity,blankCity,tmpPhone;
-
+    let resJSON;
+    let blankPhone, tmpCity, blankCity, tmpPhone;
     let regData = req.body;
-    let fields =['firstName','lastName','age','email','username','password','phone','city'];
-    for (const key in fields){
-        if(regData[fields[key]] == undefined){
-            console.log('chao');
+    let fields = ['firstName', 'lastName', 'age', 'email', 'username', 'password', 'phone', 'city'];
+
+    for (const key in fields) {
+        if (regData[fields[key]] == undefined) {
             return 0;
         }
-        if ( Array.isArray(regData[fields[key]])){
+        if (Array.isArray(regData[fields[key]])) {
             regData[fields[key]] = regData[fields[key]][0];
         }
     }
-    if (regData.phone==''){
-        blankPhone=true;
-        tmpPhone=regData.phone;
-        regData.phone='+359896603828';
+
+    if (regData.phone == '') {
+        blankPhone = true;
+        tmpPhone = regData.phone;
+        regData.phone = '+359896603828';
     }
-    if (regData.city==''){
-        blankCity=true;
-        tmpCity=regData.city;
-        regData.city='Yambol';
+
+    if (regData.city == '') {
+        blankCity = true;
+        tmpCity = regData.city;
+        regData.city = 'Yambol';
     }
-    // loggerManager.logInfo(
-    //     `User with email: ${regData.email} is trying to register.`
-    // );
-    console.log(regData.city,regData.phone);
+
+    loggerManager.logInfo(
+        `User with email: ${regData.email} is trying to register.`
+    );
+
     let returnValue = validation.formValidation(regData, validation.registerValidations);
 
-    regData.phone = blankPhone?tmpPhone:regData.phone;
-    regData.city = blankCity?tmpCity:regData.city;
+    regData.phone = blankPhone ? tmpPhone : regData.phone;
+    regData.city = blankCity ? tmpCity : regData.city;
+
     // Validate client data
     if (returnValue === true) {
         returnValue = await DB.registerUser(
@@ -155,23 +161,20 @@ app.post('/register', async (req, res) => {
     res.send(resJSON);
 });
 
-app.get('/verify/:token',async (req, res) => {
+app.get('/verify/:token', async (req, res) => {
     let returnValue;
     let token = req.params.token;
 
-
     // Checks if token is passed
-    returnValue= await DB.verifyUser(token);
-    if(returnValue[0].hasOwnProperty('Success')){
+    returnValue = await DB.verifyUser(token);
+
+    if (returnValue[0].hasOwnProperty('Success')) {
         res.redirect('/');
     }
 })
 
 app.get('/users/:username', async (req, res) => {
     let returnValue, JSONResponse;
-
-    console.log(req.params.username);
-    console.log(req.headers.authorization);
 
     // Checks if token is passed
     if (req.headers.authorization != undefined) {
@@ -199,42 +202,40 @@ app.get('/users/:username', async (req, res) => {
 
         JSONResponse = JSONModule.
             createProfileJSON(returnValue);
-
     }
 
     res.send(JSONResponse);
 })
 
 app.post('/registerBoat', async (req, res) => {
-    let resJSON;
     // Receive x-www-form-urlencoded from client
+    let resJSON;
     let regData = req.body;
-    console.log(regData);
     let returnValue;
+
     loggerManager.logInfo(
         `User with token: ${regData.Token} is trying to register a boat.`
     );
 
-        returnValue = await DB.registerBoat(
-            regData.Token,
-            regData.licenseId,
-            regData.boatName,
-            regData.Engine,
-            regData.registrationNumber,
-            regData.boatLicense,
-            regData.seatsCount,
-            regData.anchorLength,
-            regData.lifeJacketsCount,
-        )
+    returnValue = await DB.registerBoat(
+        regData.Token,
+        regData.licenseId,
+        regData.boatName,
+        regData.Engine,
+        regData.registrationNumber,
+        regData.boatLicense,
+        regData.seatsCount,
+        regData.anchorLength,
+        regData.lifeJacketsCount,
+    )
 
-        console.log(returnValue);
-        if (returnValue[0].hasOwnProperty("Success")) {
-            loggerManager.logInfo(
-                `User with token: ${regData.Token} is successfully register into the database.`
-            );
-        }
+    if (returnValue[0].hasOwnProperty("Success")) {
+        loggerManager.logInfo(
+            `User with token: ${regData.Token} is successfully register into the database.`
+        );
+    }
 
-        resJSON = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Success"), returnValue[0].hasOwnProperty("Success") ? returnValue[0] : errors[returnValue[0].ReturnCode], 'registerBoat')
+    resJSON = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Success"), returnValue[0].hasOwnProperty("Success") ? returnValue[0] : errors[returnValue[0].ReturnCode], 'registerBoat')
 
     //Send respond
     res.send(resJSON);
