@@ -1,6 +1,7 @@
 const express = require('express');
-var CryptoJS = require("crypto-js");
+let hash = require('../helpers/hash')
 const validation = require('../helpers/validations');
+const CryptoJS = require('crypto-js')
 const logs = require('../models/log.js')
 const db = require('../models/db');
 const JSONModule = require('../helpers/JSON');
@@ -63,9 +64,9 @@ app.post('/register', async (req, res) => {
     // Receive x-www-form-urlencoded from client
     let regData = req.body;
 
-    loggerManager.logInfo(
-        `User with email: ${regData.email} is trying to register.`
-    );
+    // loggerManager.logInfo(
+    //     `User with email: ${regData.email} is trying to register.`
+    // );
 
     let returnValue = validation.formValidation(regData, validation.registerValidations);
 
@@ -153,6 +154,41 @@ app.get('/users/:username', async (req, res) => {
 
     res.send(JSONResponse);
 })
+
+app.post('/registerBoat', async (req, res) => {
+    let resJSON;
+    // Receive x-www-form-urlencoded from client
+    let regData = req.body;
+    console.log(regData);
+    let returnValue;
+    loggerManager.logInfo(
+        `User with token: ${regData.Token} is trying to register a boat.`
+    );
+
+        returnValue = await DB.registerBoat(
+            regData.Token,
+            regData.licenseId,
+            regData.boatName,
+            regData.Engine,
+            regData.registrationNumber,
+            regData.boatLicense,
+            regData.seatsCount,
+            regData.anchorLength,
+            regData.lifeJacketsCount,
+        )
+
+        console.log(returnValue);
+        if (returnValue[0].hasOwnProperty("Success")) {
+            loggerManager.logInfo(
+                `User with token: ${regData.Token} is successfully register into the database.`
+            );
+        }
+
+        resJSON = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Success"), returnValue[0].hasOwnProperty("Success") ? returnValue[0] : errors[returnValue[0].ReturnCode], 'registerBoat')
+
+    //Send respond
+    res.send(resJSON);
+});
 
 
 module.exports = app;
