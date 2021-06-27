@@ -15,7 +15,7 @@ import { UserContext } from "../App";
 function Login(props) {
     const userContext = useContext(UserContext);
     const [loading, setLoading] = useState(false);
-    const [invalidData, setInvalidData] = useState({});
+    const [invalidValues, setInvalidValues] = useState({});
 
     // this reference is used for indication
     // when the component has been unmounted
@@ -34,7 +34,7 @@ function Login(props) {
         (event) => {
             event.preventDefault();
 
-            setInvalidData({});
+            setInvalidValues({});
             setLoading(true);
 
             userContext
@@ -46,7 +46,7 @@ function Login(props) {
                 .then((success) => {
                     if (mountedRef.current) {
                         console.log(success);
-                        setInvalidData((prevState) => {
+                        setInvalidValues((prevState) => {
                             return { ...prevState, ...success };
                         });
 
@@ -69,7 +69,7 @@ function Login(props) {
                         type="email"
                         name="email"
                         placeholder="qnko_goshov@abv.bg"
-                        errText={invalidData.email}
+                        errText={invalidValues.email}
                         required
                     />
                 </div>
@@ -82,10 +82,16 @@ function Login(props) {
                         type="password"
                         placeholder="********"
                         name="password"
-                        errText={invalidData.password}
+                        errText={invalidValues.password}
                         required
                     />
                 </div>
+            </div>
+
+            <div className="field">
+                {!!invalidValues.global ? (
+                    <div className="help is-danger">{invalidValues.global}</div>
+                ) : null}
             </div>
 
             <div className="field">
@@ -97,8 +103,12 @@ function Login(props) {
             <div className="field">
                 <div className="control">
                     <label htmlFor="rememberMe" className="checkbox">
-                        <input type="checkbox" name="rememberMe" id="rememberMe"/> 
-                        <label for="rememberMe"> Запомни ме</label>
+                        <input
+                            type="checkbox"
+                            name="rememberMe"
+                            id="rememberMe"
+                        />
+                        <label htmlFor="rememberMe"> Запомни ме</label>
                     </label>
                 </div>
             </div>

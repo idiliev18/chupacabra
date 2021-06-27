@@ -6,11 +6,11 @@ function SetupForm(props) {
     const handleSubmit = props.onSubmit;
 
     return (
-        <div className="center" style={{ marginTop: "5%", marginBottom: "5%"}}>
+        <div className="center">
             <Box className={styles.box}>
                 <div
                     className={"is-flex " + styles["responsive-flex"]}
-                    style={{ height: "100%"}}
+                    style={{ height: "100%" }}
                 >
                     <div
                         id={styles["side-msg"]}

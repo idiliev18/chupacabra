@@ -1,13 +1,13 @@
 @import "../variables.scss";
 
 .form {
-  margin-top: 10%;
+    // margin-top: 10%;
 }
 
 .control {
-  width: 100%;
+    width: 100%;
 
-  &:not(:first-child) {
-    padding-left: $control-padding-horizontal;
-  }
+    &:not(:first-child) {
+        padding-left: $control-padding-horizontal;
+    }
 }

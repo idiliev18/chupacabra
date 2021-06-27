@@ -9,6 +9,9 @@ const app = express();
 const loggerManager = new logs();
 const { errors } = require('../helpers/errors')
 
+const cors = require('cors');
+
+app.use(cors());
 app.use(express.urlencoded({
     extended: true
 }));
@@ -142,7 +145,7 @@ app.get('/users/:username', async (req, res) => {
                 createProfileJSON(returnValue);
         }
     } else {
-        // Get public accoutn information
+        // Get public account information
         returnValue = await DB.getPublicProfileInformation(req.params.username)
 
         // Check is there found user

@@ -95,8 +95,6 @@ function Signup(props) {
         [userContext]
     );
 
-    const handleInputChange = useCallback((event) => {}, []);
-
     return (
         <SetupForm onSubmit={handleSubmit}>
             <h1>Регистрация</h1>
@@ -204,6 +202,12 @@ function Signup(props) {
                         required
                     />
                 </div>
+            </div>
+
+            <div className="field">
+                {!!invalidValues.global ? (
+                    <div className="help is-danger">{invalidValues.global}</div>
+                ) : null}
             </div>
 
             <div className="field">

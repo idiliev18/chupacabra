@@ -70,55 +70,71 @@ function App() {
     }, []);
 
     const authenticate = async (userData) => {
-        console.log("Submitted for authenticating!", userData);
-        let responseData = await fetchAPI("/login", userData, "POST");
+        return new Promise((res, rej) => {
+            console.log("Submitted for authenticating!", userData);
+            fetchAPI("/login", userData, "POST")
+                .then((responseData) => {
+                    if (responseData.type === "login-success") {
+                        let updatedState = {
+                            userData: {
+                                username: "example",
+                                email: VALID_EMAIL.email,
+                                token: responseData.data.Token,
+                            },
+                            authenticated: true,
+                        };
 
-        if (responseData.type === "login-success") {
-            let updatedState = {
-                userData: {
-                    username: "example",
-                    email: VALID_EMAIL.email,
-                    token: responseData.data.Token,
-                },
-                authenticated: true,
-            };
+                        setState((prevState) => {
+                            return { ...prevState, ...updatedState };
+                        });
 
-            setState((prevState) => {
-                return { ...prevState, ...updatedState };
-            });
+                        writeStorage("auth", updatedState.userData.token);
 
-            writeStorage("auth", updatedState.userData.token);
-
-            return { email: true, password: true };
-        } else if (responseData.type === "login-failure") {
-            return { email: "неправилна имейл или парола" };
-        }
+                        return { email: true, password: true };
+                    } else if (responseData.type === "login-failure") {
+                        return { email: "неправилна имейл или парола" };
+                    }
+                })
+                .catch(() => {
+                    res({
+                        global: "internal server error",
+                    });
+                });
+        });
     };
 
     const registerUser = async (userData) => {
-        console.log("Submitted for registering!", userData);
-        let responseData = await fetchAPI("/register", userData, "POST");
+        return new Promise((res, rej) => {
+            console.log("Submitted for registering!", userData);
+            fetchAPI("/register", userData, "POST")
+                .then((responseData) => {
+                    if (responseData.type === "register-success") {
+                        let updatedState = {
+                            userData: {
+                                username: "example",
+                                email: VALID_EMAIL.email,
+                                token: responseData.data.Token,
+                            },
+                            authenticated: true,
+                        };
 
-        if (responseData.type === "register-success") {
-            let updatedState = {
-                userData: {
-                    username: "example",
-                    email: VALID_EMAIL.email,
-                    token: responseData.data.Token,
-                },
-                authenticated: true,
-            };
+                        setState((prevState) => {
+                            return { ...prevState, ...updatedState };
+                        });
 
-            setState((prevState) => {
-                return { ...prevState, ...updatedState };
-            });
+                        writeStorage("auth", updatedState.userData.token);
 
-            writeStorage("auth", updatedState.userData.token);
-
-            return {};
-        } else if (responseData.type === "register-failure") {
-            return responseData.fields;
-        }
+                        res({});
+                    } else if (responseData.type === "register-failure") {
+                        res(responseData.fields);
+                    }
+                })
+                .catch(() => {
+                    res({
+                        global: "internal server error",
+                    });
+                });
+        });
     };
 
     const invalidateAuthentication = () => {
@@ -130,6 +146,12 @@ function App() {
                 userData: null,
                 authenticated: false,
             });
+        }
+    };
+
+    const fetchUser = () => {
+        if (!state.authenticatied) return {};
+        else {
         }
     };
 

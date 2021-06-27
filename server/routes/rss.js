@@ -1,6 +1,9 @@
 const express = require("express");
 const axios = require("axios");
 const app = express();
+const cors = require('cors');
+
+app.use(cors());
 
 app.get("/maritimeFeed", (req, res) => {
     res.setHeader("content-type", "text/rss+xml");
