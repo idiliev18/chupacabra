@@ -136,6 +136,8 @@ class db {
         request.input('userUsername', sql.VarChar, username)
         request.input('userToken', sql.VarChar, token)
 
+        console.log("GPPI " + token);
+        console.log("GPPI " + username);
         let result;
 
         try {
@@ -144,11 +146,12 @@ class db {
                 @Username = @userUsername,
                 @Token = @userToken`)
 
-
         } catch (err) {
             return err;
         }
 
+
+        console.log(result.recordsets);
         return result.recordsets;
     }
 

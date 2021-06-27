@@ -123,6 +123,9 @@ app.post('/register', async (req, res) => {
 app.get('/users/:username', async (req, res) => {
     let returnValue, JSONResponse;
 
+    console.log(req.params.username);
+    console.log(req.headers.authorization);
+
     // Checks if token is passed
     if (req.headers.authorization != undefined) {
         returnValue = await DB.getPrivateProfileInformation(req.params.username, req.headers.authorization)
