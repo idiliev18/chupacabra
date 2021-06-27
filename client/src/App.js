@@ -89,10 +89,10 @@ function App() {
 
                             writeStorage("auth", updatedState.token);
 
-                            return {};
+                            res({});
                         });
                     } else if (responseData.type === "login-failure") {
-                        return { email: "неправилна имейл или парола" };
+                        res({ email: "неправилна имейл или парола" });
                     }
                 })
                 .catch(() => {

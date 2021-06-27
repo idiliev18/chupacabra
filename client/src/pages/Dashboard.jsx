@@ -1,7 +1,7 @@
 import React, { createElement, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 
-import { Tile, Notification, Icon } from "react-bulma-components";
+import { Tile, Notification, Icon, Button } from "react-bulma-components";
 import { Redirect } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,6 +12,7 @@ import {
     faShip,
 } from "@fortawesome/free-solid-svg-icons";
 import { SetupForm } from "../components/SetupForm";
+import { ErrorableInput } from "../components/ErrorableInput";
 
 import styles from "./Dashboard.module.scss";
 
@@ -32,7 +33,90 @@ function BoatsPage(props) {
 }
 
 function RegisterBoatPage(props) {
-    return <SetupForm style={{ width: "100vw", height: "100vh" }}></SetupForm>;
+    return (
+        <SetupForm style={{ width: "100%", height: "100%" }}>
+            <h1>Регистрация на лодка</h1>
+            <br />
+
+            <div className="field">
+                <div className="control">
+                    <ErrorableInput
+                        label="Име на лодката"
+                        name="boatName"
+                        required
+                    />
+                </div>
+            </div>
+
+            <div className="field">
+                <div className="control">
+                    <ErrorableInput label="Двигател" name="engine" required />
+                </div>
+            </div>
+
+            <div className="field">
+                <div className="control">
+                    <ErrorableInput
+                        label="Регистрационен номер"
+                        name="registrationNumber"
+                        required
+                    />
+                </div>
+            </div>
+
+            <div className="field">
+                <div className="control">
+                    <ErrorableInput
+                        label="Свидетелство за управление на лодка"
+                        name="boatLicense"
+                        required
+                    />
+                </div>
+            </div>
+
+            <div className="field">
+                <div className="control">
+                    <ErrorableInput
+                        label="Брой места"
+                        name="seatsCount"
+                        required
+                    />
+                </div>
+            </div>
+
+            <div className="field">
+                <div className="control">
+                    <ErrorableInput
+                        label="Дължина на котва"
+                        name="anchorLength"
+                        required
+                    />
+                </div>
+            </div>
+
+            <div className="field">
+                <div className="control">
+                    <ErrorableInput
+                        label="Брой спасителни жилетки"
+                        type="number"
+                        name="seatsCount"
+                        min="3"
+                        max="20"
+                        required
+                    />
+                </div>
+            </div>
+
+            <div className="field">
+                <Button
+                    color="primary"
+                    renderAs="input"
+                    type="submit"
+                    value="Изпращане"
+                ></Button>
+            </div>
+        </SetupForm>
+    );
 }
 
 export default function Dashboard(props) {
