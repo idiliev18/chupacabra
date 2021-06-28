@@ -18,6 +18,13 @@ app.use(limiter);
 app.use("/api", api);
 app.use("/rss", rss);
 
+/**
+ * Go to the default route
+ * @async
+ * @param {string} route
+ * @function
+ */
+
 app.get("/", (req, res) => {
     res.send("Qsha");
 });

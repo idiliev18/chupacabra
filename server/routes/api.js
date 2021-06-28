@@ -19,6 +19,15 @@ app.use(express.urlencoded({
 
 let DB = new db();
 
+
+/**
+ * Post to the /login route
+ * @param {string} route
+ * @function
+ * @returns
+ * @async
+ * 
+ */
 app.post('/login', async (req, res) => {
     //Receive x-www-form-urlencoded from front-end
     let loginData = req.body;
@@ -75,6 +84,14 @@ app.post('/login', async (req, res) => {
     res.send(resJSON);
 });
 
+/**
+ * Post to the /register route
+ * @param {string} route
+ * @function
+ * @returns
+ * @async
+ * 
+ */
 app.post('/register', async (req, res) => {
     // Receive x-www-form-urlencoded from client
     let resJSON;
@@ -164,6 +181,15 @@ app.post('/register', async (req, res) => {
     res.send(resJSON);
 });
 
+/**
+ * Get to the /verify route
+ * @param {string} route
+ * @function
+ * @returns
+ * @async
+ * 
+ */
+
 app.get('/verify/:token', async (req, res) => {
     let returnValue;
     let token = req.params.token;
@@ -178,6 +204,14 @@ app.get('/verify/:token', async (req, res) => {
     }
 })
 
+/**
+ * Get to the /users route
+ * @param {string} route
+ * @function
+ * @returns
+ * @async
+ * 
+ */
 app.get('/users/:username', async (req, res) => {
     let returnValue, JSONResponse;
 
@@ -212,6 +246,15 @@ app.get('/users/:username', async (req, res) => {
     res.send(JSONResponse);
 })
 
+/**
+ * Post to the /forgot route
+ * @param {string} route
+ * @function
+ * @returns
+ * @async
+ * 
+ */
+
 app.post('/forgot', async (req, res) => {
     let returnValue = await DB.generateForgotPasswordToken(req.body.username);
     loggerManager.logInfo(`User with username: ${req.body.username} is trying to reset her/his password`)
@@ -224,6 +267,15 @@ app.post('/forgot', async (req, res) => {
         res.send('Unauthorized attempt');
     }
 });
+
+/**
+ * Post to the /resetPassword route
+ * @param {string} route
+ * @function
+ * @returns
+ * @async
+ * 
+ */
 
 app.post('/resetPassword', async (req, res) => {
     let data = req.body;
@@ -252,6 +304,15 @@ app.post('/resetPassword', async (req, res) => {
     res.send(JSONResponse);
 });
 
+/**
+ * Post to the /users/:username/settings route
+ * @param {string} route
+ * @function
+ * @returns
+ * @async
+ * 
+ */
+
 app.post('/users/:username/settings', async (req, res) => {
     let returnValue, JSONResponse;
 
@@ -266,6 +327,15 @@ app.post('/users/:username/settings', async (req, res) => {
 
     res.send(JSONResponse);
 });
+
+/**
+ * Post to the /registerBoat route
+ * @param {string} route
+ * @function
+ * @returns
+ * @async
+ * 
+ */
 
 app.post('/registerBoat', async (req, res) => {
     // Receive x-www-form-urlencoded from client
@@ -304,6 +374,15 @@ app.post('/registerBoat', async (req, res) => {
     res.send(resJSON);
 });
 
+/**
+ * Get to the /boats route
+ * @param {string} route
+ * @function
+ * @returns
+ * @async
+ * 
+ */
+
 app.get('/boats', async (req, res) => {
     let token = req.headers.authorization;
     let returnValue;
@@ -323,15 +402,5 @@ app.get('/boats', async (req, res) => {
 
     res.send(JSONResponse);
 })
-//Code for converting binary into a image
-//saves image into avatars with username given from frontend
-//doesn't need to access the database in any way
-//implement it when sashko is aroung to get the data
-// POTENTIAL CODE
-//const buffer = fs.readFileSync(path.resolve(__dirname,'./../avatars/'+req.headers.authorization+'.png'));
-//fs.writeFileSync(path.resolve(__dirname,'./../avatars/'+req.headers.username+'.png'), buffer);
-// app.post('/users/:username/changeProfilePicture', async (req, res) => {
-//     const buffer = fs.readFileSync(path.resolve(__dirname,'./../avatars/logo.png'));
-//     fs.writeFileSync(path.resolve(__dirname,'./../avatars/test.png'), buffer);
-// });
+
 module.exports = app;
