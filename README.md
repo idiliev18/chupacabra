@@ -23,8 +23,7 @@
     Our website systematizes, organizes and facilitates the work of the workers in the ports and gives the citizens access to useful information. 
    </big></p>
 
-
-  <h2><a href = "https://github.com/idiliev18/chupacabra/wiki">Our Documentation</h2>
+   <a href = "https://github.com/idiliev18/chupacabra/wiki"><h2>Our Documentation</h2></a>
 
   <h1>🎥 Demo of our project </h1>
 
