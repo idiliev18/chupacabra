@@ -83,7 +83,7 @@ function Login(props) {
                     <div className="control">
                         <ErrorableInput
                             label="Имейл"
-                            type="email"
+                            type="text"
                             name="email"
                             placeholder="qnko_goshov@abv.bg"
                             errText={invalidValues.email}
