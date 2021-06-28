@@ -26,7 +26,7 @@ app.post('/login', async (req, res) => {
     let resJSON;
 
     loggerManager.logInfo(
-        `User with email: ${loginData.email} is trying to login.`
+        `User with email/username: ${loginData.email} is trying to login.`
     );
 
     let fields = ['email', 'password'];
@@ -58,7 +58,7 @@ app.post('/login', async (req, res) => {
             );
         } else {
             loggerManager.logWarn(
-                `There is no an account with this Username: ${loginData.email}`
+                `There is no an account with this email/username: ${loginData.email}`
             );
         }
 
@@ -67,7 +67,7 @@ app.post('/login', async (req, res) => {
         resJSON = JSONModule.createJSONResponse(false, returnValue, login);
 
         loggerManager.logWarn(
-            `Email: ${user.email} is not valid.`
+            `Email/username: ${user.email} is not valid.`
         );
     }
 
@@ -168,6 +168,8 @@ app.get('/verify/:token', async (req, res) => {
     let returnValue;
     let token = req.params.token;
 
+    loggerManager.logInfo(`User with token: ${token} is verified`)
+
     // Checks if token is passed
     returnValue = await DB.verifyUser(token);
 
@@ -212,11 +214,13 @@ app.get('/users/:username', async (req, res) => {
 
 app.post('/forgot', async (req, res) => {
     let returnValue = await DB.generateForgotPasswordToken(req.body.username);
+    loggerManager.logInfo(`User with username: ${req.body.username} is trying to reset her/his password`)
 
-    if(returnValue) {
+    if (returnValue) {
         emailer.sendForgotPassEmail(returnValue.Email, returnValue.Token);
         res.redirect('/')
     } else {
+        loggerManager.logWarn("Unauthorized attempt");
         res.send('Unauthorized attempt');
     }
 });
@@ -225,46 +229,39 @@ app.post('/resetPassword', async (req, res) => {
     let data = req.body;
     let token = req.headers.authorization;
 
-    console.log(data);
-    console.log(token);
-
     let returnValue;
     let JSONResponse
 
-    if(data.password === data.confirmPassword){
-        console.log('Vliza');
+    if (data.password === data.confirmPassword) {
         returnValue = await DB.resetPassword(token, CryptoJS.SHA256(data.password
-             + process.env.salt).
-        toString(CryptoJS.enc.Base32));
-            console.log(returnValue[0].ReturnCode);
-        if(returnValue[0].ReturnCode == 0)
-        {
-            console.log("NE se chupq");
-            JSONResponse = JSONModule.createJSONResponse(1, 'Success', 'reset')
-        }else{
-            JSONResponse = JSONModule.createJSONResponse(0, 'Failure', 'reset')
+            + process.env.salt).
+            toString(CryptoJS.enc.Base32));
 
+        if (returnValue[0].ReturnCode == 0) {
+            JSONResponse = JSONModule.createJSONResponse(1, 'Success', 'reset');
+            loggerManager.logInfo(`User with token: ${token}, successfully reset his/her password`);
+        } else {
+            JSONResponse = JSONModule.createJSONResponse(0, 'Failure', 'reset');
+            loggerManager.logWarn(`User with token: ${token}, can not successfully reset his/her password`);
         }
-    }else{
-        JSONResponse = JSONModule.createJSONResponse(0, 'Failure', 'reset')
-
+    } else {
+        JSONResponse = JSONModule.createJSONResponse(0, 'Failure', 'reset');
+        loggerManager.logWarn(`User with token: ${token}, can not successfully reset his/her password`);
     }
 
     res.send(JSONResponse);
 });
 
-app.post('/users/:username/settings',async (req, res) =>{
+app.post('/users/:username/settings', async (req, res) => {
     let returnValue, JSONResponse;
-    console.log(req.body);
+
     // Checks if token is passed
     if (req.headers.authorization != undefined) {
-        returnValue = await DB.updateUser(req.headers.authorization ,req.body.firstName, req.body.lastName,req.body.email)
-        console.log(returnValue);
+        returnValue = await DB.updateUser(req.headers.authorization, req.body.firstName, req.body.lastName, req.body.email)
         JSONResponse = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Success"), returnValue[0].hasOwnProperty("Success") ? returnValue[0] : errors[returnValue[0].ReturnCode], 'settings')
-        // Check is there valid token
-
-    }else{
-        res.send('unauthorized attempt');
+    } else {
+        loggerManager.logWarn("Unauthorized attempt");
+        res.send('Unauthorized attempt');
     }
 
     res.send(JSONResponse);
@@ -293,8 +290,12 @@ app.post('/registerBoat', async (req, res) => {
 
     if (returnValue[0].hasOwnProperty("Success")) {
         loggerManager.logInfo(
-            `User with token: ${regData.Token} is successfully register into the database.`
+            `Boat with name: ${regData.boatName} and license: ${regData.boatLicense} is successfully register into the database.`
         );
+    } else {
+        loggerManager.logWarn(
+            `Boat with name: ${regData.boatName} and license: ${regData.boatLicense} is not successfully register into the database.`
+        )
     }
 
     resJSON = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Success"), returnValue[0].hasOwnProperty("Success") ? returnValue[0] : errors[returnValue[0].ReturnCode], 'registerBoat')
@@ -308,13 +309,15 @@ app.get('/boats', async (req, res) => {
     let returnValue;
     let JSONResponse;
 
-    if(token != undefined){
+    if (token != undefined) {
         returnValue = await DB.getBoatsInformation(token);
-        console.log(returnValue);
-        if(returnValue.length == 0){
-            JSONResponse = JSONModule.createJSONResponse(0, {"reason": "Boats not found"}, "boat")
-        }else{
-            JSONResponse = JSONModule.createJSONResponse(1, returnValue, "boat")
+        
+        if (returnValue.length == 0) {
+            JSONResponse = JSONModule.createJSONResponse(0, { "reason": "Boats not found" }, "boat");
+            loggerManager.logWarn(`User with token: ${token} can not access the boat`);
+        } else {
+            JSONResponse = JSONModule.createJSONResponse(1, returnValue, "boat");
+            loggerManager.logInfo(`Boat with token: ${token} can access the boat`);
         }
     }
 
