@@ -1,4 +1,4 @@
-import React, { createElement, useState } from "react";
+import React, { createElement, useContext, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 
 import { Tile, Notification, Icon } from "react-bulma-components";
@@ -41,6 +41,8 @@ export default function Dashboard(props) {
             page: () => <Redirect to="/" />,
         },
     ];
+
+    const userContext = useContext(UserContext);
 
     const isTablet = useMediaQuery({ query: "(max-width: 1216px)" });
     const isPhone = useMediaQuery({ query: "(max-width: 769px)" });
@@ -103,7 +105,9 @@ export default function Dashboard(props) {
                                 </Icon>
                             )
                         ) : (
-                            <h3 className="title">User</h3>
+                            <h3 className="title">
+                                {userContext.user.Username}
+                            </h3>
                         )}
                     </div>
                 </Notification>
