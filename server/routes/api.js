@@ -34,7 +34,7 @@ app.post('/login', async (req, res) => {
         `User with email/username: ${req.body.email} is trying to login.`
     );
 
-    //Receive x-www-form-urlencoded from front-end
+    // Receive x-www-form-urlencoded from front-end
     let loginData = req.body;
     let resJSON, recordSet;
 
@@ -53,7 +53,8 @@ app.post('/login', async (req, res) => {
             loggerManager.logInfo(
                 `User with email/username: ${loginData.email} is successfully logged.`
             );
-
+            
+            // Create JSON Response with Token and Token Expire date
             resJSON = JSONModule.
                 createJSONResponse(isLogged, recordSet[0], 'login')
 
@@ -61,7 +62,8 @@ app.post('/login', async (req, res) => {
             loggerManager.logWarn(
                 `There is no an account with this email/username: ${loginData.email}`
             );
-
+            
+            // Create JSON Response with error message, which depends on error code
             resJSON = JSONModule.
                 createJSONResponse(isLogged, errors[recordSet[0].ReturnCode], 'login')
         }
@@ -75,7 +77,7 @@ app.post('/login', async (req, res) => {
         );
     }
 
-    //Send respond
+    // Send respond
     res.send(resJSON);
 });
 
