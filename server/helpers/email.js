@@ -24,7 +24,7 @@ async function sendVerificationEmail(to, token) {
         <p style="font-size: 20px; margin-left: 10%; margin-right: 10%;">Радваме се, че се регистрирахте &#128151 на нашия сайт! За да използвате пълните функционалности на нашата платформа, 
         моля потвърдете Вашия имейл, натискайки синия бутона долу 🢃.</p> 
         <br>
-        <img src="https://cdn.discordapp.com/attachments/834872582661603440/858667540648951839/dancing_fish.gif" height="400px" style="margin-left:32%;"><br>
+        <img src="https://github.com/idiliev18/chupacabra/blob/master/client/src/pages/img/dancing%20fish.gif?raw=true" height="400px" style="margin-left:32%;"><br>
         <a href="http://localhost:4000/api/verify/${token}"><button style="margin-left: 40%; margin-top: 3%; height:50px; width:20%; background-color: #12b0df; color:white; border-radius:200px; border: none; cursor: pointer; font-size: 20px;">Потвърждаване</button></a>
         <br><br><h2 style="margin-left: 10%;">Благодарим!</h4> <br><br>
         <a href="https://chupacabra.codes" style="text-decoration: none; font-size: 15px; color: #0b7dbd;"><p>Обратно в сайта ⮌<span>🔗</span> </p></a> 

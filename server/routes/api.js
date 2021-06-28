@@ -210,8 +210,8 @@ app.get('/users/:username', async (req, res) => {
     res.send(JSONResponse);
 })
 
-app.post('/forgot/:username', async (req, res) => {
-    let returnValue = await DB.generateForgotPasswordToken(req.params.username);
+app.post('/forgot', async (req, res) => {
+    let returnValue = await DB.generateForgotPasswordToken(req.body.username);
 
     if(returnValue) {
         emailer.sendForgotPassEmail(returnValue.Email, returnValue.Token);
@@ -221,8 +221,36 @@ app.post('/forgot/:username', async (req, res) => {
     }
 });
 
-app.get('/resetPassword/:token', async (req, res) => {
-    console.log(req.params.token)
+app.post('/resetPassword', async (req, res) => {
+    let data = req.body;
+    let token = req.headers.authorization;
+
+    console.log(data);
+    console.log(token);
+
+    let returnValue;
+    let JSONResponse
+
+    if(data.password === data.confirmPassword){
+        console.log('Vliza');
+        returnValue = await DB.resetPassword(token, CryptoJS.SHA256(data.password
+             + process.env.salt).
+        toString(CryptoJS.enc.Base32));
+            console.log(returnValue[0].ReturnCode);
+        if(returnValue[0].ReturnCode == 0)
+        {
+            console.log("NE se chupq");
+            JSONResponse = JSONModule.createJSONResponse(1, 'Success', 'reset')
+        }else{
+            JSONResponse = JSONModule.createJSONResponse(0, 'Failure', 'reset')
+
+        }
+    }else{
+        JSONResponse = JSONModule.createJSONResponse(0, 'Failure', 'reset')
+
+    }
+
+    res.send(JSONResponse);
 });
 
 app.post('/users/:username/settings',async (req, res) =>{
@@ -241,8 +269,6 @@ app.post('/users/:username/settings',async (req, res) =>{
 
     res.send(JSONResponse);
 });
-
-
 
 app.post('/registerBoat', async (req, res) => {
     // Receive x-www-form-urlencoded from client

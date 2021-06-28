@@ -239,6 +239,28 @@ class db {
         return result.recordsets;
     }
 
+    async resetPassword(token, password){
+        const request = new sql.Request();
+        request.input('userToken', sql.VarChar, token)
+        .input('userPasswordHash', sql.VarChar, password)
+
+        console.log(token, password);
+        let result;
+
+        try {
+            result = await request.query(
+                `EXEC ResetPassword
+                @Token = @userToken,
+                @Password = @userPasswordHash`)
+
+        } catch (err) {
+            loggerManager.logError(JSON.stringify(err));
+            return err;
+        }
+
+        return result.recordset;
+    }
+
     //private
     static _config = dbConfig.config;
     static _connection = false;
