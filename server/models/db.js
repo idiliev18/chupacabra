@@ -186,8 +186,9 @@ class db {
 
     async loginUser(loginCredential, hashPassword) {
         const request = new sql.Request();
+
         request.input('userLoginCredential', sql.NVarChar, loginCredential)
-            .input('userHashPassword', sql.VarChar, hashPassword);
+               .input('userHashPassword', sql.VarChar, hashPassword);
 
         let result;
 
@@ -201,7 +202,7 @@ class db {
             loggerManager.logError(JSON.stringify(err));
             return err;
         }
-
+        
         return result.recordset;
     }
 

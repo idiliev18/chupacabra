@@ -88,7 +88,7 @@ function formValidation(dataToValidate, criterias) {
 const registerValidations = {
     'firstName': { 'isNameValid': 1 },
     'lastName': { 'isNameValid': 1 },
-    'username': { 'isUsernameValid': 1},
+    'username': { 'isUsernameValid': 1 },
     'age': { 'minNumber': 0, 'maxNumber': 127, 'isNumber': 1 },
     'city': { 'isNameValid': 1 },
     'phone': { 'isPhoneValid': 1 },
@@ -108,8 +108,34 @@ const loginValidations = {
     'isEmailValid': 'Invalid email'
 };
 
+
+function isLoginDataValid(loginData) {
+
+    let fields = ['email', 'password'];
+    let isValid;
+
+    for (const key in fields) {
+        if (loginData[fields[key]] == undefined) {
+            isValid = false;
+        }
+
+        if (Array.isArray(loginData[fields[key]])) {
+            isValid = false;
+        }
+    }
+
+    if (loginData.email.includes('@')) {
+        isValid = loginData.
+            email.
+            match(/(([a-z]+)([._a-z0-9])([a-z0-9]+)).{1,64}(@)([a-z]+)([.a-z])([a-z])+/gmi)
+    }
+
+    return isValid;
+}
+
 module.exports.isDataValid = isDataValid;
 module.exports.formValidation = formValidation;
 module.exports.registerValidations = registerValidations;
 module.exports.loginValidations = loginValidations;
 module.exports.validations = validations;
+module.exports.isLoginDataValid = isLoginDataValid;

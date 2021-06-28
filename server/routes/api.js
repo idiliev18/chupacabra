@@ -19,7 +19,6 @@ app.use(express.urlencoded({
 
 let DB = new db();
 
-
 /**
  * Post to the /login route
  * @param {string} route
@@ -29,54 +28,50 @@ let DB = new db();
  * 
  */
 app.post('/login', async (req, res) => {
-    //Receive x-www-form-urlencoded from front-end
-    let loginData = req.body;
-    let returnValue = true;
-    let resJSON;
 
+    // Logs information to Grafana
     loggerManager.logInfo(
-        `User with email/username: ${loginData.email} is trying to login.`
+        `User with email/username: ${req.body.email} is trying to login.`
     );
 
-    let fields = ['email', 'password'];
+    //Receive x-www-form-urlencoded from front-end
+    let loginData = req.body;
+    let resJSON, recordSet;
 
-    for (const key in fields) {
-        if (loginData[fields[key]] == undefined) {
-            return 0;
-        }
+    let isValid = validation.isLoginDataValid(loginData);
 
-        if (Array.isArray(loginData[fields[key]])) {
-            loginData[fields[key]] = loginData[fields[key]][0];
-        }
-    }
-
-    if (loginData.email.includes('@')) {
-        returnValue = validation.formValidation(loginData, validation.loginValidations);
-    }
-
-    //Validation
-    if (returnValue) {
-        returnValue = await DB.loginUser(loginData.email,
+    if (isValid) {
+        // To do: Implement better hashing
+        recordSet = await DB.loginUser(loginData.email,
             CryptoJS.SHA256(loginData.password + process.env.salt).
                 toString(CryptoJS.enc.Base32)
         );
 
-        if (returnValue[0].hasOwnProperty("Token")) {
+        let isLogged = recordSet.hasOwnProperty("Token");
+
+        if (isLogged) {
             loggerManager.logInfo(
                 `User with email/username: ${loginData.email} is successfully logged.`
             );
+
+            resJSON = JSONModule.
+                createJSONResponse(isLogged, recordSet[0], 'login')
+
         } else {
             loggerManager.logWarn(
                 `There is no an account with this email/username: ${loginData.email}`
             );
+
+            resJSON = JSONModule.
+                createJSONResponse(isLogged, errors[recordSet[0].ReturnCode], 'login')
         }
 
-        resJSON = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Token"), returnValue[0].hasOwnProperty("Token") ? returnValue[0] : errors[returnValue[0].ReturnCode], 'login')
     } else {
-        resJSON = JSONModule.createJSONResponse(false, returnValue, login);
+        resJSON = JSONModule.createJSONResponse(false, recordSet, 'login');
 
+        // Logs information to Grafana
         loggerManager.logWarn(
-            `Email/username: ${user.email} is not valid.`
+            `Email/username: ${loginData.email} is not valid.`
         );
     }
 
@@ -390,7 +385,7 @@ app.get('/boats', async (req, res) => {
 
     if (token != undefined) {
         returnValue = await DB.getBoatsInformation(token);
-        
+
         if (returnValue.length == 0) {
             JSONResponse = JSONModule.createJSONResponse(0, { "reason": "Boats not found" }, "boat");
             loggerManager.logWarn(`User with token: ${token} can not access the boat`);
