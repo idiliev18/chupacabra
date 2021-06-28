@@ -32,7 +32,7 @@
    </big></p>
 
 
-  <h1><a href = " https://github.com/idiliev18/chupacabra/wiki">Documentation  </a></h1>
+<h1><a href = "https://github.com/idiliev18/chupacabra/wiki">Our Documentation</h1>
 
   <h1>🎥 Demo of our project </h1>
 
