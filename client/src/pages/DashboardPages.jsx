@@ -26,15 +26,13 @@ export function ProfilePage(props) {
         setInvalidValues({ ...invalidValues, settingsGlobal: null });
         setSuccessValues({ ...successValues, settingsGlobal: null });
 
-        let data = null;
+        let data = {};
 
         if (
-            !!event.target.email.value ||
-            !!event.target.firstName.value ||
-            !!event.target.lastName.value
+            event.target.email.value !== "" ||
+            event.target.firstName.value !== "" ||
+            event.target.lastName.value !== ""
         ) {
-            data = {};
-
             if (event.target.email.value !== "")
                 data.email = event.target.email.value;
             if (event.target.firstName.value !== "")
@@ -43,25 +41,23 @@ export function ProfilePage(props) {
                 data.lastName = event.target.lastName.value;
         }
 
-        if (!!data) {
-            userContext
-                .updateUserSettings(data)
-                .then((res) => {
-                    if (res)
-                        setSuccessValues({
-                            settingsGlobal: true,
-                        });
-                    else
-                        setSuccessValues({
-                            settingsGlobal: false,
-                        });
-                })
-                .catch((e) => {
-                    setInvalidValues({
+        userContext
+            .updateUserSettings(data)
+            .then((res) => {
+                if (res)
+                    setSuccessValues({
+                        settingsGlobal: true,
+                    });
+                else
+                    setSuccessValues({
                         settingsGlobal: false,
                     });
+            })
+            .catch((e) => {
+                setInvalidValues({
+                    settingsGlobal: false,
                 });
-        }
+            });
     };
 
     // const onResetPasswordSubmit = event => {
@@ -256,7 +252,7 @@ export function ProfilePage(props) {
                                 renderAs="input"
                                 type="submit"
                                 value={
-                                    loadingValues.settingsGlobal
+                                    loadingValues.passwordGlobal
                                         ? "Моля изчакайте..."
                                         : "Запази"
                                 }
