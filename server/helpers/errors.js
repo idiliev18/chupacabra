@@ -1,3 +1,6 @@
+/**
+ * Errors for each field
+ */
 let errors = [
   {},
   {
