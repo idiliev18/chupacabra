@@ -10,6 +10,13 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+/**
+ * Use nodemailer to send verification email to dedicated email address
+ * @function
+ * @async
+ * @param {string} to Addresss of the email
+ * @param {string} token Token of the user
+ */
 async function sendVerificationEmail(to, token) {
     let info = await transporter.sendMail({
         from: process.env.GMAILID,
@@ -39,6 +46,13 @@ async function sendVerificationEmail(to, token) {
     });
 }
 
+/**
+ * Use nodemailer to send forgoten password email to dedicated email address
+ * @function
+ * @async
+ * @param {string} to Addresss of the email
+ * @param {string} token Token of the user
+ */
 async function sendForgotPassEmail(to, token) {
     let info = await transporter.sendMail({
         from: process.env.GMAILID,

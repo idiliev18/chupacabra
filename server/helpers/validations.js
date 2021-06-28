@@ -46,6 +46,7 @@ const validations = {
 
 /**
  * To check certain data if it is valid
+ * @function
  * @param {string} data data to check
  * @param {object} toCheck For what to check
  * @returns {boolean} Is the data valid?
@@ -62,6 +63,7 @@ function isDataValid(data, toCheck) {
 
 /**
  * Function to validate the form received from client
+ * @function
  * @param {object} dataToValidate Data that needs to be validated
  * @param {object} criterias Criterias for evaluating the date
  * @returns {(boolean|Array)} Booleant if the data is valid or array of errors

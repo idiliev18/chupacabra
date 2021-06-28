@@ -1,4 +1,12 @@
+/**
+ * Class for management the logging system
+ * @class
+ */
 class LoggerManager {
+    /**
+     * Initialise the logging system
+     * @constructor
+     */
     constructor() {
         this.#winston = require('winston');
         this.#LokiTransport = require('winston-loki');
@@ -27,30 +35,65 @@ class LoggerManager {
     }
 
     //public methods
+    /**
+     * Send error log
+     * @public
+     * @param {string} logMsg Message to be logged
+     */
     logError(logMsg) {
         this.#logger.error(logMsg)
     }
 
+    /**
+     * Send warn log
+     * @public
+     * @param {string} logMsg Message to be logged
+     */
     logWarn(logMsg) {
         this.#logger.warn(logMsg)
     }
-
+    
+    /**
+     * Send info log
+     * @public
+     * @param {string} logMsg Message to be logged
+     */
     logInfo(logMsg) {
         this.#logger.info(logMsg);
     }
 
+    /**
+     * Send http log
+     * @public
+     * @param {string} logMsg Message to be logged
+     */
     logHttp(logMsg) {
         this.#logger.http(logMsg);
     }
 
+    /**
+     * Send verbose log
+     * @public
+     * @param {string} logMsg Message to be logged
+     */
     logVerbose(logMsg) {
         this.#logger.verbose(logMsg);
     }
 
+    /**
+     * Send debug log
+     * @public
+     * @param {string} logMsg Message to be logged
+     */
     logDebug(logMsg) {
         this.#logger.debug(logMsg);
     }
 
+    /**
+     * Send Silly log
+     * @public
+     * @param {string} logMsg Message to be logged
+     */
     logSilly(logMsg) {
         this.#logger.silly(logMsg);
     }
