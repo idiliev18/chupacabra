@@ -9,7 +9,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 import { deleteStorage, readStorage, writeStorage } from "./localStorage";
-import { fetchAPI, fetchUser, validateToken } from "./api";
+import { fetchAPI, fetchUser, validateToken, changeAvatar } from "./api";
 
 import Loading from "./components/Loading";
 
@@ -27,11 +27,6 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 const NeedsAuthentication = lazy(() => import("./pages/NeedsAuthentication"));
 
 const UserContext = createContext();
-
-const VALID_EMAIL = {
-    email: "example@example.com",
-    password: "12341234",
-};
 
 function App() {
     const [state, setState] = useState({
@@ -142,6 +137,45 @@ function App() {
         });
     };
 
+    const updateUserSettings = async (userData) => {
+        return new Promise((res, rej) => {
+            if (!state.authorized) res(false);
+            else {
+                fetchAPI(
+                    "/users/@me/settings",
+                    userData,
+                    {
+                        Authorization: state.userData.token,
+                    },
+                    "POST"
+                )
+                    .then((data) => {
+                        if (data.type === "settings-success") {
+                            fetchUser(state.userData.token)
+                                .then((userData) => {
+                                    if (userData.type === "user-success") {
+                                        setState({
+                                            ...state,
+                                            userData: userData.data,
+                                        });
+                                        res(true);
+                                    } else {
+                                        res(false);
+                                    }
+                                })
+                                .catch(() => {
+                                    res(false);
+                                });
+                        } else if (data.type === "settings-failure") res(false);
+                        else res(false);
+                    })
+                    .catch((e) => {
+                        res(false);
+                    });
+            }
+        });
+    };
+
     /**
      * clears localStorage's token
      * @returns {void}
@@ -170,6 +204,7 @@ function App() {
                             authenticate,
                             registerUser,
                             invalidateAuthentication,
+                            updateUserSettings,
                         }}
                     >
                         <Content>
