@@ -13,14 +13,6 @@
   </p>
 
    <hr>
-   <!--
-   <p align = "center">
-   <strong>                                                                                                      
-  Note : For the website to function properly you need to install the following node module: Bulma calendar!
-  </strong>  
-  </p >
-  <hr><br>
-  -->
   <p align = "center" style:"font-size:4em">
   <strong><big>
    The innovative solution for every port in the world. 💧
@@ -32,7 +24,7 @@
    </big></p>
 
 
-<h1><a href = "https://github.com/idiliev18/chupacabra/wiki">Our Documentation</h1>
+  <h2><a href = "https://github.com/idiliev18/chupacabra/wiki">Our Documentation</h2>
 
   <h1>🎥 Demo of our project </h1>
 
