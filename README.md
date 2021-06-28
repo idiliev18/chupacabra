@@ -27,77 +27,52 @@
   </strong><big>
   </p><hr>
   <h1>💻 About  </h1>
-  <p>
+  <p> <big>
     Our website systematizes, organizes and facilitates the work of the workers in the ports and gives the citizens access to useful information. 
-  </p>
+   </big></p>
+
+
+  <h1><a href = " https://github.com/idiliev18/chupacabra/wiki">Documentation  </a></h1>
+
   <h1>🎥 Demo of our project </h1>
-  <p>Some kind of GIF to show the website </p>
-  <!--
-  <img src  = "gifts/index.gif">
-  -->
-  <p>Documentation </p>
-  <!--
-  <h1><a href = "https://codingburgas-my.sharepoint.com/:w:/g/personal/ssivanov19_codingburgas_bg/EUGuPsevQ9NMuSeoroLK6jMBN-b7UeZFsMO_KY_B9xg1EQ?e=xEuDhm">📄 Our Documentation</h1>
-  <h1><a href = "https://ssivanov19.github.io/fire-department-2021-documnetation/" target="_blank">📄 Our JS Documentation</h1>
-  <h1><a href = "https://codingburgas-my.sharepoint.com/:x:/g/personal/kntaligadzhiev19_codingburgas_bg/EcpkbBmua9tEsJy9ixz0cv0BSa70jbMQqZ9aEXBKQBdPHg?e=uGMarC" target="_blank">📄 Our QA Documentation</h1>
-  <h1><a href = "https://codingburgas-my.sharepoint.com/:p:/g/personal/ssivanov19_codingburgas_bg/EcnS26cesNRApLYNauglkcEByoWYs6RJbLT88mUMOeL4Cg?e=eyw9c5" target="_blank">📄 Our Presentation</h1>
-  </a>
-  -->
+
+  <img src  = "https://media.discordapp.net/attachments/834874291417251880/858901965593378836/unknown.png?width=1323&height=676">
+  
+  
+
   <h1>⌨️ How it works</h1>
-  <p>Explain how it works</p>
-  <!--
-  <p><big>Our work can be split on 2 main things :</p></big>
+  
+  <p><big>Our work can be split into 2 main things :</p></big>
   <ol>
-    <li>👨‍💻 Back end - Local Storage : </li>
+    <li>👨‍💻 Back end - JavaScript : </li>
     <ul>
-    <li>We store our date in localStorage.</li>
-    <li>To store the date we stringify it and then store it in localStorage. When we need it, we just parse it with JSON.</li>
-    <li>This method in not the most secure one, but it is good enough, as our main task is to present dynamic date and statistics.</li>
+    <li>We use OOP Javascript for our backend as we have different classes for the different use cases</li>
+    <li>We transfer the data through the node-mssql module</li>
+    <li>Then the backend operates with the data sent from the DB</li>
     </ul>
     <br>
     <li>
-    <img src="https://bulma.io/images/bulma-logo.png" width="72px" height="18px" alt="bulmaLogo" > Front end - Bulma :  </li>
+    Front end - React with Bulma </li>
     <ul><li>Bulma is CSS framework that is build on flexbox and grid system and create fully responsive webpage.</li>
+    <li>Combined with React - a library from Facebook</li>
+    <li>And we get a powerful tool used for building out website</li>
    </ul>
    <br>
-   <p>Here you can see how these two part combines and create our website:</p>
-   <ul>
-   <li> <img src  = "gifts/account.gif"> </li>
-   </ul>
-  </ol>
-  -->
-  <h1>🖱️ Usage </h1>
-  <p>Explain how to use it</p>
-  <!--
-  <p>To use the website, you need to have Node and npm installed. After that you can install the modules we have used by typing this in your terminal in the website directory:
-  </p>
-   <pre>
-   npm install bulma-calendar
-   </pre>
-   <p>
-    Other non-required, but recommended modules are :
-   </p>
-   <pre>
-   npm install jsdoc
-   </pre>
-   <pre>
-   npm install node-localstorage
-   </pre>
-   <p> After that, just start the website by click on index.html in File Explorer. </p>
-   -->
+
+
+
    <h1> 📥 Deploying </h1>
    <p> To deploy our project on your machine you just need to clone it. This can be done by : </p>
    <pre>
     git clone https://github.com/idiliev18/chupacabra.git
-    cd chupacabra</pre>
-   <h1> ⛏️ Built using : </h1>
-   <p>With what it is build</p>
-   <!--
-   <p><img src="https://cdn.discordapp.com/attachments/820664631206084625/836270431765397575/Webp.net-resizeimage.png" width="45px" height="18px" alt="node">
-    Bulma-calendar, node-localstorage and jsdoc - Node modules. </p>
-    <p><img src="https://cdn.discordapp.com/attachments/820664631206084625/836272664175706132/Webp.net-resizeimage_1_-removebg-preview.png" width="45px" height="18px" alt="py">
-    Bulma - CSS Framework for Responsive design.  </p>
-    -->
+    cd chupacabra
+    cd server
+    npm install
+    node app.js
+    cd ../
+    cd client/
+    npm install
+    npm start</pre>
     <h1>🧒 Our Team</h1>
     <p>Iliyan Iliev - <a href = "https://github.com/idiliev18"> IDIliev18</a> - Scrum trainer </p>
     <p>Stoyan Ivanov - <a href = "https://github.com/SSIvanov19"> SSIvanov19</a> - Back-end Developer </p>
