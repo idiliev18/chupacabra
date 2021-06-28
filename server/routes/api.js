@@ -294,4 +294,15 @@ app.get('/boats', async (req, res) => {
 
     res.send(JSONResponse);
 })
+//Code for converting binary into a image
+//saves image into avatars with username given from frontend
+//doesn't need to access the database in any way
+//implement it when sashko is aroung to get the data
+// POTENTIAL CODE
+//const buffer = fs.readFileSync(path.resolve(__dirname,'./../avatars/'+req.headers.authorization+'.png'));
+//fs.writeFileSync(path.resolve(__dirname,'./../avatars/'+req.headers.username+'.png'), buffer);
+// app.post('/users/:username/changeProfilePicture', async (req, res) => {
+//     const buffer = fs.readFileSync(path.resolve(__dirname,'./../avatars/logo.png'));
+//     fs.writeFileSync(path.resolve(__dirname,'./../avatars/test.png'), buffer);
+// });
 module.exports = app;
