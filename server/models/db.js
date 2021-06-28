@@ -273,7 +273,6 @@ class db {
         request.input('userToken', sql.VarChar, token)
         .input('userPasswordHash', sql.VarChar, password)
 
-        console.log(token, password);
         let result;
 
         try {
