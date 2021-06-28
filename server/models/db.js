@@ -45,7 +45,7 @@ class db {
     }
 
 
-    async updateUser(token,firstName,lastName,email) {
+    async updateUser(token, firstName, lastName, email) {
         const request = new sql.Request();
         request.input('userToken', sql.VarChar, token)
             .input('firstName', sql.NVarChar, firstName)
@@ -70,7 +70,26 @@ class db {
         return result.recordset;
     }
 
-    async registerBoat(token, name, engine, registrationNumber, boatLicense, seatsCount, anchorLength,lifeJacketsCount) {
+    async generateForgotPasswordToken(username) {
+        const request = new sql.Request();
+        request.input('userUsername', sql.VarChar, username);
+
+        let result;
+
+        try {
+            result = await request.query(`
+                EXEC GenerateForgotPasswordToken
+                @Username = @userUsername
+            `);
+        } catch (err) {
+            loggerManager.logError(JSON.stringify(err));
+            return err;
+        }
+
+        return (result.recordset == undefined ? false : result.recordset[0]);
+    }
+
+    async registerBoat(token, name, engine, registrationNumber, boatLicense, seatsCount, anchorLength, lifeJacketsCount) {
         const request = new sql.Request();
         request.input('userToken', sql.NVarChar, token)
             .input('boatName', sql.NVarChar, name)
@@ -201,13 +220,13 @@ class db {
         return result.recordsets;
     }
 
-    async getBoatsInformation(token){
+    async getBoatsInformation(token) {
         const request = new sql.Request();
         request.input('userToken', sql.VarChar, token)
 
         let result;
 
-          try {
+        try {
             result = await request.query(
                 `EXEC GetBoats
                 @Token = @userToken`)
@@ -215,7 +234,7 @@ class db {
         } catch (err) {
             loggerManager.logError(JSON.stringify(err));
             return err;
-        }  
+        }
 
         return result.recordsets;
     }

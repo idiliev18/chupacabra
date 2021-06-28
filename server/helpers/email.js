@@ -1,17 +1,16 @@
 const nodemailer = require("nodemailer");
 const logs = require('../models/log.js');
 const loggerManager = new logs();
+const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    auth: {
+        user: process.env.GMAILID,
+        pass: process.env.GMAILPASS
+    }
+});
 
 async function sendVerificationEmail(to, token) {
-    const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        auth: {
-            user: process.env.GMAILID,
-            pass: process.env.GMAILPASS
-        }
-    });
-
     let info = await transporter.sendMail({
         from: process.env.GMAILID,
         to: to,
@@ -38,7 +37,39 @@ async function sendVerificationEmail(to, token) {
         }
         loggerManager.logInfo(`Email was sent to the user with email: ${to} ` + info.response);
     });
+}
+
+async function sendForgotPassEmail(to, token) {
+    let info = await transporter.sendMail({
+        from: process.env.GMAILID,
+        to: to,
+        subject: "Забравена парола",
+        html: `
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;700&family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+        <h1 style="margin-left: 5%;">Здравейте 👋!</h1>
+        <br>
+        <p style="font-size: 20px; margin-left: 10%; margin-right: 10%;">Изглежда, че сте си забравили вашата парола за нашия сайт. За да може да я смените моля, натиснете синия бутон по-долу 🢃.</p>
+        <br>
+        <img src="https://raw.githubusercontent.com/idiliev18/chupacabra/master/client/src/pages/img/fish%20party.gif" height="400px" style="margin-left:32%;"><br>
+        <a href="http://localhost:4000/api/resetPassword/${token}"><button style="margin-left: 40%; margin-top: 3%; height:50px; width:20%; background-color: #12b0df; color:white; border-radius:200px; border: none; cursor: pointer; font-size: 20px;">Смяна на парола</button></a>
+        <br><br>
+        <p style="margin-left: 10%;">Ако не Вие сте изпратили молбатa за смяна на парола, може да игнорирате този имейл!</p> <br><br>
+        <a href="https://chupacabra.codes" style="text-decoration: none; font-size: 15px; color: #0b7dbd;">
+        <p>Обратно в сайта ⮌<span>🔗</span> </p>
+        </a>
+        `
+    });
+
+    transporter.sendMail(info, (error, info) => {
+        if (error) {
+            return loggerManager.logError(error);
+        }
+        loggerManager.logInfo(`Email was sent to the user with email: ${to} ` + info.response);
+    });
 
 }
 
 module.exports.sendVerificationEmail = sendVerificationEmail;
+module.exports.sendForgotPassEmail = sendForgotPassEmail;

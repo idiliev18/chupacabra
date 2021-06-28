@@ -210,7 +210,20 @@ app.get('/users/:username', async (req, res) => {
     res.send(JSONResponse);
 })
 
+app.post('/forgot/:username', async (req, res) => {
+    let returnValue = await DB.generateForgotPasswordToken(req.params.username);
 
+    if(returnValue) {
+        emailer.sendForgotPassEmail(returnValue.Email, returnValue.Token);
+        res.redirect('/')
+    } else {
+        res.send('Unauthorized attempt');
+    }
+});
+
+app.get('/resetPassword/:token', async (req, res) => {
+    console.log(req.params.token)
+});
 
 app.post('/users/:username/settings',async (req, res) =>{
     let returnValue, JSONResponse;
