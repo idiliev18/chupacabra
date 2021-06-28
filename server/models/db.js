@@ -21,6 +21,11 @@ class db {
         }
     }
 
+/**
+ * Method that cheks is token valid
+ * @function
+ * @param {string} token - The token that will be checked
+ */
     async verifyUser(token) {
         const request = new sql.Request();
         request.input('userToken', sql.NVarChar, token)
@@ -44,7 +49,14 @@ class db {
         return result.recordset;
     }
 
-
+/**
+ * Method which execute stored procedure ChangeUserData which  update information about the user if the given token is valid
+ * @function
+ * @param {string} token - The token that will be checked
+ * @param {string} firstName - The new first name
+ * @param {string} lastName - The new last name
+ * @param {string} email - The new email
+ */
     async updateUser(token, firstName, lastName, email) {
         const request = new sql.Request();
         request.input('userToken', sql.VarChar, token)
@@ -70,6 +82,11 @@ class db {
         return result.recordset;
     }
 
+/**
+ * Method which execute stored procedure GenerateForgotPasswordToken which generates reset password token
+ * @function
+ * @param {string} username - Username of the user who forgot its password
+ */
     async generateForgotPasswordToken(username) {
         const request = new sql.Request();
         request.input('userUsername', sql.VarChar, username);
@@ -89,6 +106,18 @@ class db {
         return (result.recordset == undefined ? false : result.recordset[0]);
     }
 
+/**
+ * Method which execute stored procedure RegisterBoat which register boats to the db
+ * @function
+ * @param {string} token - The token of the user who wants to register a boat
+ * @param {string} name - Username of the user who forgot its password
+ * @param {string} engine - Username of the user who forgot its password
+ * @param {string} registrationNumber - Username of the user who forgot its password
+ * @param {string} boatLicense - Username of the user who forgot its password
+ * @param {string} seatsCount - Username of the user who forgot its password
+ * @param {string} anchorLength - Username of the user who forgot its password
+ * @param {string} lifeJacketsCount - Username of the user who forgot its password
+ */
     async registerBoat(token, name, engine, registrationNumber, boatLicense, seatsCount, anchorLength, lifeJacketsCount) {
         const request = new sql.Request();
         request.input('userToken', sql.NVarChar, token)
