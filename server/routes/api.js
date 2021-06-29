@@ -101,10 +101,17 @@ app.post('/login', async (req, res) => {
  * 
  */
 app.post('/register', async (req, res) => {
+    loggerManager.logInfo(
+        `User with email: ${req.body.email} is trying to register.`
+    );
+
     // Receive x-www-form-urlencoded from client
+    let regData = req.body;
+
+
     let resJSON;
     let blankPhone, tmpCity, blankCity, tmpPhone;
-    let regData = req.body;
+    
     let fields = ['firstName', 'lastName', 'age', 'email', 'username', 'password', 'phone', 'city'];
 
     for (const key in fields) {
@@ -128,16 +135,13 @@ app.post('/register', async (req, res) => {
         regData.city = 'Yambol';
     }
 
-    loggerManager.logInfo(
-        `User with email: ${regData.email} is trying to register.`
-    );
-
     let returnValue = validation.formValidation(regData, validation.registerValidations);
 
     regData.phone = blankPhone ? tmpPhone : regData.phone;
     regData.city = blankCity ? tmpCity : regData.city;
     let salt = await hash.getSalt();
     console.log(salt);
+    
     // Validate client data
     if (returnValue === true) {
         returnValue = await DB.registerUser(

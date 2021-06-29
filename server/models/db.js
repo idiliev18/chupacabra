@@ -192,7 +192,6 @@ class db {
                 @Salt = @salt`
             );
         } catch (err) {
-            loggerManager.logError(JSON.stringify(err));
             return err;
         }
 
@@ -214,8 +213,8 @@ class db {
                 @PasswordHash = @userHashPassword`
             );
         } catch (err) {
-            loggerManager.logError(JSON.stringify(err));
-            return err;
+            loggerManager.logError("SQL Error + " + JSON.stringify(err));
+            return new Array(err);
         }
 
         return result.recordset;
