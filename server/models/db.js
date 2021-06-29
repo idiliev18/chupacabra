@@ -16,16 +16,23 @@ class db {
             await sql.connect(this._config);
             this._connection = true;
         } catch (err) {
-            loggerManager.logError(JSON.stringify(err));
-            console.log(err);
+            loggerManager.logError(
+                `SQL error: Failed connection to the DB:\n 
+                ${JSON.stringify(err)
+                    .split(',')
+                    .join("\n\t    ")
+                    .replace(/:/g, " - ")
+                    .replace(/["{}]/g, "")
+                }`
+            );
         }
     }
 
-/**
- * Method that cheks is token valid
- * @function
- * @param {string} token - The token that will be checked
- */
+    /**
+     * Method that cheks is token valid
+     * @function
+     * @param {string} token - The token that will be checked
+     */
     async verifyUser(token) {
         const request = new sql.Request();
         request.input('userToken', sql.NVarChar, token)
@@ -35,28 +42,36 @@ class db {
         try {
             result = await request.query(
                 `IF EXISTS(SELECT Id FROM Users WHERE Token = @userToken)
-                           BEGIN
-                           UPDATE Users SET IsVerified = 1 WHERE Token = @userToken
-                           SELECT 0 AS Success
-                           END
-                           SELECT 7 AS ReturnCode`
+            BEGIN
+            UPDATE Users SET IsVerified = 1 WHERE Token = @userToken
+            SELECT 0 AS Success
+            END
+            SELECT 7 AS ReturnCode`
             );
         } catch (err) {
-            loggerManager.logError(JSON.stringify(err));
+            loggerManager.logError(
+                `SQL error: Failed to verify token:\n 
+                ${JSON.stringify(err)
+                    .split(',')
+                    .join("\n\t    ")
+                    .replace(/:/g, " - ")
+                    .replace(/["{}]/g, "")
+                }`
+            );
             return err;
         }
 
         return result.recordset;
     }
 
-/**
- * Method which execute stored procedure ChangeUserData which  update information about the user if the given token is valid
- * @function
- * @param {string} token - The token that will be checked
- * @param {string} firstName - The new first name
- * @param {string} lastName - The new last name
- * @param {string} email - The new email
- */
+    /**
+     * Method which execute stored procedure ChangeUserData which  update information about the user if the given token is valid
+     * @function
+     * @param {string} token - The token that will be checked
+     * @param {string} firstName - The new first name
+     * @param {string} lastName - The new last name
+     * @param {string} email - The new email
+     */
     async updateUser(token, firstName, lastName, email) {
         const request = new sql.Request();
         request.input('userToken', sql.VarChar, token)
@@ -69,24 +84,32 @@ class db {
         try {
             result = await request.query(
                 `EXEC ChangeUserData
-                @Email = @userEmail,
-                @FirstName = @firstName,
-                @LastName = @lastName,
-                @Token = @userToken`
+            @Email = @userEmail,
+            @FirstName = @firstName,
+            @LastName = @lastName,
+            @Token = @userToken`
             );
         } catch (err) {
-            loggerManager.logError(JSON.stringify(err));
+            loggerManager.logError(
+                `SQL error: Failed to update user:\n 
+                ${JSON.stringify(err)
+                    .split(',')
+                    .join("\n\t    ")
+                    .replace(/:/g, " - ")
+                    .replace(/["{}]/g, "")
+                }`
+            );
             return err;
         }
 
         return result.recordset;
     }
 
-/**
- * Method which execute stored procedure GenerateForgotPasswordToken which generates reset password token
- * @function
- * @param {string} username - Username of the user who forgot its password
- */
+    /**
+     * Method which execute stored procedure GenerateForgotPasswordToken which generates reset password token
+     * @function
+     * @param {string} username - Username of the user who forgot its password
+     */
     async generateForgotPasswordToken(username) {
         const request = new sql.Request();
         request.input('userUsername', sql.VarChar, username);
@@ -95,29 +118,37 @@ class db {
 
         try {
             result = await request.query(`
-                EXEC GenerateForgotPasswordToken
-                @Username = @userUsername
-            `);
+            EXEC GenerateForgotPasswordToken
+            @Username = @userUsername
+                `);
         } catch (err) {
-            loggerManager.logError(JSON.stringify(err));
+            loggerManager.logError(
+                `SQL error: Failed to generate forgoten password token:\n 
+                ${JSON.stringify(err)
+                    .split(',')
+                    .join("\n\t    ")
+                    .replace(/:/g, " - ")
+                    .replace(/["{}]/g, "")
+                }`
+            );
             return err;
         }
 
         return (result.recordset == undefined ? false : result.recordset[0]);
     }
 
-/**
- * Method which execute stored procedure RegisterBoat which register boats to the db
- * @function
- * @param {string} token - The token of the user who wants to register a boat
- * @param {string} name - Username of the user who forgot its password
- * @param {string} engine - Username of the user who forgot its password
- * @param {string} registrationNumber - Username of the user who forgot its password
- * @param {string} boatLicense - Username of the user who forgot its password
- * @param {string} seatsCount - Username of the user who forgot its password
- * @param {string} anchorLength - Username of the user who forgot its password
- * @param {string} lifeJacketsCount - Username of the user who forgot its password
- */
+    /**
+     * Method which execute stored procedure RegisterBoat which register boats to the db
+     * @function
+     * @param {string} token - The token of the user who wants to register a boat
+     * @param {string} name - Username of the user who forgot its password
+     * @param {string} engine - Username of the user who forgot its password
+     * @param {string} registrationNumber - Username of the user who forgot its password
+     * @param {string} boatLicense - Username of the user who forgot its password
+     * @param {string} seatsCount - Username of the user who forgot its password
+     * @param {string} anchorLength - Username of the user who forgot its password
+     * @param {string} lifeJacketsCount - Username of the user who forgot its password
+     */
     async registerBoat(token, name, engine, registrationNumber, boatLicense, seatsCount, anchorLength, lifeJacketsCount) {
         const request = new sql.Request();
         request.input('userToken', sql.NVarChar, token)
@@ -134,39 +165,55 @@ class db {
         try {
             result = await request.query(
                 `EXEC RegisterBoat
-                @Token = @userToken,
-                @Name = @boatName,
-                @Engine = @boatEngine,
-                @RegistrationNumber = @boatRegistrationNumber,
-                @BoatLicense = @boatLicense,
-                @SeatsCount = @boatSeatsCount,
-                @AnchorLength = @boatAnchorLength,
-                @LifeJacketsCount = @boatLifeJacketsCount`
+            @Token = @userToken,
+            @Name = @boatName,
+            @Engine = @boatEngine,
+            @RegistrationNumber = @boatRegistrationNumber,
+            @BoatLicense = @boatLicense,
+            @SeatsCount = @boatSeatsCount,
+            @AnchorLength = @boatAnchorLength,
+            @LifeJacketsCount = @boatLifeJacketsCount`
             );
         } catch (err) {
-            loggerManager.logError(JSON.stringify(err));
+            loggerManager.logError(
+                `SQL error: Failed to register boat:\n 
+                ${JSON.stringify(err)
+                    .split(',')
+                    .join("\n\t    ")
+                    .replace(/:/g, " - ")
+                    .replace(/["{}]/g, "")
+                }`
+            );
             return err;
         }
 
         return result.recordset;
     }
 
-    async getSalt(credentials){
+    async getSalt(credentials) {
         const request = new sql.Request();
         request.input('loginCredential', sql.NVarChar, credentials)
         let result;
-        try{
+        try {
             result = await request.query('SELECT Salt AS Salt FROM Users WHERE Email = @loginCredential OR Username = @loginCredential')
-        }catch (err){
-            loggerManager.logError(JSON.stringify(err));
+        } catch (err) {
+            loggerManager.logError(
+                `SQL error: Failed to get salt:\n 
+                ${JSON.stringify(err)
+                    .split(',')
+                    .join("\n\t    ")
+                    .replace(/:/g, " - ")
+                    .replace(/["{}]/g, "")
+                }`
+            );
             return err;
         }
         return result.recordsets[0];
     }
 
-    async registerUser(firstName, lastName, age, city, phone, email, username, hashPassword,salt) {
+    async registerUser(firstName, lastName, age, city, phone, email, username, hashPassword, salt) {
         const request = new sql.Request();
-        
+
         request.input('userFirstName', sql.NVarChar, firstName)
             .input('userLastName', sql.NVarChar, lastName)
             .input('userAge', sql.Int, age)
@@ -175,25 +222,33 @@ class db {
             .input('userEmail', sql.NVarChar, email)
             .input('userUsername', sql.VarChar, username)
             .input('userHashPassword', sql.VarChar, hashPassword)
-            .input('salt',sql.VarChar,salt);
+            .input('salt', sql.VarChar, salt);
 
         let result;
 
         try {
             result = await request.query(
                 `EXEC RegisterUser
-                @FirstName = @userFirstName,
-                @LastName = @userLastName,
-                @Age  = @userAge,
-                @City  = @userCity,
-                @Phone  = @userPhone,
-                @Username = @userUsername,
-                @Email = @userEmail,
-                @PasswordHash = @userHashPassword,
-                @Salt = @salt`
+            @FirstName = @userFirstName,
+            @LastName = @userLastName,
+            @Age  = @userAge,
+            @City  = @userCity,
+            @Phone  = @userPhone,
+            @Username = @userUsername,
+            @Email = @userEmail,
+            @PasswordHash = @userHashPassword,
+            @Salt = @salt`
             );
         } catch (err) {
-            loggerManager.logError("SQL Error + " + JSON.stringify(err));
+            loggerManager.logError(
+                `SQL error: Failed to register user:\n 
+                ${JSON.stringify(err)
+                    .split(',')
+                    .join("\n\t    ")
+                    .replace(/:/g, " - ")
+                    .replace(/["{}]/g, "")
+                }`
+            );
             return new Array(err);
         }
 
@@ -204,18 +259,26 @@ class db {
         const request = new sql.Request();
 
         request.input('userLoginCredential', sql.NVarChar, loginCredential)
-               .input('userHashPassword', sql.VarChar, hashPassword);
+            .input('userHashPassword', sql.VarChar, hashPassword);
 
         let result;
 
         try {
             result = await request.query(
                 `EXEC LoginUser
-                @LoginCredential = @userLoginCredential,
-                @PasswordHash = @userHashPassword`
+            @LoginCredential = @userLoginCredential,
+            @PasswordHash = @userHashPassword`
             );
         } catch (err) {
-            loggerManager.logError("SQL Error + " + JSON.stringify(err));
+            loggerManager.logError(
+                `SQL error: Failed to login user:\n 
+                ${JSON.stringify(err)
+                    .split(',')
+                    .join("\n\t    ")
+                    .replace(/:/g, " - ")
+                    .replace(/["{}]/g, "")
+                }`
+            );
             return new Array(err);
         }
 
@@ -233,12 +296,20 @@ class db {
         try {
             result = await request.query(
                 `EXEC GetProfileInformation
-                @Username = @userUsername,
-                @Token = @userToken`
+            @Username = @userUsername,
+            @Token = @userToken`
             );
 
         } catch (err) {
-            loggerManager.logError(JSON.stringify(err));
+            loggerManager.logError(
+                `SQL error: Failed to get public profile information:\n 
+                ${JSON.stringify(err)
+                    .split(',')
+                    .join("\n\t    ")
+                    .replace(/:/g, " - ")
+                    .replace(/["{}]/g, "")
+                }`
+            );
             return err;
         }
 
@@ -255,11 +326,19 @@ class db {
         try {
             result = await request.query(
                 `EXEC GetProfileInformation
-                @Username = @userUsername,
-                @Token = @userToken`)
+            @Username = @userUsername,
+            @Token = @userToken`)
 
         } catch (err) {
-            loggerManager.logError(JSON.stringify(err));
+            loggerManager.logError(
+                `SQL error: Failed to get private profile information:\n 
+                ${JSON.stringify(err)
+                    .split(',')
+                    .join("\n\t    ")
+                    .replace(/:/g, " - ")
+                    .replace(/["{}]/g, "")
+                }`
+            );
             return err;
         }
 
@@ -275,31 +354,47 @@ class db {
         try {
             result = await request.query(
                 `EXEC GetBoats
-                @Token = @userToken`)
+            @Token = @userToken`)
 
         } catch (err) {
-            loggerManager.logError(JSON.stringify(err));
+            loggerManager.logError(
+                `SQL error: Failed to get boat information:\n 
+                ${JSON.stringify(err)
+                    .split(',')
+                    .join("\n\t    ")
+                    .replace(/:/g, " - ")
+                    .replace(/["{}]/g, "")
+                }`
+            );
             return err;
         }
 
         return result.recordset;
     }
 
-    async resetPassword(token, password){
+    async resetPassword(token, password) {
         const request = new sql.Request();
         request.input('userToken', sql.VarChar, token)
-        .input('userPasswordHash', sql.VarChar, password)
+            .input('userPasswordHash', sql.VarChar, password)
 
         let result;
 
         try {
             result = await request.query(
                 `EXEC ResetPassword
-                @Token = @userToken,
-                @Password = @userPasswordHash`)
+            @Token = @userToken,
+            @Password = @userPasswordHash`)
 
         } catch (err) {
-            loggerManager.logError(JSON.stringify(err));
+            loggerManager.logError(
+                `SQL error: Failed to reset password:\n 
+                ${JSON.stringify(err)
+                    .split(',')
+                    .join("\n\t    ")
+                    .replace(/:/g, " - ")
+                    .replace(/["{}]/g, "")
+                }`
+            );
             return err;
         }
 
