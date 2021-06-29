@@ -151,7 +151,20 @@ class db {
         return result.recordset;
     }
 
-    async registerUser(firstName, lastName, age, city, phone, email, username, hashPassword) {
+    async getSalt(credentials){
+        const request = new sql.Request();
+        request.input('loginCredential', sql.NVarChar, credentials)
+        let result;
+        try{
+            result = await request.query('SELECT Salt AS Salt FROM Users WHERE Email = @loginCredential OR Username = @loginCredential')
+        }catch (err){
+            loggerManager.logError(JSON.stringify(err));
+            return err;
+        }
+        return result.recordsets[0];
+    }
+
+    async registerUser(firstName, lastName, age, city, phone, email, username, hashPassword,salt) {
         const request = new sql.Request();
         request.input('userFirstName', sql.NVarChar, firstName)
             .input('userLastName', sql.NVarChar, lastName)
@@ -160,7 +173,8 @@ class db {
             .input('userPhone', sql.VarChar, phone)
             .input('userEmail', sql.NVarChar, email)
             .input('userUsername', sql.VarChar, username)
-            .input('userHashPassword', sql.VarChar, hashPassword);
+            .input('userHashPassword', sql.VarChar, hashPassword)
+            .input('salt',sql.VarChar,salt);
 
         let result;
 
@@ -174,14 +188,15 @@ class db {
                 @Phone  = @userPhone,
                 @Username = @userUsername,
                 @Email = @userEmail,
-                @PasswordHash = @userHashPassword`
+                @PasswordHash = @userHashPassword,
+                @Salt = @salt`
             );
         } catch (err) {
             loggerManager.logError(JSON.stringify(err));
             return err;
         }
 
-        return result.recordset;
+        return result.recordsets[0];
     }
 
     async loginUser(loginCredential, hashPassword) {
@@ -202,7 +217,7 @@ class db {
             loggerManager.logError(JSON.stringify(err));
             return err;
         }
-        
+
         return result.recordset;
     }
 

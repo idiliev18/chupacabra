@@ -28,7 +28,6 @@ let DB = new db();
  * 
  */
 app.post('/login', async (req, res) => {
-
     // Logs information to Grafana
     loggerManager.logInfo(
         `User with email/username: ${req.body.email} is trying to login.`
@@ -39,35 +38,47 @@ app.post('/login', async (req, res) => {
     let resJSON, recordSet;
 
     let isValid = validation.isLoginDataValid(loginData);
-
     if (isValid) {
-        // To do: Implement better hashing
-        recordSet = await DB.loginUser(loginData.email,
-            CryptoJS.SHA256(loginData.password + process.env.salt).
-                toString(CryptoJS.enc.Base32)
-        );
 
-        let isLogged = recordSet.hasOwnProperty("Token");
+        let salt = await DB.getSalt(loginData.email);
+        let isSaltReturned = salt.length > 0;
 
-        if (isLogged) {
-            loggerManager.logInfo(
-                `User with email/username: ${loginData.email} is successfully logged.`
+        if(isSaltReturned){
+            recordSet = await DB.loginUser(loginData.email,
+                await hash.hashPassword(loginData.password, salt)
             );
-            
-            // Create JSON Response with Token and Token Expire date
-            resJSON = JSONModule.
-                createJSONResponse(isLogged, recordSet[0], 'login')
 
-        } else {
-            loggerManager.logWarn(
-                `There is no an account with this email/username: ${loginData.email}`
-            );
-            
-            // Create JSON Response with error message, which depends on error code
-            resJSON = JSONModule.
-                createJSONResponse(isLogged, errors[recordSet[0].ReturnCode], 'login')
+            let isLogged = recordSet[0].hasOwnProperty("Token");
+                
+
+            if (isLogged) {
+
+                loggerManager.logInfo(
+                    `User with email/username: ${loginData.email} is successfully logged.`
+                );
+    
+                // Create JSON Response with Token and Token Expire date
+                resJSON = JSONModule.
+                    createJSONResponse(isLogged, recordSet[0], 'login')
+    
+            } else {
+                loggerManager.logWarn(
+                    `There is no an account with this email/username: ${loginData.email}`
+                );
+    
+                // Create JSON Response with error message, which depends on error code
+                resJSON = JSONModule.
+                    createJSONResponse(isLogged, errors[recordSet[0].ReturnCode], 'login')
+            }
         }
+        else{
+            loggerManager.logWarn(
+                `Cannot get salt from database for user with email/username: ${loginData.email}`
+            );
 
+            resJSON = JSONModule.createJSONResponse(false, recordSet, 'login');
+        }
+        
     } else {
         resJSON = JSONModule.createJSONResponse(false, recordSet, 'login');
 
@@ -125,7 +136,8 @@ app.post('/register', async (req, res) => {
 
     regData.phone = blankPhone ? tmpPhone : regData.phone;
     regData.city = blankCity ? tmpCity : regData.city;
-
+    let salt = await hash.getSalt();
+    console.log(salt);
     // Validate client data
     if (returnValue === true) {
         returnValue = await DB.registerUser(
@@ -136,8 +148,8 @@ app.post('/register', async (req, res) => {
             regData.phone,
             regData.email,
             regData.username,
-            CryptoJS.SHA256(regData.password + process.env.salt).
-                toString(CryptoJS.enc.Base32)
+            await hash.hashPassword(regData.password, salt),
+            salt
         )
 
 

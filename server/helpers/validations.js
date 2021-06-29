@@ -112,25 +112,28 @@ const loginValidations = {
 function isLoginDataValid(loginData) {
 
     let fields = ['email', 'password'];
-    let isValid;
+    let failsCount = true;
 
     for (const key in fields) {
         if (loginData[fields[key]] == undefined) {
-            isValid = false;
+            loginData.email = "";
+            failsCount = false;
         }
 
         if (Array.isArray(loginData[fields[key]])) {
-            isValid = false;
+            failsCount = false;
         }
     }
 
     if (loginData.email.includes('@')) {
-        isValid = loginData.
+        if(!loginData.
             email.
-            match(/(([a-z]+)([._a-z0-9])([a-z0-9]+)).{1,64}(@)([a-z]+)([.a-z])([a-z])+/gmi)
+            match(/(([a-z]+)([._a-z0-9])([a-z0-9]+)).{1,64}(@)([a-z]+)([.a-z])([a-z])+/gmi)){
+                failsCount = false;
+            }
     }
-
-    return isValid;
+   
+    return failsCount;
 }
 
 module.exports.isDataValid = isDataValid;

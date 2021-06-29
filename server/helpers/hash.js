@@ -8,10 +8,16 @@ const bcrypt = require("bcrypt");
  * @param {string} saltRounds The salt used for hashing
  * @returns JSON
  */
-async function hashPassword(password, saltRounds) {  
-    const salt = await bcrypt.genSalt(saltRounds);
-    console.log(await bcrypt.hash(password, salt));
-    return await bcrypt.hash(password, salt);
-}
+async function hashPassword(password, salt) {  
+    return await bcrypt.hash(password, salt[0].Salt);
+} 
 
+async function getSalt() {  
+    return await bcrypt.genSalt()
+} 
+
+function getHello(){
+    return 'Hello';
+}
 module.exports.hashPassword = hashPassword;
+module.exports.getSalt = getSalt;
