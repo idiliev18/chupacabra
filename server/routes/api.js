@@ -331,14 +331,15 @@ app.post('/registerBoat', async (req, res) => {
     // Receive x-www-form-urlencoded from client
     let resJSON;
     let regData = req.body;
+    let token = req.headers.authorization;
     let returnValue;
 
     loggerManager.logInfo(
-        `User with token: ${regData.Token} is trying to register a boat.`
+        `User with token: ${token} is trying to register a boat.`
     );
 
     returnValue = await DB.registerBoat(
-        regData.Token,
+        token,
         regData.boatName,
         regData.Engine,
         regData.registrationNumber,

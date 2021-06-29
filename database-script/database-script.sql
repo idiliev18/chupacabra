@@ -1,15 +1,12 @@
 USE [master]
 GO
-/****** Object:  Database [Chupacabra]    Script Date: 2021-06-29 9:10:28 PM ******/
+/****** Object:  Database [Chupacabra]    Script Date: 29.6.2021 г. 23:16:00 ******/
 CREATE DATABASE [Chupacabra]
  CONTAINMENT = NONE
  ON  PRIMARY 
 ( NAME = N'Chupacabra', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS\MSSQL\DATA\Chupacabra.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
  LOG ON 
 ( NAME = N'Chupacabra_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS\MSSQL\DATA\Chupacabra_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
- WITH CATALOG_COLLATION = DATABASE_DEFAULT
-GO
-ALTER DATABASE [Chupacabra] SET COMPATIBILITY_LEVEL = 150
 GO
 IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
 begin
@@ -74,13 +71,9 @@ ALTER DATABASE [Chupacabra] SET TARGET_RECOVERY_TIME = 60 SECONDS
 GO
 ALTER DATABASE [Chupacabra] SET DELAYED_DURABILITY = DISABLED 
 GO
-ALTER DATABASE [Chupacabra] SET ACCELERATED_DATABASE_RECOVERY = OFF  
-GO
-ALTER DATABASE [Chupacabra] SET QUERY_STORE = OFF
-GO
 USE [Chupacabra]
 GO
-/****** Object:  Table [dbo].[Boats]    Script Date: 2021-06-29 9:10:29 PM ******/
+/****** Object:  Table [dbo].[Boats]    Script Date: 29.6.2021 г. 23:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -98,10 +91,18 @@ CREATE TABLE [dbo].[Boats](
  CONSTRAINT [PK__Boats__3214EC0755DC1B67] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [UQ__Boats__AFC653FAF5394511] UNIQUE NONCLUSTERED 
+(
+	[BoatLicense] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [UQ__Boats__E8864602563C1802] UNIQUE NONCLUSTERED 
+(
+	[RegistrationNumber] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Fishes]    Script Date: 2021-06-29 9:10:29 PM ******/
+/****** Object:  Table [dbo].[Fishes]    Script Date: 29.6.2021 г. 23:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -113,10 +114,10 @@ CREATE TABLE [dbo].[Fishes](
 PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[FishingEvents]    Script Date: 2021-06-29 9:10:29 PM ******/
+/****** Object:  Table [dbo].[FishingEvents]    Script Date: 29.6.2021 г. 23:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -130,10 +131,10 @@ CREATE TABLE [dbo].[FishingEvents](
 PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[FishingEventsFishes]    Script Date: 2021-06-29 9:10:29 PM ******/
+/****** Object:  Table [dbo].[FishingEventsFishes]    Script Date: 29.6.2021 г. 23:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -146,10 +147,10 @@ CREATE TABLE [dbo].[FishingEventsFishes](
 PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Roles]    Script Date: 2021-06-29 9:10:29 PM ******/
+/****** Object:  Table [dbo].[Roles]    Script Date: 29.6.2021 г. 23:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -160,10 +161,10 @@ CREATE TABLE [dbo].[Roles](
 PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UserBoats]    Script Date: 2021-06-29 9:10:29 PM ******/
+/****** Object:  Table [dbo].[UserBoats]    Script Date: 29.6.2021 г. 23:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -175,10 +176,10 @@ CREATE TABLE [dbo].[UserBoats](
 (
 	[UserId] ASC,
 	[BoatId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 2021-06-29 9:10:29 PM ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 29.6.2021 г. 23:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -201,10 +202,10 @@ CREATE TABLE [dbo].[Users](
  CONSTRAINT [PK__Users__3214EC0777E5016A] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UsersRoles]    Script Date: 2021-06-29 9:10:29 PM ******/
+/****** Object:  Table [dbo].[UsersRoles]    Script Date: 29.6.2021 г. 23:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -216,76 +217,8 @@ CREATE TABLE [dbo].[UsersRoles](
 (
 	[UserId] ASC,
 	[RoleId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-GO
-SET IDENTITY_INSERT [dbo].[Boats] ON 
-GO
-INSERT [dbo].[Boats] ([Id], [Name], [Engine], [RegistrationNumber], [BoatLicense], [SeatsCount], [AnchorLength], [LifeJacketsCount], [IsVerified]) VALUES (5, N'SantaMaria', N'Honda', N'a12g', N'1234123412341', 12, 12, 12, 0)
-GO
-INSERT [dbo].[Boats] ([Id], [Name], [Engine], [RegistrationNumber], [BoatLicense], [SeatsCount], [AnchorLength], [LifeJacketsCount], [IsVerified]) VALUES (6, N'DrugataLodka10', N'Mercedes', N'ajsfdkl1234', N'asdjfkl234', 12, 12, 12, 0)
-GO
-INSERT [dbo].[Boats] ([Id], [Name], [Engine], [RegistrationNumber], [BoatLicense], [SeatsCount], [AnchorLength], [LifeJacketsCount], [IsVerified]) VALUES (7, N'SantaMaria', N'Honda', N'a12b', N'123566', 12, 12, 12, 0)
-GO
-SET IDENTITY_INSERT [dbo].[Boats] OFF
-GO
-SET IDENTITY_INSERT [dbo].[Roles] ON 
-GO
-INSERT [dbo].[Roles] ([Id], [RoleName]) VALUES (1, N'User')
-GO
-INSERT [dbo].[Roles] ([Id], [RoleName]) VALUES (2, N'Admin')
-GO
-INSERT [dbo].[Roles] ([Id], [RoleName]) VALUES (3, N'Operator')
-GO
-INSERT [dbo].[Roles] ([Id], [RoleName]) VALUES (4, N'Boatman')
-GO
-SET IDENTITY_INSERT [dbo].[Roles] OFF
-GO
-INSERT [dbo].[UserBoats] ([UserId], [BoatId]) VALUES (7, 5)
-GO
-INSERT [dbo].[UserBoats] ([UserId], [BoatId]) VALUES (7, 6)
-GO
-INSERT [dbo].[UserBoats] ([UserId], [BoatId]) VALUES (9, 7)
-GO
-SET IDENTITY_INSERT [dbo].[Users] ON 
-GO
-INSERT [dbo].[Users] ([Id], [FirstName], [LastName], [Age], [City], [Phone], [Username], [Email], [Token], [TokenExpiresAt], [PasswordHash], [AccountCreatedAt], [IsVerified], [Salt]) VALUES (7, N'Alex', N'Manov', 45, NULL, NULL, N'sashko12', N'sashko12@cb.bg', N'AAE0797E5FB0CEB0D20224E52EFCF8', CAST(N'2021-06-29T09:17:25.947' AS DateTime), N'60c9de859700563c24c6033e142112c5dc986c8bde897a85d6ae4e4f0d443662', CAST(N'2021-06-28T09:17:25.947' AS DateTime), 1, NULL)
-GO
-INSERT [dbo].[Users] ([Id], [FirstName], [LastName], [Age], [City], [Phone], [Username], [Email], [Token], [TokenExpiresAt], [PasswordHash], [AccountCreatedAt], [IsVerified], [Salt]) VALUES (8, N'fda', N'df', 12, NULL, NULL, N'wqdfdgshgf', N'dafdf@fddf.bg', N'F782E7909A06A8290EBE78893E1339', CAST(N'2021-06-29T09:44:41.997' AS DateTime), N'60c9de859700563c24c6033e142112c5dc986c8bde897a85d6ae4e4f0d443662', CAST(N'2021-06-28T09:44:41.997' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[Users] ([Id], [FirstName], [LastName], [Age], [City], [Phone], [Username], [Email], [Token], [TokenExpiresAt], [PasswordHash], [AccountCreatedAt], [IsVerified], [Salt]) VALUES (9, N'Iliyan', N'Iliev', 16, N'Burgas', N'+359876603828', N'ilko1234', N'idiliev18@codingburgas.bg', N'D510B13D44A50C5CAC1CFB24700D31', CAST(N'2021-06-29T09:55:21.270' AS DateTime), N'e6ea6d1055a67e61c44385460da96963797f263cc7dd124fdfba34c601f719da', CAST(N'2021-06-28T09:55:21.270' AS DateTime), 1, NULL)
-GO
-INSERT [dbo].[Users] ([Id], [FirstName], [LastName], [Age], [City], [Phone], [Username], [Email], [Token], [TokenExpiresAt], [PasswordHash], [AccountCreatedAt], [IsVerified], [Salt]) VALUES (10, N'foncho', N'tarikata', 15, N'kolio', N'', N'kashon1123', N'ilko@abv.bg', N'5E70AAC521992946AB17A1585CDD67', CAST(N'2021-06-30T10:53:53.100' AS DateTime), N'$2b$10$Ep1x4FsTQH.3p6oxbcYcwOT0gNRK1LwfdUM0NZy9nem/ymqxBIXoe', CAST(N'2021-06-29T10:53:53.100' AS DateTime), 0, N'$2b$10$Ep1x4FsTQH.3p6oxbcYcwO')
-GO
-INSERT [dbo].[Users] ([Id], [FirstName], [LastName], [Age], [City], [Phone], [Username], [Email], [Token], [TokenExpiresAt], [PasswordHash], [AccountCreatedAt], [IsVerified], [Salt]) VALUES (11, N'foncho', N'tarikata', 15, N'kolio', N'+359874123654', N'kashon1123f', N'ilko@abv.bgdf', N'6E31F513C9F437052250288DADF523', CAST(N'2021-06-30T21:04:43.067' AS DateTime), N'$2b$10$ksW954H8eAr8wmkA2hdtfun1ID.iTht2yJpIyLrgliOLH0q/6SnnO', CAST(N'2021-06-29T21:04:43.067' AS DateTime), 0, N'$2b$10$ksW954H8eAr8wmkA2hdtfu')
-GO
-SET IDENTITY_INSERT [dbo].[Users] OFF
-GO
-INSERT [dbo].[UsersRoles] ([UserId], [RoleId]) VALUES (7, 4)
-GO
-INSERT [dbo].[UsersRoles] ([UserId], [RoleId]) VALUES (8, 1)
-GO
-INSERT [dbo].[UsersRoles] ([UserId], [RoleId]) VALUES (9, 1)
-GO
-INSERT [dbo].[UsersRoles] ([UserId], [RoleId]) VALUES (10, 1)
-GO
-INSERT [dbo].[UsersRoles] ([UserId], [RoleId]) VALUES (11, 1)
-GO
-SET ANSI_PADDING ON
-GO
-/****** Object:  Index [UQ__Boats__AFC653FAF5394511]    Script Date: 2021-06-29 9:10:29 PM ******/
-ALTER TABLE [dbo].[Boats] ADD  CONSTRAINT [UQ__Boats__AFC653FAF5394511] UNIQUE NONCLUSTERED 
-(
-	[BoatLicense] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-GO
-SET ANSI_PADDING ON
-GO
-/****** Object:  Index [UQ__Boats__E8864602563C1802]    Script Date: 2021-06-29 9:10:29 PM ******/
-ALTER TABLE [dbo].[Boats] ADD  CONSTRAINT [UQ__Boats__E8864602563C1802] UNIQUE NONCLUSTERED 
-(
-	[RegistrationNumber] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[Users] ADD  CONSTRAINT [DF_Users_TokenCreatedAt]  DEFAULT (getdate()+(1)) FOR [TokenExpiresAt]
 GO
@@ -337,7 +270,7 @@ ALTER TABLE [dbo].[Users]  WITH CHECK ADD  CONSTRAINT [CK_Users_Email] CHECK  ((
 GO
 ALTER TABLE [dbo].[Users] CHECK CONSTRAINT [CK_Users_Email]
 GO
-/****** Object:  StoredProcedure [dbo].[ChangeUserData]    Script Date: 2021-06-29 9:10:29 PM ******/
+/****** Object:  StoredProcedure [dbo].[ChangeUserData]    Script Date: 29.6.2021 г. 23:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -372,7 +305,7 @@ BEGIN
 	SELECT 8 AS ReturnCode
 END
 GO
-/****** Object:  StoredProcedure [dbo].[GenerateForgotPasswordToken]    Script Date: 2021-06-29 9:10:29 PM ******/
+/****** Object:  StoredProcedure [dbo].[GenerateForgotPasswordToken]    Script Date: 29.6.2021 г. 23:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -397,7 +330,7 @@ BEGIN
     SELECT Email, @Token AS Token FROM Users WHERE Username = @Username
 END
 GO
-/****** Object:  StoredProcedure [dbo].[GetBoats]    Script Date: 2021-06-29 9:10:29 PM ******/
+/****** Object:  StoredProcedure [dbo].[GetBoats]    Script Date: 29.6.2021 г. 23:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -446,7 +379,7 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[GetProfileInformation]    Script Date: 2021-06-29 9:10:29 PM ******/
+/****** Object:  StoredProcedure [dbo].[GetProfileInformation]    Script Date: 29.6.2021 г. 23:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -503,7 +436,7 @@ INNER JOIN Roles r
 ON r.Id = ur.RoleId
 WHERE UserName = @Username
 GO
-/****** Object:  StoredProcedure [dbo].[LoginUser]    Script Date: 2021-06-29 9:10:29 PM ******/
+/****** Object:  StoredProcedure [dbo].[LoginUser]    Script Date: 29.6.2021 г. 23:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -556,7 +489,7 @@ BEGIN
 	END
 END
 GO
-/****** Object:  StoredProcedure [dbo].[RegisterBoat]    Script Date: 2021-06-29 9:10:29 PM ******/
+/****** Object:  StoredProcedure [dbo].[RegisterBoat]    Script Date: 29.6.2021 г. 23:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -596,13 +529,18 @@ BEGIN
 	DECLARE @Id int
 	SELECT @Id = Id FROM Users WHERE Token = @Token AND DATEDIFF(MINUTE, GETDATE(), TokenExpiresAt ) > 0
 
-	INSERT INTO UsersRoles (UserId, RoleId)
-	VALUES (@Id, 4)
+	IF NOT EXISTS (SELECT UserId FROM UsersRoles WHERE UserId = @Id AND RoleId = 4)
+	BEGIN
+
+		INSERT INTO UsersRoles (UserId, RoleId)
+		VALUES (@Id, 4)
+	
+	END
 
 	SELECT 0 as Success
 END
 GO
-/****** Object:  StoredProcedure [dbo].[RegisterUser]    Script Date: 2021-06-29 9:10:29 PM ******/
+/****** Object:  StoredProcedure [dbo].[RegisterUser]    Script Date: 29.6.2021 г. 23:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -657,7 +595,7 @@ BEGIN
 	SELECT @Token AS Token,  @ExpireDate AS [ExpireDate]
 END
 GO
-/****** Object:  StoredProcedure [dbo].[ResetPassword]    Script Date: 2021-06-29 9:10:29 PM ******/
+/****** Object:  StoredProcedure [dbo].[ResetPassword]    Script Date: 29.6.2021 г. 23:16:01 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON

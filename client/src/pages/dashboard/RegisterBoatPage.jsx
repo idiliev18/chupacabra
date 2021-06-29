@@ -19,17 +19,23 @@ export default function RegisterBoatPage(props) {
         setLoading(true);
 
         let data = {
-            Name: event.target.boatName.value,
+            boatName: event.target.boatName.value,
             Engine: event.target.engine.value,
-            RegistrationNumber: event.target.registrationNumber.value,
-            BoatLicense: event.target.boatLicense.value,
-            SeatsCount: event.target.seatsCount.value,
-            AnchorLength: event.target.anchorLength.value,
-            LifeJacketsCount: event.target.lifeJacketsCount.value,
-            Token: userContext.token,
+            registrationNumber: event.target.registrationNumber.value,
+            boatLicense: event.target.boatLicense.value,
+            seatsCount: event.target.seatsCount.value,
+            anchorLength: event.target.anchorLength.value,
+            lifeJacktsCount: event.target.lifeJacketsCount.value,
         };
 
-        fetchAPI("/registerBoat", data, {}, "POST")
+        fetchAPI(
+            "/registerBoat",
+            data,
+            {
+                Authorization: userContext.token,
+            },
+            "POST"
+        )
             .then((res) => {
                 if (res.type === "registerBoat-success") {
                     event.target.boatName.value = "";
@@ -146,7 +152,7 @@ export default function RegisterBoatPage(props) {
 
                 <div className="field">
                     {!!failureValues ? (
-                        <div className="help is-failure">{failureValues}</div>
+                        <div className="help is-danger">{failureValues}</div>
                     ) : null}
                 </div>
 

@@ -282,7 +282,7 @@ class db {
             return err;
         }
 
-        return result.recordsets;
+        return result.recordset;
     }
 
     async resetPassword(token, password){
