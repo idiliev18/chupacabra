@@ -45,12 +45,12 @@ export default function RegisterBoatPage(props) {
                     event.target.seatsCount.value = "";
                     event.target.anchorLength.value = "";
                     event.target.lifeJacketsCount.value = "";
-                    setSuccessValues("successful registration");
+                    setSuccessValues({
+                        global: "successful registration",
+                    });
                     setLoading(false);
                 } else if (res.type === "registerBoat-failure") {
-                    setFailureValues(
-                        "unsuccessful registration. " + res.fields.name
-                    );
+                    setFailureValues(res.fields);
                     setLoading(false);
                 }
             })
@@ -78,6 +78,7 @@ export default function RegisterBoatPage(props) {
                         <ErrorableInput
                             label="Име на лодката"
                             name="boatName"
+                            errText={failureValues.boatName}
                             required
                         />
                     </div>
@@ -88,6 +89,7 @@ export default function RegisterBoatPage(props) {
                         <ErrorableInput
                             label="Двигател"
                             name="engine"
+                            errText={failureValues.engine}
                             required
                         />
                     </div>
@@ -98,6 +100,7 @@ export default function RegisterBoatPage(props) {
                         <ErrorableInput
                             label="Регистрационен номер"
                             name="registrationNumber"
+                            errText={failureValues.registrationNumber}
                             required
                         />
                     </div>
@@ -108,6 +111,7 @@ export default function RegisterBoatPage(props) {
                         <ErrorableInput
                             label="Свидетелство за управление на лодка"
                             name="boatLicense"
+                            errText={failureValues.boatLicense}
                             required
                         />
                     </div>
@@ -120,6 +124,7 @@ export default function RegisterBoatPage(props) {
                             type="number"
                             name="seatsCount"
                             onChange={onNumericInputChange}
+                            errText={failureValues.seatsCount}
                             required
                         />
                     </div>
@@ -133,6 +138,7 @@ export default function RegisterBoatPage(props) {
                             name="anchorLength"
                             onChange={onNumericInputChange}
                             placeholder="в метри"
+                            errText={failureValues.anchorLength}
                             required
                         />
                     </div>
@@ -145,6 +151,7 @@ export default function RegisterBoatPage(props) {
                             type="number"
                             name="lifeJacketsCount"
                             onChange={onNumericInputChange}
+                            errText={failureValues.lifeJacketsCount}
                             required
                         />
                     </div>
@@ -152,13 +159,17 @@ export default function RegisterBoatPage(props) {
 
                 <div className="field">
                     {!!failureValues ? (
-                        <div className="help is-danger">{failureValues}</div>
+                        <div className="help is-danger">
+                            {failureValues.global}
+                        </div>
                     ) : null}
                 </div>
 
                 <div className="field">
                     {!!successValues ? (
-                        <div className="help is-success">{successValues}</div>
+                        <div className="help is-success">
+                            {successValues.global}
+                        </div>
                     ) : null}
                 </div>
 
