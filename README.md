@@ -77,7 +77,7 @@ GMAILPASS=&ltGmail password&gt</pre>
     <pre>npm install</pre>
      6. Start the server
     <pre>node app.js</pre>
-     7. In new terminal open client folder
+     7. In an new terminal, open client folder
     <pre>cd client</pre>
      8. Install the node modules (might take some time):
     <pre>npm install</pre>
