@@ -9,10 +9,13 @@ const bcrypt = require("bcrypt");
  * @returns JSON
  */
 async function hashPassword(password, salt) {  
-    return await bcrypt.hash(password, salt[0].Salt);
+    console.log('Nasoliha me');
+    console.log(salt);
+    return await bcrypt.hash(password, salt);
 } 
 
 async function getSalt() {  
+    console.log('VLIZA ZA SOL');
     return await bcrypt.genSalt()
 } 
 

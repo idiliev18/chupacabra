@@ -166,6 +166,7 @@ class db {
 
     async registerUser(firstName, lastName, age, city, phone, email, username, hashPassword,salt) {
         const request = new sql.Request();
+        
         request.input('userFirstName', sql.NVarChar, firstName)
             .input('userLastName', sql.NVarChar, lastName)
             .input('userAge', sql.Int, age)
@@ -192,10 +193,11 @@ class db {
                 @Salt = @salt`
             );
         } catch (err) {
-            return err;
+            loggerManager.logError("SQL Error + " + JSON.stringify(err));
+            return new Array(err);
         }
 
-        return result.recordsets[0];
+        return result.recordset;
     }
 
     async loginUser(loginCredential, hashPassword) {

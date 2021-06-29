@@ -43,42 +43,42 @@ app.post('/login', async (req, res) => {
         let salt = await DB.getSalt(loginData.email);
         let isSaltReturned = salt.length > 0;
 
-        if(isSaltReturned){
+        if (isSaltReturned) {
             recordSet = await DB.loginUser(loginData.email,
                 await hash.hashPassword(loginData.password, salt)
             );
 
             let isLogged = recordSet[0].hasOwnProperty("Token");
-                
+
 
             if (isLogged) {
 
                 loggerManager.logInfo(
                     `User with email/username: ${loginData.email} is successfully logged.`
                 );
-    
+
                 // Create JSON Response with Token and Token Expire date
                 resJSON = JSONModule.
                     createJSONResponse(isLogged, recordSet[0], 'login')
-    
+
             } else {
                 loggerManager.logWarn(
                     `There is no an account with this email/username: ${loginData.email}`
                 );
-    
+
                 // Create JSON Response with error message, which depends on error code
                 resJSON = JSONModule.
                     createJSONResponse(isLogged, errors[recordSet[0].ReturnCode], 'login')
             }
         }
-        else{
+        else {
             loggerManager.logWarn(
                 `Cannot get salt from database for user with email/username: ${loginData.email}`
             );
 
             resJSON = JSONModule.createJSONResponse(false, recordSet, 'login');
         }
-        
+
     } else {
         resJSON = JSONModule.createJSONResponse(false, recordSet, 'login');
 
@@ -108,43 +108,15 @@ app.post('/register', async (req, res) => {
     // Receive x-www-form-urlencoded from client
     let regData = req.body;
 
-
     let resJSON;
-    let blankPhone, tmpCity, blankCity, tmpPhone;
-    
-    let fields = ['firstName', 'lastName', 'age', 'email', 'username', 'password', 'phone', 'city'];
+    let recordSet = validation.isRegisterDataValid(regData);
 
-    for (const key in fields) {
-        if (regData[fields[key]] == undefined) {
-            return 0;
-        }
-        if (Array.isArray(regData[fields[key]])) {
-            regData[fields[key]] = regData[fields[key]][0];
-        }
-    }
-
-    if (regData.phone == '') {
-        blankPhone = true;
-        tmpPhone = regData.phone;
-        regData.phone = '+359896603828';
-    }
-
-    if (regData.city == '') {
-        blankCity = true;
-        tmpCity = regData.city;
-        regData.city = 'Yambol';
-    }
-
-    let returnValue = validation.formValidation(regData, validation.registerValidations);
-
-    regData.phone = blankPhone ? tmpPhone : regData.phone;
-    regData.city = blankCity ? tmpCity : regData.city;
     let salt = await hash.getSalt();
     console.log(salt);
-    
-    // Validate client data
-    if (returnValue === true) {
-        returnValue = await DB.registerUser(
+    if (recordSet === true) {
+
+        // The resultset from the db is saved in recordSet variable
+        recordSet = await DB.registerUser(
             regData.firstName,
             regData.lastName,
             regData.age,
@@ -156,30 +128,36 @@ app.post('/register', async (req, res) => {
             salt
         )
 
+        let isRegistered = recordSet[0].hasOwnProperty("Token");
 
-        if (returnValue[0].hasOwnProperty("Token")) {
+        if (isRegistered) {
+
             loggerManager.logInfo(
                 `User with email: ${regData.email} is successfully register into the database.`
             );
 
-            await emailer.sendVerificationEmail(regData.email, returnValue[0].Token)
+            // Create JSON Response with Token and Token Expire date
+            resJSON = JSONModule.createJSONResponse(true, recordSet[0], 'register')
+            await emailer.sendVerificationEmail(regData.email, recordSet[0].Token)
         } else {
             loggerManager.logWarn(
                 `Failed saving to database at user with email: ${regData.email}:\n
-                ${JSON.stringify(errors[returnValue[0].ReturnCode])
+                    ${JSON.stringify(errors[recordSet[0].ReturnCode])
                     .split(',')
                     .join("\n\t    ")
                     .replace(/:/g, " - ")
                     .replace(/["{}]/g, "")
                 }`
             );
-        }
 
-        resJSON = JSONModule.createJSONResponse(returnValue[0].hasOwnProperty("Token"), returnValue[0].hasOwnProperty("Token") ? returnValue[0] : errors[returnValue[0].ReturnCode], 'register')
-    } else {
+            resJSON = JSONModule.createJSONResponse(false, recordSet[0], 'register')
+        }
+    }
+    else {
+        console.log(recordSet);
         loggerManager.logWarn(
             `Failed validation/s at user with email ${regData.email}:\n
-            ${JSON.stringify(returnValue)
+            ${JSON.stringify(recordSet)
                 .split(',')
                 .join("\n\t    ")
                 .replace(/:/g, " - ")
@@ -187,9 +165,8 @@ app.post('/register', async (req, res) => {
             }`
         );
 
-        resJSON = JSONModule.createJSONResponse(false, returnValue, 'register');
+        resJSON = JSONModule.createJSONResponse(false, recordSet, 'register');
     }
-
     //Send respond
     res.send(resJSON);
 });
