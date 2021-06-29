@@ -53,17 +53,37 @@
 
 
    <h1> 📥 Deploying </h1>
-   <p> To deploy our project on your machine you just need to clone it. This can be done by : </p>
-   <pre>
-    git clone https://github.com/idiliev18/chupacabra.git
-    cd chupacabra
-    cd server
-    npm install
-    node app.js
-    cd ../
-    cd client/
-    npm install
-    npm start</pre>
+   <p> To deploy our project on your machine you need to follow these steps:<br>
+     1. Clone it. This can be done by: 
+   <pre>git clone https://github.com/idiliev18/chupacabra.git</pre>
+     2. Navigate to the root folder:
+   <pre>cd chupacabra</pre>
+     3. Create <strong>.env</strong> file:
+    <pre>
+LOKI_IP=&ltIP of the loke server&gt
+DISCORD_ID=&ltID of the discord webhook&gt
+DISCORD_TOKEN=&ltToken of the discord webhook&gt
+DB_USER=&ltDatabase ssername&gt
+DB_PASSWORD=&ltDatabase password&gt
+DB_SERVER=&ltDatabase server&gt
+DB=&ltDatabase name&gt
+saltRounds=&ltSalt round&gt 
+MAX_REQUEST_COUNT=&ltMax number of requests&gt
+GMAILID=&ltGmail email to send emails&gt
+GMAILPASS=&ltGmail password&gt</pre>
+     4. Navigate to the server folder: 
+    <pre>cd server</pre>
+     5. Install the node modules:
+    <pre>npm install</pre>
+     6. Start the server
+    <pre>node app.js</pre>
+     7. In new terminal open client folder
+    <pre>cd client</pre>
+     8. Install the node modules (might take some time):
+    <pre>npm install</pre>
+     9. Start the react app
+    <pre>npm start</pre>
+    </p>
     <h1>🧒 Our Team</h1>
     <p>Iliyan Iliev - <a href = "https://github.com/idiliev18"> IDIliev18</a> - Scrum trainer </p>
     <p>Stoyan Ivanov - <a href = "https://github.com/SSIvanov19"> SSIvanov19</a> - Back-end Developer </p>
