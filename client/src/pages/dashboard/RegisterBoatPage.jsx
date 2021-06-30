@@ -7,15 +7,15 @@ import { fetchAPI } from "../../api";
 import { UserContext } from "../../App";
 
 export default function RegisterBoatPage(props) {
-    const [successValues, setSuccessValues] = useState(null);
-    const [failureValues, setFailureValues] = useState(null);
+    const [successValues, setSuccessValues] = useState({});
+    const [failureValues, setFailureValues] = useState({});
     const [isLoading, setLoading] = useState(false);
     const userContext = useContext(UserContext);
 
     const onSubmit = (event) => {
         event.preventDefault();
-        setSuccessValues(null);
-        setFailureValues(null);
+        setSuccessValues({});
+        setFailureValues({});
         setLoading(true);
 
         let data = {
@@ -55,7 +55,9 @@ export default function RegisterBoatPage(props) {
                 }
             })
             .catch((e) => {
-                setFailureValues("internal server error, try again");
+                setFailureValues({
+                    global: "internal server error, try again",
+                });
                 setLoading(false);
             });
     };

@@ -19,6 +19,8 @@ import { UserContext } from "../App.js";
 
 export default function Dashboard(props) {
     const [pageIdx, setPageIdx] = useState(0);
+    const userContext = useContext(UserContext);
+
     const pages = [
         {
             icon: faUser,
@@ -27,7 +29,11 @@ export default function Dashboard(props) {
         },
         {
             icon: faAnchor,
-            text: "Лодки за одобряване",
+            text:
+                userContext.user.roles.includes("Operator") ||
+                userContext.user.roles.includes("Admin")
+                    ? "Лодки за одобряване"
+                    : "Моите лодки",
             page: BoatsPage,
         },
         {
@@ -41,8 +47,6 @@ export default function Dashboard(props) {
             page: () => <Redirect to="/" />,
         },
     ];
-
-    const userContext = useContext(UserContext);
 
     const isTablet = useMediaQuery({ query: "(max-width: 1216px)" });
     const isPhone = useMediaQuery({ query: "(max-width: 769px)" });
