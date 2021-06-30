@@ -19,17 +19,23 @@ export default function RegisterBoatPage(props) {
         setLoading(true);
 
         let data = {
-            Name: event.target.boatName.value,
+            boatName: event.target.boatName.value,
             Engine: event.target.engine.value,
-            RegistrationNumber: event.target.registrationNumber.value,
-            BoatLicense: event.target.boatLicense.value,
-            SeatsCount: event.target.seatsCount.value,
-            AnchorLength: event.target.anchorLength.value,
-            LifeJacketsCount: event.target.lifeJacketsCount.value,
-            Token: userContext.token,
+            registrationNumber: event.target.registrationNumber.value,
+            boatLicense: event.target.boatLicense.value,
+            seatsCount: event.target.seatsCount.value,
+            anchorLength: event.target.anchorLength.value,
+            lifeJacktsCount: event.target.lifeJacketsCount.value,
         };
 
-        fetchAPI("/registerBoat", data, {}, "POST")
+        fetchAPI(
+            "/registerBoat",
+            data,
+            {
+                Authorization: userContext.token,
+            },
+            "POST"
+        )
             .then((res) => {
                 if (res.type === "registerBoat-success") {
                     event.target.boatName.value = "";
@@ -39,12 +45,12 @@ export default function RegisterBoatPage(props) {
                     event.target.seatsCount.value = "";
                     event.target.anchorLength.value = "";
                     event.target.lifeJacketsCount.value = "";
-                    setSuccessValues("successful registration");
+                    setSuccessValues({
+                        global: "successful registration",
+                    });
                     setLoading(false);
                 } else if (res.type === "registerBoat-failure") {
-                    setFailureValues(
-                        "unsuccessful registration. " + res.fields.name
-                    );
+                    setFailureValues(res.fields);
                     setLoading(false);
                 }
             })
@@ -72,6 +78,7 @@ export default function RegisterBoatPage(props) {
                         <ErrorableInput
                             label="Име на лодката"
                             name="boatName"
+                            errText={failureValues.boatName}
                             required
                         />
                     </div>
@@ -82,6 +89,7 @@ export default function RegisterBoatPage(props) {
                         <ErrorableInput
                             label="Двигател"
                             name="engine"
+                            errText={failureValues.engine}
                             required
                         />
                     </div>
@@ -92,6 +100,7 @@ export default function RegisterBoatPage(props) {
                         <ErrorableInput
                             label="Регистрационен номер"
                             name="registrationNumber"
+                            errText={failureValues.registrationNumber}
                             required
                         />
                     </div>
@@ -102,6 +111,7 @@ export default function RegisterBoatPage(props) {
                         <ErrorableInput
                             label="Свидетелство за управление на лодка"
                             name="boatLicense"
+                            errText={failureValues.boatLicense}
                             required
                         />
                     </div>
@@ -114,6 +124,7 @@ export default function RegisterBoatPage(props) {
                             type="number"
                             name="seatsCount"
                             onChange={onNumericInputChange}
+                            errText={failureValues.seatsCount}
                             required
                         />
                     </div>
@@ -127,6 +138,7 @@ export default function RegisterBoatPage(props) {
                             name="anchorLength"
                             onChange={onNumericInputChange}
                             placeholder="в метри"
+                            errText={failureValues.anchorLength}
                             required
                         />
                     </div>
@@ -139,6 +151,7 @@ export default function RegisterBoatPage(props) {
                             type="number"
                             name="lifeJacketsCount"
                             onChange={onNumericInputChange}
+                            errText={failureValues.lifeJacketsCount}
                             required
                         />
                     </div>
@@ -146,13 +159,17 @@ export default function RegisterBoatPage(props) {
 
                 <div className="field">
                     {!!failureValues ? (
-                        <div className="help is-failure">{failureValues}</div>
+                        <div className="help is-danger">
+                            {failureValues.global}
+                        </div>
                     ) : null}
                 </div>
 
                 <div className="field">
                     {!!successValues ? (
-                        <div className="help is-success">{successValues}</div>
+                        <div className="help is-success">
+                            {successValues.global}
+                        </div>
                     ) : null}
                 </div>
 
