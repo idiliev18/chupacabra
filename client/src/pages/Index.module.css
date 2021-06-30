@@ -1,0 +1,42 @@
+.banner::after, .banner::before {
+    content: ""; 
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: skew(15deg)
+               translateX(-50%);
+    width: 75%;
+    height: 100%;
+    background-image: linear-gradient(120deg,#eaee44,#33d0ff);
+    background-color: #333;
+    opacity: .7;
+}
+
+.banner::before {
+    transform: skew(-15deg) 
+               translateX(-50%);
+}
+
+.banner {
+    overflow: hidden;
+}
+
+.banner > * {
+    z-index: 1000;
+}
+
+.banner {
+    position: relative;
+    min-height: 60vh;
+    background-image: url(./img/bg.jpg);
+    background-size: cover;
+    display: flex;
+}
+
+h1 {
+    margin: auto;  
+}
+
+body {
+    margin: 10px;
+}
